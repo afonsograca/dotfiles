@@ -1,0 +1,4 @@
+# Extra local files with possible sensitive info
+*_local
+*.lock
+extra/*

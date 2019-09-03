@@ -1,0 +1,6 @@
+{
+  "name": "yarn global packages",
+  "dependencies": {
+    "danger": "*"
+  }
+}

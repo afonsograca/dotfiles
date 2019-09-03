@@ -1,0 +1,7 @@
+##
+## List of aliases for your system
+##
+
+
+## Reload .bash_profile
+alias reload="source ~/.bash_profile"

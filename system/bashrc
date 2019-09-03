@@ -1,0 +1,71 @@
+##
+## Bash run command configurations
+##
+
+bashrc_path=$(readlink ~/.bashrc)
+bashrc_dirname=$(dirname $bashrc_path)
+bashrc_parent_dirname=$(dirname $bashrc_dirname)
+
+source ${bashrc_parent_dirname}/bin/source_files_in.sh
+
+### Load shell options
+if test -r ${bashrc_dirname}/options; then
+  source ${bashrc_dirname}/options
+fi
+
+source_files_in "${bashrc_parent_dirname}/extra/**/*options_local"
+
+
+### Load aliases
+
+# System aliases
+if test -r ${bashrc_dirname}/aliases; then
+  source ${bashrc_dirname}/aliases
+fi
+
+# App aliases
+source_files_in ${bashrc_parent_dirname}/apps/**/aliases
+
+# Extra aliases
+source_files_in ${bashrc_parent_dirname}/extra/**/*aliases_local
+
+
+### Load functions
+
+# System functions
+if test -r ${bashrc_dirname}/functions; then
+  source ${bashrc_dirname}/functions
+fi
+
+# App functions
+source_files_in "${bashrc_parent_dirname}/apps/**/functions"
+
+# Extra functions
+source_files_in "${bashrc_parent_dirname}/extra/**/*functions_local"
+
+
+### Load completion (bash & git) & git prompt features
+if test "$(brew --prefix)/etc/bash_completion"; then
+  source "$(brew --prefix)/etc/bash_completion"
+elif test -r "/etc/bash_completion"; then
+  source "/etc/bash_completion"
+fi
+
+
+### Load prompt configuration
+if test -r ${bashrc_dirname}/prompt; then
+  source ${bashrc_dirname}/prompt
+fi
+
+source_files_in "${bashrc_parent_dirname}/extra/**/*prompt_local"
+
+
+### Load user-specific definitions
+source_files_in "${bashrc_parent_dirname}/extra/**/*bashrc_local"
+
+
+### Removing local variables from scope
+unset bashrc_path
+unset bashrc_dirname
+unset bashrc_parent_dirname
+unset -f source_files_in

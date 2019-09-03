@@ -1,0 +1,37 @@
+##
+## Environemt variables to be exported into your system
+##
+
+### Defining your default editor
+export EDITOR="vim"
+
+
+### Language and Localisation definition
+export LANG=en_US.UTF-8
+export LC_ALL=en_US.UTF-8
+
+
+### Increase Bash history size. Allow 32³ entries; the default is 500.
+export HISTSIZE="32768"
+export HISTFILESIZE="${HISTSIZE}"
+
+
+### Omit duplicates and commands that begin with a space from history.
+export HISTCONTROL="ignoreboth"
+
+
+### Defining display colors for different filetypes
+export CLICOLOR="true"
+export LSCOLORS="gxfxcxdxbxCgCdabagacad"
+
+
+### Highlight section titles in manual pages.
+export LESS_TERMCAP_md="${yellow}"
+
+
+### Define Homebrew's Cask default install location
+export HOMEBREW_CASK_OPTS="--appdir=/Applications"
+
+
+### Define NVM directory 
+export NVM_DIR="$HOME/.nvm"

@@ -1,0 +1,58 @@
+##
+## Prompt config file
+##
+
+
+### Git prompt style
+GIT_PS1_SHOWDIRTYSTATE=true # Show uncommitted changes with a * (unstagged) or + (staged)
+GIT_PS1_SHOWSTASHSTATE=true # Show if there's something stashed
+GIT_PS1_SHOWUNTRACKEDFILES=true # Show if there are untracked files
+GIT_PS1_SHOWUPSTREAM="auto" # Show if ahead or behind upstream
+# GIT_PS1_SHOWCOLORHINTS=true
+
+
+### Setting the prompt style
+bash_prompt() {
+  
+  ### Defining colours
+  if test $(tput colors) -ge 256; then
+      local reset="\[$(tput sgr0)\]"
+      local green="\[$(tput setaf 2)\]"
+      local yellow="\[$(tput setaf 3)\]"
+      local blue="\[$(tput setaf 4)\]"
+      local bold_green="\[$(tput bold)$(tput setaf 10)\]"
+  else
+      local reset="\[\033[0m\]"
+      local green="\[\033[0;32m\]"
+      local yellow="\[\033[0;33m\]"
+      local blue="\[\033[0;34m\]"
+      local bold_green="\[\033[1;92m\]"
+  fi
+  
+  # Setting the title
+  local pre_git="\[\033]0;\W $(__git_ps1 "(%s)")\007\]"
+
+  # Adding the current user
+  if sudo -n true 2> /dev/null; then
+    local pre_git="${pre_git}${bold_green}\u${reset}" # in sudo
+  else
+    local pre_git="${pre_git}${green}\u"
+  fi
+  
+  # Adding Git colour
+  local pre_git="${pre_git}${yellow}"
+
+  # Adding current directory
+  local post_git="${blue} \W "
+
+  # Adding the prompt character
+  local post_git="${post_git}$ ${reset}"
+
+  if command -v __git_ps1 >/dev/null 2>&1; then
+    __git_ps1 "$pre_git" "$post_git"
+  else
+    PS1="${pre_git}${post_git}"
+  fi
+}
+
+PROMPT_COMMAND=bash_prompt

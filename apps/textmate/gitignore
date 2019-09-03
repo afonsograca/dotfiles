@@ -1,0 +1,7 @@
+##
+## Class of TextMate files to be globally ignored by Git
+##
+
+*.tmproj
+*.tmproject
+tmtags

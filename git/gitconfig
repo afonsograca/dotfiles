@@ -1,0 +1,704 @@
+##
+## User-level Git Configuration file
+##
+
+[add]
+  ignoreErrors = true # make `git add` error not fatal
+
+[advice]
+  addEmbeddedRepo = true # advice on accidental repo nesting
+  amWorkDir = true # show location of patch when `git am` fails
+  commitBeforeMerge = true # advice on merge failure due to uncommitted changes
+  detachedHead = true  # advice how to create branch when in detach HEAD state
+  ignoredHook = true # warn about ignored hook because it is not set as executable
+  implicitIdentity = true # advice on how to set identity when none is set 
+  pushAlreadyExists = true # advice on bad push for not being able to Fast-Forward
+  pushFetchFirst = true # advice to fetch when trying to push to a branch ahead
+  pushNeedsForce = true # advice on how to force a push to be accepted 
+  pushNonFFCurrent = true # hints when push fails due to a non-fast-forward update 
+  pushNonFFMatching = true # hints when matching push fails due to a NFF update
+  pushUpdateRejected = true  # turn all push* advices on/off simultaneously
+  resolveConflict = true # command advice on how to resolve conflicts 
+  rmHints = true # hints when `git rm` fails
+  statusHints = true # hints on how to deal with files on `git status`
+  statusUoption = true # advice to use `-u` option when `git status` is slow
+  waitingForEditor = true  # message while waiting for editor input from the user
+
+[alias]
+  hist = log --pretty=format:\"%h %ad | %s%d [%an]\" --graph --date=short
+ 
+[am]
+  keepcr = true # not remove \r from lines ending with \r\n
+  threeWay = true # fall back on 3-way merge if the patch does not apply cleanly
+
+[apply]
+  ignoreWhitespace = change # ignore changes in whitespace
+  whitespace = fix # fix whitespace issues automatically
+
+[blame]
+  showRoot = false # mark root commit with a ^ before the hash
+  blankBoundary = true # present a blank hash for boundary commits
+  showEmail = true # show the author's email instead of the name  
+  # date # the format of the date shown (default unset - ISO)
+
+[branch]
+  autoSetupMerge = true # should `git branch`/`git checkout` imply the `--track` option (default true)
+  autoSetupRebase = always # should new branches should be set up to be rebased upon `git pull` (default never)
+
+# [browser "command_name"]
+  # cmd # command executed by the shell
+  # path # override path for tool
+
+[clean]
+  requireForce = true # make `git-clean` do nothing unless given -f, -i or -n
+
+[color]
+  # branch # colour in `git branch`. Overrides `ui` value (default auto)
+  # diff # ANSI escape sequences in patches. Overrides `ui` value (default auto)
+  # grep # colour matches. Overrides `ui` value (default auto)
+  # interactive # colour interactive prompts. Overrides `ui` value (default auto)
+  pager = true # colour when using pager (default true)
+  # showBranch # colour in `git show`. Overrides `ui` value (default auto)
+  # status # colour in `git status`. Overrides `ui` value (default auto)
+  ui = auto # default colour mode for all the color options
+  
+[color "branch"]
+  current = yellow reverse
+  local = yellow
+  plain = red # other refs
+  remote = green
+  upstream = blue
+
+# [color "diff"]
+#   commit =
+#   context = normal
+#   frag = cyan
+#   func = magenta
+#   old = red
+#   oldMoved
+#   oldMovedDimmed
+#   oldMovedAlternative
+#   oldMovedAlternativeDimmed
+#   meta = white
+#   new = green
+#   newMoved
+#   newMovedDimmed
+#   newMovedAlternative
+#   newMovedAlternativeDimmed
+#   whitespace = red reverse
+
+[color "decorate"]
+  branch = yellow
+  HEAD = blue bold
+  remoteBranch = green
+  stash = red
+  tag = cyan
+
+[color "grep"]
+  context = white
+  filename = normal dim
+  function = magenta
+  linenumber = cyan
+  #match # set both `matchContext` and `matchSelected` at the same time
+  matchContext = yellow 
+  matchSelected = yellow reverse normal bold
+  selected = normal
+  separator = cyan
+
+[color "interactive"]
+  error = red bold
+  header = yellow
+  help = normal dim
+  prompt = cyan
+
+[color "status"]
+  added = green
+  branch = magenta bold
+  changed = yellow
+  header = white
+  localBranch = yellow
+  nobranch = red
+  remoteBranch = green
+  unmerged = magenta
+  untracked = blue
+  #updated # same as `added` 
+
+[column]
+  # branch # specify column behaviour on `git branch`. Overrides `ui`.
+  clean = true # specify column behaviour on `git clean -i`. Overrides `ui`.
+  status = true # specify column behaviour on `git status`. Overrides `ui`.
+  tag = true # specify column behaviour on `git tag`. Overrides `ui`.
+  ui = auto column nodense # should output in columns (default never column nodense)
+
+[commit]
+  cleanup = default # clean whitespaces and comments from messages
+  gpgSign = true # sign all commits
+  status = true # show commit status in message editor as a comment
+  template = true # path to template to be used in the commit message
+  verbose = true # show diff as a comment in the message editor
+
+[core]
+  abbrev = auto # length to which object names are abbreviated to
+  # askPass # set commands to ask for user/pass (default unset)
+  attributesFile = ~/.gitattributes # global attributes file
+  autocrlf = input # properly handle line endings
+  # bare # not applicable to a global gitconfig, relates to repo type
+  # bigFileThreshold # threshold upon which files are stored deflated
+  checkStat = default # determines which stat fields to match
+  commentChar = "#" # character to mark a comment (default #)
+  # compression = # takes a value 0..9, being 0 no compression and 9 best compression of objects
+  # createObject # determine how files are created depending on the sytem/OS combinations (default unset)
+  # deltaBaseCacheLimit # Max nº of bytes to reserve for caching base objects
+  editor = "vim" # editor to be used by `git commit` and `git tag`
+  eol = native # line ending type to use (default native)
+  excludesFile = ~/.gitignore_global # global ignore file
+  fileMode = true # honour the executable bit of the file mode (default true)
+  # filesRefLockTimeout # time to wait until retry locking a ref (default 100 ms)
+  # fsmonitor # command to track changed files since a specified time
+  fsyncObjectFiles = false # enable fsync() when writing object files (default false)
+  # gitProxy # set a proxy command for git protocol
+  hideDotFiles = dotGitOnly # Windows only - mark . files/folders as hidden (default dotGitOnly)
+  hooksPath = ~/.githooks # global hooks directory
+  ignoreCase = false # workarounds for case-insensitive filesystems
+  ignoreStat = false # ignore stat of possible changed files (default false)
+  # logAllRefUpdates # not applicable to a global gitconfig, relates to reflog
+  # looseCompression # same as compression but for objects not in a pack file (default 1)
+  # notesRef # path to notes when `git show --notes` (default refs/notes/commits)
+  # packedGitLimit # Max nº of bytes to map simultaneously into memory
+  # packedGitWindowSize # nº of bytes/pack-file to map into memory
+  # packedRefsTimeout # time to wait until retry locking a packed ref (default 1000)
+  pager = less -M # text viewer for use by Git commands like `diff`
+  precomposeUnicode = true # prevent showing unicode filenames as untracked
+  preferSymlinkRefs = false # prefer symlink refs instead of default symrefs
+  preloadIndex = true # enable parallel index preload (default true)
+  # protectHFS # protect `.git` paths on HFS -- better left unset
+  # protectNTFS # prevent problematic paths on NTFS -- better left unset
+  quotePath = false # prevent escaping unicode characters
+  # repositoryFormatVersion # not applicable to a global gitconfig, relates to repo's format and layout version
+  safecrlf = true # check if converting CRLF is reversible
+  # sharedRepository # not applicable to a global gitconfig, relates to repo read/write abilities
+  # sparseCheckout # applicable on a repo basis, only to checkout parts of the repo
+  splitIndex = false # don't use the split-index feature
+  # sshCommand # set a proxy command to use instead of ssh
+  symlinks = true # support symlinks (default true)
+  trustctime = false # ignore ctime differences
+  untrackedCache = true # way to speed up commands that involve determining untracked files
+  warnAmbiguousRefs = true # warn about ambiguous ref names (default true)
+  whitespace = space-before-tab,trailing-space # list of common whitespace problems to notice
+  # worktree # not applicable to a global gitconfig, relates to repo
+
+[credential]
+	helper = osxkeychain # external helper to be called
+  useHttpPath = true # consider the "path" component of an URL
+
+[credentialCache]
+  ignoreSIGHUP = true # ignore SIGHUP, instead of quitting
+
+[diff]
+  algorithm
+  autoRefreshIndex
+  colorMoved If set to either a valid <mode> or a true value, moved lines in a diff are colored differently, for details of valid modes see --color-moved in git-diff[1]. If simply set to true the default color mode will be used. When set to false, moved lines are not colored.
+  context
+  dirstat
+  external
+  ignoreSubmodules
+  indentHeuristic
+  interHunkContext
+  mnemonicPrefix
+  noprefix
+  orderFile
+  renameLimit
+  renames
+  statGraphWidth
+  submodule
+  suppressBlankEmpty
+  tool
+  wordRegex
+  wsErrorHighlight
+
+[diff ""]
+  binary
+  cachetextconv
+  command
+  textconv
+  wordRegex
+  xfuncname
+
+[diff ""]
+  path
+  cmd
+
+[difftool]
+  prompt = false # prompt before each difftool invocation
+  
+[difftool "Kaleidoscope"]
+
+[difftool "sourcetree"]
+
+[fastimport]
+  # unpackLimit # limit after which objects are stored as a pack. Defaults to `transfer.unpackLimit`
+
+[fetch]
+  # fsckObjects # strategy for `git-fetch-pack`. Defaults to `transfer.fsckObjects`
+  output = full # format of the output (default full)
+  prune = true # remove any remote-tracking references that no longer exist on the remote
+  pruneTags = false # remove any tags not present in the remote, even local ones
+  recurseSubmodules = on-demand # strategy to recurse into submodules
+  # unpackLimit # limit after which objects are stored as a pack. Defaults to `transfer.unpackLimit`
+  
+# [format]
+#   attach
+#   cc
+#   coverLetter
+#   from = true # use the committer identity in the From field of patch emails
+#   headers
+#   numbered
+#   outputDirectory
+#   pretty
+#   signature
+#   signatureFile
+#   signOff
+#   subjectPrefix
+#   suffix
+#   thread
+#   to
+#   useAutoBase
+
+# [filter ""]
+#   clean
+#   smudge
+
+# [fsck]
+#   skipList
+
+# [gc]
+#   aggressiveDepth
+#   aggressiveWindow
+#   auto
+#   autoDetach
+#   autoPackLimit
+#   logExpiry
+#   packRefs
+#   pruneExpire
+#   reflogExpire
+#   reflogExpireUnreachable
+#   rerereResolved
+#   rerereUnresolved
+#   worktreePruneExpire
+
+# [gitcvs]
+#   allBinary
+#   commitMsgAnnotation
+#   dbDriver
+#   dbName
+#   dbPass
+#   dbUser
+#   enabled
+#   logFile
+#   dbTableNamePrefix
+#   usecrlfattr
+
+# [gitweb]
+#   avatar
+#   blame
+#   category
+#   description
+#   grep
+#   highlight
+#   owner
+#   patches
+#   pickaxe
+#   remote_heads
+#   showSizes
+#   snapshot
+#   url
+
+[grep]
+  extendedRegexp
+  fallbackToNoIndex
+  lineNumber = true # show line numbers by default
+  patternType
+  threads
+
+[gpg]
+  program
+
+# [gui]
+#   blamehistoryctx
+#   commitMsgWidth
+#   copyBlameThreshold
+#   diffContext
+#   displayUntracked
+#   encoding
+#   fastCopyBlame
+#   matchTrackingBranch
+#   newBranchTemplate
+#   pruneDuringFetch
+#   spellingDictionary
+#   trustmtime
+
+# [guitool ""]
+#   argPrompt
+#   cmd
+#   confirm
+#   needsFile
+#   noConsole
+#   noRescan
+#   prompt
+#   revPrompt
+#   revUnmerged
+#   title
+
+[help]
+  autoCorrect = -1 # utomatically correct mistyped commands 
+  browser = open # browser to open help in case format is web
+  format = man # format to print help (default man)
+  # htmlPath # documentation path of git
+
+# [http]
+#   cookieFile
+#   delegation
+#   emptyAuth
+#   extraHeader
+#   followRedirects
+#   lowSpeedLimit
+#   lowSpeedTime
+#   maxRequests
+#   minSessions
+#   noEPSV
+#   pinnedpubkey
+#   postBuffer
+#   proxy
+#   proxyAuthMethod
+#   saveCookies
+#   sslCAInfo
+#   sslCAPath
+#   sslCert
+#   sslCertPasswordProtected
+#   sslCipherList
+#   sslKey
+#   sslTry
+#   sslVerify
+#   sslVersion
+#   userAgent
+
+[i18n]
+  commitEncoding = "utf-8" # encoding in which commits are stored
+  logOutputEncoding = "utf-8" # encoding when running `git log` and similar
+
+# [imap]
+
+# [index]
+#   version
+  
+# [init]
+#   templateDir
+
+[instaweb]
+  browser = open # browser to view the gitweb page
+  httpd = webrick # the HTTP daemon to be executed
+  local = true # bind web server to the local IP
+  modulePath = /usr/libexec/apache2 # when using Apache as httpd
+  port = 1234 # the port for httpd (default 1234)
+
+[interactive]
+  diffFilter = /usr/local/opt/git/share/git-core/contrib/diff-highlight/          diff-highlight # diff filter when interactive
+  singleKey = false # do not require hitting Enter after each prompt
+
+[log]
+  abbrevCommit
+  date
+  decorate
+  follow
+  graphColors
+  showRoot
+  showSignature
+  mailmap
+
+# [mailinfo]
+#   scissors
+
+# [mailmap]
+#   blob
+#   file
+
+[man]
+  viewer = man # default program to open man pages
+  
+# [man ""] # custom man program viewer
+#   cmd
+#   path
+
+[merge]
+  branchdesc
+  conflictStyle
+  defaultToUpstream
+  ff
+  log
+  renameLimit
+  renormalize
+  stat
+  tool
+  verbosity
+  verifySignatures
+  
+[merge ""]
+  name
+  driver
+  recursive
+
+[mergetool]
+  keepBackup
+  keepTemporaries
+  prompt
+  writeToTemp
+
+[mergetool "Kaleidoscope"]
+  cmd
+  path
+  trustExitCode
+
+[mergetool "sourcetree"]
+  cmd
+  path
+  trustExitCode
+
+# [notes]
+#   displayRef
+#   mergeStrategy
+#   rewriteMode
+#   rewriteRef
+#
+# [notes "rewrite"]
+#
+#
+# [notes ""]
+#   mergeStrategy
+
+# [pack]
+#   compression
+#   deltaCacheLimit
+#   deltaCacheSize
+#   depth
+#   indexVersion
+#   packSizeLimit
+#   window
+#   windowMemory
+#   threads
+#   useBitmaps
+#   writeBitmapHashCache
+
+[pager]
+  diff = 'diff-/usr/local/opt/git/share/git-core/contrib/diff-highlight/          diff-highlight | less'
+  log = 'diff-/usr/local/opt/git/share/git-core/contrib/diff-highlight/          diff-highlight | less'
+  show = 'diff-/usr/local/opt/git/share/git-core/contrib/diff-highlight/          diff-highlight | less'
+
+[pretty]
+
+# [protocol]
+#   allow
+#   version
+
+# [protocol ""]
+#   allow
+
+[pull]
+  # ff # always/never do a ff commit
+  octopus = true # default merge strategy when pulling multiple branches
+  # rebase = preserve # use rebase as a default for `git pull`
+  twohead = true # default merge strategy when pulling a single branch
+
+[push]
+  default = current # always push to a branch with the same name
+  followTags = false # push tags simulatenously with commits
+  gpgSign = if-asked # sign push if necessary
+  # pushOption # options to be passed to the server (pre & post receive hook)
+  recurseSubmodules = check # check if all submodule commits are available remote
+
+[rebase]
+  abbreviateCommands
+  autoSquash
+  autoStash
+  instructionFormat
+  missingCommitsCheck
+  stat
+
+# [receive]
+#   advertiseAtomic
+#   advertisePushOptions
+#   autogc
+#   certNonceSeed
+#   certNonceSlop
+#   denyCurrentBranch
+#   denyDeleteCurrent
+#   denyDeletes
+#   denyNonFastForwards
+#   fsckObjects
+#   hideRefs
+#   keepAlive
+#   maxInputSize
+#   shallowUpdate
+#   unpackLimit
+#   updateServerInfo
+
+# [receive "fsck"]
+#   skipList
+
+[remote]
+  pushDefault = origin
+
+# [remotes]
+
+# [repack]
+#   packKeptObjects
+#   useDeltaBaseOffset
+#   writeBitmaps
+
+[rerere]
+  autoUpdate
+  enabled
+
+# [sendemail]
+#   aliasesFile
+#   aliasFileType
+#   annotate
+#   bcc
+#   cc
+#   ccCmd
+#   chainReplyTo
+#   confirm
+#   envelopeSender
+#   from
+#   identity
+#   multiEdit
+#   signedoffbycc
+#   smtpPass
+#   suppresscc
+#   suppressFrom
+#   to
+#   tocmd
+#   smtpBatchSize
+#   smtpDomain
+#   smtpEncryption
+#   smtpReloginDelay
+#   smtpServer
+#   smtpServerPort
+#   smtpServerOption
+#   smtpsslcertpath
+#   smtpUser
+#   thread
+#   transferEncoding
+#   validate
+#   xmailer
+
+[sequence]
+  editor = "vim" # text editor to be used by `git rebase -i`
+
+[showbranch]
+  default = --topo-order # show branches in topological order
+
+# [splitIndex]
+#   maxPercentChange
+#   sharedIndexExpire
+
+[ssh]
+  variant = ssh # check the support of OpenSSH commands
+
+[status]
+  branch = true # always present branch even in `git status -s` 
+  displayCommentPrefix = false # add a comment at the beginning of every line
+  relativePaths = false # show paths relative to `pwd`
+  short = false # show `git status --s` by default
+  showStash = true # show the number of current stashes
+  showUntrackedFiles = normal # show untracked files and directories
+  submoduleSummary = true # display submodules statuses
+
+[stash]
+  showPatch = false # present stash in patch form with `git stash show`
+  showStat = true # present diffstat with `git stash show`
+
+# [submodule]
+#   active
+#   alternateLocation
+#   alternateErrorStrategy
+#   fetchJobs
+#   recurse
+
+[tag]
+  forceSignAnnotated = true # tags should be signed
+  sort = -version:refname # default sort for tags
+
+# [tar]
+#   umask
+
+# [transfer]
+#   fsckObjects
+#   hideRefs
+#   unpackLimit
+
+# [uploadarchive]
+#   allowUnreachable
+
+# [uploadpack] # meant to be used in pull updates in a remote repository
+#   allowFilter
+#   allowReachableSHA1InWant
+#   allowTipSHA1InWant
+#   allowAnySHA1InWant
+#   hideRefs
+#   keepAlive
+#   packObjectsHook
+
+[url "git@github.com:"]
+  pushInsteadOf = https://github.com/ # make sure pushes are done
+  pushInsteadOf = git://github.com/   # over ssh
+
+[url "git@gist.github.com:"]
+  pushInsteadOf = https://gist.github.com/ # make sure pushes are done
+  pushInsteadOf = git://gist.github.com/   # over ssh
+
+[url "git@gitlab.com"]
+  pushInsteadOf = https://gitlab.com/ # make sure pushes are done
+  pushInsteadOf = git://gitlab.com/   # over ssh
+  
+[url "https://"]
+  insteadOf = git:// # ensures at least some server verification
+  insteadOf = http:// # provide at least some security
+
+# [user] set locally
+
+[versionsort] # order by which tags should be ordered
+  suffix = "-"
+  suffix = "-pre"
+  suffix = "-alpha"
+  suffix = "-beta"
+  suffix = "-rc"
+  suffix = "-gm"
+  
+[web]
+  browser = open # browser used by `git instaweb` and `git help` -- default
+
+[worktree]
+  guessRemote = true # try to find a remote branch before creating one
+
+
+
+
+
+
+[alias]
+  co = checkout
+  lg = log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)%Creset' --abbrev-commit
+[difftool "sourcetree"]
+  cmd = opendiff \"$LOCAL\" \"$REMOTE\"
+  path =
+[mergetool "sourcetree"]
+  cmd = /Applications/SourceTree.app/Contents/Resources/opendiff-w.sh \"$LOCAL\" \"$REMOTE\" -ancestor \"$BASE\" -merge \"$MERGED\"
+  trustExitCode = true
+[merge]
+  conflictstyle = diff3
+  tool = opendiff
+[color "diff"]
+    meta = yellow bold
+    frag = magenta bold
+    old = red bold
+    new = green bold

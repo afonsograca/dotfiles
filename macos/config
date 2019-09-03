@@ -1,0 +1,544 @@
+#!/bin/sh
+##
+## Script to set the default configs of MacOS
+##
+
+handle_general_config() {
+  
+  print_step " Configuring General..."
+  
+  # Expand save panel by default
+  defaults write NSGlobalDomain NSNavPanelExpandedStateForSaveMode -bool true
+  defaults write NSGlobalDomain NSNavPanelExpandedStateForSaveMode2 -bool true
+
+  # Expand print panel by default
+  defaults write NSGlobalDomain PMPrintingExpandedStateForPrint -bool true
+  defaults write NSGlobalDomain PMPrintingExpandedStateForPrint2 -bool true
+
+  # Automatically quit printer app once the print jobs complete
+  defaults write com.apple.print.PrintingPrefs "Quit When Finished" -bool true
+
+  # Disable the “Are you sure you want to open this application?” dialog
+  defaults write com.apple.LaunchServices LSQuarantine -bool false
+
+  # Remove duplicates in the “Open With” menu (also see `lscleanup` alias)
+  /System/Library/Frameworks/CoreServices.framework/Frameworks/LaunchServices.framework/Support/lsregister -kill -r -domain local -domain system -domain user
+  
+  # Save document to iCloud by default
+  defaults write NSGlobalDomain NSDocumentSaveNewDocumentsToCloud -bool false
+}
+
+handle_desktop_and_screen_saver_config() {
+  
+  print_step " Configuring Desktop & Screen saver..."
+
+  # Show icons for hard drives, servers, and removable media on the desktop
+  defaults write com.apple.finder ShowExternalHardDrivesOnDesktop -bool true
+  defaults write com.apple.finder ShowHardDrivesOnDesktop -bool true
+  defaults write com.apple.finder ShowMountedServersOnDesktop -bool true
+  defaults write com.apple.finder ShowRemovableMediaOnDesktop -bool true
+
+  # Save screenshots to the desktop
+  defaults write com.apple.screencapture location -string "${HOME}/Desktop"
+
+  # Save screenshots in PNG format (other options: BMP, GIF, JPG, PDF, TIFF)
+  defaults write com.apple.screencapture type -string "png"
+  
+  # set locally
+}
+
+handle_dock_config() {
+  
+  print_step " Configuring the Dock..."
+  
+  # Apps in dock set locally
+  
+  # Size
+  defaults write com.apple.dock tilesize -int 37
+  
+  # Magnification
+  defaults write com.apple.dock magnification -bool true
+  defaults write com.apple.dock largesize -int 77
+  
+  # Position on screen
+  defaults write com.apple.dock orientation -string "bottom"
+  
+  # Minimize windows using
+  defaults write com.apple.dock mineffect -string "genie"
+  
+  # Prefer tabs when opening documents
+  defaults write NSGlobalDomain AppleWindowTabbingMode -string "fullscreen"
+  
+  # Double-click a window's title bar to 
+  defaults write NSGlobalDomain AppleActionOnDoubleClick -string "Maximize"
+  
+  # Minimize windows into application
+  defaults write com.apple.dock minimize-to-application -bool true
+  
+  # Animate opening applications
+  defaults write com.apple.dock launchanim -bool true
+  
+  # Automatically hide and show the Dock
+  defaults write com.apple.dock autohide -bool false
+  
+  # Show indicators for open applications
+  defaults write com.apple.dock show-process-indicators -bool true
+  
+  # Enable spring loading for all Dock items
+  defaults write com.apple.dock enable-spring-load-actions-on-all-items -bool true
+
+  # Make Dock icons of hidden applications translucent
+  defaults write com.apple.dock showhidden -bool true
+}
+
+handle_mission_control_config() {
+  
+  print_step " Configuring Mission Control..."
+  
+  # Automatically rearrange Spaces based on most recent use
+  defaults write com.apple.dock mru-spaces -bool true
+  
+  # When switching to an application, switch to a Space with open
+  # windows for the application
+  defaults write NSGlobalDomain AppleSpacesSwitchOnActivate -bool true
+  
+  # Group windows by application
+  defaults write com.apple.dock expose-group-by-app -bool false
+  
+  # Displays have separate Spaces
+  defaults write com.apple.spaces spans-displays -bool false
+  
+  # Dashboard
+  defaults write com.apple.dashboard dashboard-enabled-state -int 1
+}
+
+handle_language_and_region_config() {
+  
+  print_step " Configuring Language & Region..."
+  
+  # Preferred languages
+  defaults write NSGlobalDomain AppleLanguages -array "en"
+  
+  # Region
+  defaults write NSGlobalDomain AppleLocale -string "en_GB"
+}
+
+handle_security_and_privacy_config() {
+  
+  print_step " Configuring Security & Privacy..."
+}
+
+handle_spotlight_config() {
+  
+  print_step " Configuring Spotlight..."
+}
+
+handle_notifications_config() {
+  
+  print_step " Configuring Notifications..."
+  
+  # Show Crash Reports as notifications
+  defaults write com.apple.CrashReporter UseUNC 1
+}
+
+handle_display_config() {
+  
+  print_step " Configuring Displays..."
+
+  # Enable subpixel font rendering on non-Apple LCDs
+  # Reference: https://github.com/kevinSuttle/macOS-Defaults/issues/17#issuecomment-266633501
+  defaults write NSGlobalDomain AppleFontSmoothing -int 1
+
+  # Enable HiDPI display modes (requires restart)
+  sudo defaults write /Library/Preferences/com.apple.windowserver DisplayResolutionEnabled -bool true
+}
+
+handle_energy_saver_config() {
+  
+  print_step " Configuring Energy saver..."
+}
+
+handle_keyboard_config() {
+  
+  print_step " Configuring Keyboard..."
+
+  ## Keyboard
+  
+  ## Text
+  
+  ## Shortcuts
+  # Enable Full Keyboard Access on All controls
+  defaults write NSGlobalDomain AppleKeyboardUIMode -int 3
+  
+  ## Input Sources
+  # Show Input menu in menu bar
+  defaults write com.apple.systemuiserver "NSStatusItem Visible com.apple.menuextra.textinput" -bool true
+  defaults write com.apple.systemuiserver "menuExtras" -array-add "/System/Library/CoreServices/Menu Extras/TextInput.menu"
+  
+  ## Dictation
+  
+}
+
+handle_mouse_config() {
+  
+  print_step " Configuring Mouse..."
+}
+
+handle_trackpad_config() {
+  
+  print_step " Configuring Trackpad..."
+
+  # Trackpad: enable tap to click for this user and for the login screen
+  defaults write com.apple.driver.AppleBluetoothMultitouch.trackpad Clicking -bool true
+  defaults -currentHost write NSGlobalDomain com.apple.mouse.tapBehavior -int 1
+  defaults write NSGlobalDomain com.apple.mouse.tapBehavior -int 1
+}
+
+handle_printers_and_scanners_config() {
+  
+  print_step " Configuring Printers & Scanners..."
+}
+
+handle_sound_config() {
+  
+  print_step " Configuring Sound..."
+}
+
+handle_startup_disk_config() {
+  
+  print_step " Configuring Startup disk..."
+}
+
+handle_icloud_config() {
+  
+  print_step " Configuring iCloud..."
+}
+
+handle_internet_acccounts_config() {
+  
+  print_step " Configuring Internet Accounts..."
+}
+
+handle_app_store_config() {
+  
+  print_step " Configuring App Store..."
+}
+
+handle_network_config() {
+  
+  print_step " Configuring Network..."
+}
+
+handle_bluetooth_config() {
+  
+  print_step " Configuring Bluetooth..."
+
+  # Enable aptX codec support
+  sudo defaults write bluetoothaudiod "Enable AptX codec" -bool true
+
+  # Enable AAC codec support
+  sudo defaults write bluetoothaudiod "Enable AAC codec" -bool true
+
+  # Increase sound quality for Bluetooth devices without aptX/aac
+  sudo defaults write bluetoothaudiod "Apple Bitpool Min" -int 50
+  sudo defaults write bluetoothaudiod "Apple Initial Bitpool" -int 50
+}
+
+handle_extensions_config() {
+  
+  print_step " Configuring Extensions..."
+}
+
+handle_sharing_config() {
+  
+  print_step " Configuring Sharing..."
+}
+
+handle_users_and_group_config() {
+  
+  print_step " Configuring Users & Groups..."
+}
+
+handle_parental_controls_config() {
+  
+  print_step " Configuring Parental Controls..."
+}
+
+handle_siri_config() {
+  
+  print_step " Configuring Siri..."
+}
+
+handle_date_and_time_config() {
+  
+  print_step " Configuring Date & Time..."
+}
+
+handle_time_machine_config() {
+  
+  print_step " Configuring Time Machine..."
+
+
+  # Prevent Time Machine from prompting to use new hard drives as backup volume
+  defaults write com.apple.TimeMachine DoNotOfferNewDisksForBackup -bool true
+
+  # Disable local Time Machine backups
+  hash tmutil &> /dev/null && sudo tmutil disablelocal
+}
+
+handle_accessibility_config() {
+  
+  print_step " Configuring Accessibility..."
+  
+  ## Zoom
+  # Use scroll gesture with modifier (^Control)
+  defaults write com.apple.universalaccess closeViewScrollWheelToggle -bool true
+  defaults write com.apple.universalaccess HIDScrollZoomModifierMask -int 262144
+  
+  # Zoom follows keyboard focus
+  defaults write com.apple.universalaccess closeViewZoomFollowsFocus -bool true
+}
+
+handle_finder_config() {
+  
+  print_step " Configuring Finder..."
+  
+  defaults write com.apple.finder FXPreferredViewStyle -string "icnv"
+  
+  # Disable Resume
+  defaults write com.apple.finder NSQuitAlwaysKeepsWindows -bool false
+
+  # Show status bar
+  defaults write com.apple.finder ShowStatusBar -bool true
+
+  # Hide path bar
+  defaults write com.apple.finder ShowPathbar -bool false
+
+  # Avoid creating .DS_Store files on network or USB volumes
+  defaults write com.apple.desktopservices DSDontWriteNetworkStores -bool true
+  defaults write com.apple.desktopservices DSDontWriteUSBStores -bool true
+
+  # Automatically open a new Finder window when a volume is mounted
+  defaults write com.apple.frameworks.diskimages auto-open-ro-root -bool true
+  defaults write com.apple.frameworks.diskimages auto-open-rw-root -bool true
+  defaults write com.apple.finder OpenWindowForNewRemovableDisk -bool true
+}
+
+handle_touch_bar_config() {
+  
+  print_step " Configuring the Touch bar..."
+}
+
+handle_developer_config() {
+  
+  print_step " Adding Developer configurations..."
+}
+
+handle_macos_configs() {
+  
+  ### Includes
+  if test -z "${base_dir+empty}"; then
+    local base_dir="$(cd "$(dirname "$0")/.."; pwd)"
+  fi
+  local macos_dir="$base_dir/macos"
+  
+  if ! command -v source_files_in >/dev/null 2>&1; then
+    source "$base_dir/bin/source_files_in.sh"
+  fi
+  
+  if ! command -v activate_sudo >/dev/null 2>&1; then
+    source "$base_dir/bin/sudo.sh"
+  fi
+  
+  if ! command -v print_header_footer >/dev/null 2>&1; then
+    source "$base_dir/bin/print_utils.sh"
+  fi
+  
+  ### Intro
+  print_header_footer "Step: macOS" $1
+
+
+  ### Pre-script sanity checks 
+
+  # Prevent overrides by closing all System Prefs
+  osascript -e 'tell application "System Preferences" to quit'
+
+  # Make sure you have admin privileges
+  activate_sudo
+
+
+  ### General
+  handle_general_config
+
+  ### Desktop & Screen Saver
+  handle_desktop_and_screen_saver_config
+
+  ### Dock
+  handle_dock_config
+  
+  ### Mission Control
+  handle_mission_control_config
+
+  ### Language & Region
+  handle_language_and_region_config
+
+  ### Security & Privacy
+  handle_security_and_privacy_config
+
+  ### Spotlight
+  handle_spotlight_config
+
+  ### Notifications
+  handle_notifications_config
+
+  ### Displays
+  handle_display_config
+
+  ### Energy Saver
+  handle_energy_saver_config
+
+  ### Keyboard
+  handle_keyboard_config
+
+  ### Mouse
+  handle_mouse_config
+
+  ### Trackpad
+  handle_trackpad_config
+
+  ### Printers & Scanners
+  handle_printers_and_scanners_config
+
+  ### Sound
+  handle_sound_config
+
+  ### Startup Disk
+  handle_startup_disk_config
+
+  ### iCloud
+  handle_icloud_config
+
+  ### Internet Accounts
+  handle_internet_acccounts_config
+
+  ### App Store
+  handle_app_store_config
+
+  ### Network
+  handle_network_config
+
+  ### Bluetooth
+  handle_bluetooth_config
+
+  ### Extensions
+  handle_extensions_config
+
+  ### Sharing
+  handle_sharing_config
+
+  ### Users & Groups
+  handle_users_and_group_config
+
+  ### Parental Controls
+  handle_parental_controls_config
+
+  ### Siri
+  handle_siri_config
+
+  ### Date & Time
+  handle_date_and_time_config
+
+  ### Time Machine
+  handle_time_machine_config
+
+  ### Accessibility
+  handle_accessibility_config
+
+  ### Finder
+  handle_finder_config
+
+  ### Touch bar
+  handle_touch_bar_config
+
+  ### Developer
+  handle_developer_config
+
+
+  # Folder that enables features (like split screen) in Xcode
+  if test ! -d /AppleInternal; then
+    sudo mkdir /AppleInternal
+  fi
+
+
+  ### User-specific definitions
+  for file in "$base_dir"/extra/{**,}*macos_config_local; do
+    source_files_in "$file"
+  done
+
+  ### Finishing touches
+  # for app in "Activity Monitor" \
+  #   "Address Book" \
+  #   "Calendar" \
+  #   "cfprefsd" \
+  #   "Contacts" \
+#     "Dock" \
+#     "Finder" \
+  #   "Google Chrome Canary" \
+  #   "Google Chrome" \
+  #   "Mail" \
+  #   "Messages" \
+  #   "Opera" \
+  #   "Photos" \
+  #   "Safari" \
+  #   "SizeUp" \
+  #   "Spectacle" \
+#     "SystemUIServer" \
+  #   "Terminal" \
+  #   "Transmission" \
+  #   "Tweetbot" \
+  #   "Twitter" \
+  #   "iCal"; do
+  #   killall "${app}" &> /dev/null
+  # done
+
+
+  print_header_footer "Step: System — DONE! (Note: some of these changes require a logout/restart to take effect.)"
+}
+
+handle_macos_configs "$1"
+
+unset -f handle_general_config
+unset -f handle_desktop_and_screen_saver_config
+unset -f handle_dock_config
+unset -f handle_mission_control_config
+unset -f handle_language_and_region_config
+unset -f handle_security_and_privacy_config
+unset -f handle_spotlight_config
+unset -f handle_notifications_config
+unset -f handle_display_config
+unset -f handle_energy_saver_config
+unset -f handle_keyboard_config
+unset -f handle_mouse_config
+unset -f handle_trackpad_config
+unset -f handle_printers_and_scanners_config
+unset -f handle_sound_config
+unset -f handle_startup_disk_config
+unset -f handle_icloud_config
+unset -f handle_internet_acccounts_config
+unset -f handle_app_store_config
+unset -f handle_network_config
+unset -f handle_bluetooth_config
+unset -f handle_extensions_config
+unset -f handle_sharing_config
+unset -f handle_users_and_group_config
+unset -f handle_parental_controls_config
+unset -f handle_siri_config
+unset -f handle_date_and_time_config
+unset -f handle_time_machine_config
+unset -f handle_accessibility_config
+unset -f handle_finder_config
+unset -f handle_touch_bar_config
+unset -f handle_developer_config
+
+unset -f handle_macos_configs
+

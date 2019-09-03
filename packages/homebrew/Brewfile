@@ -1,0 +1,219 @@
+##
+## Brewfile contains all our brew dependencies
+##
+
+
+### App Directory
+cask_args appdir: "/Applications"
+
+
+### Taps (third-party repositories)
+# Administration of macOS applications
+tap "caskroom/cask"
+
+# Bundler for non-Ruby dependencies from Homebrew
+tap "homebrew/bundle"
+
+# Unofficial, Vendorless, and Walled Builds
+tap "alehouse/homebrew-unofficial"
+
+# Casks for fonts
+tap "caskroom/fonts"
+
+# Remove a formula and its unused dependencies
+tap "beeftornado/rmtree"
+
+
+### Brews
+
+# Programmable completion for Bash 3.2
+brew "bash-completion"
+
+# Decentralized dependency manager for Cocoa
+brew "carthage"
+
+# Changes the current Ruby
+brew "chruby"
+
+# ⚠️ Stop saying "you forgot to …" in code review
+brew "danger/tap/danger-swift"
+
+# Elixir is a dynamic, functional language designed for building scalable and maintainable applications
+brew "elixir"
+
+# Distributed revision control system
+brew "git"
+
+# "GNU Pretty Good Privacy (PGP) package"
+brew "gnupg"
+
+# Mac App Store command line interface
+brew "mas"
+
+# Platform built on V8 to build network applications
+brew "node"
+
+# Pinentry for GPG on Mac
+brew "pinentry-mac"
+
+# Simple Python version management
+brew "pyenv"
+
+# Interpreted, interactive, object-oriented programming language
+brew "python@2"
+
+# Groom your app’s Ruby environment
+# brew "rbenv"
+
+# Platform built on V8 to build network applications
+brew "ruby"
+
+# Swift Version Manager https://swiftenv.fuller.li/
+brew "kylef/formulae/swiftenv"
+
+# Tool to enforce Swift style and conventions
+brew "swiftlint"
+
+# Display directories as trees (with optional color/HTML output)
+brew "tree"
+
+# Language for application scale JavaScript development
+brew "typescript", args: ['without-node']
+
+# JavaScript package manager
+brew "yarn", args: ["without-node"]
+
+
+### Apps
+
+# Developer tools for Android development
+cask "android-studio"
+
+# Dropbox desktop client
+cask "dropbox"
+
+# Fabric.io desktop client for mobile development
+cask "fabric"
+
+# Mozilla's web browser
+cask "firefox"
+
+# Google Drive's desktop client
+cask "google-backup-and-sync"
+
+# Google's web browser
+cask "google-chrome"
+
+# Introspected tunnels to localhost
+cask "ngrok"
+
+# Delete with an Iron fist
+cask "omnidisksweeper"
+
+# Toolchain for API developers
+cask "postman"
+
+# Design toolkit built to help you create your best work
+cask "sketch"
+
+# Skype desktop client
+cask "skype"
+
+# Spotify desktop client
+cask "spotify"
+
+# A fast, easy, and free BitTorrent client
+cask "transmission"
+
+# Visual Studio Code code editor
+cask "visual-studio-code"
+
+# Open-source media player
+cask "vlc"
+
+# WWDC video aggregator
+cask "wwdc"
+
+
+### Mac App Store
+
+# API Documentation Browser and Code Snippet Manager
+mas "Dash", id: 449589707
+
+# Digital audio workstations
+mas "GarageBand", id: 682658836
+
+# Capture gifs, the easy way
+mas "GIPHY CAPTURE", id: 668208984
+
+# Video Editing
+mas "iMovie", id: 408981434
+
+# Presentation software
+mas "Keynote", id: 409183694
+
+# Spreadsheets
+mas "Numbers", id: 409203825
+
+# Word processor
+mas "Pages", id: 409201541
+
+# Team communication
+mas "Slack", id: 803453959
+
+# Open any archive in seconds
+mas "The Unarchiver", id: 425424353
+
+# Developer tools
+mas "Xcode", id: 497799835
+
+
+### Quick Look Plug-ins
+
+# Preview archives
+cask "betterzip"
+
+# Preview JSON files
+cask "quicklook-json"
+
+# Preview Markdown files
+cask "qlmarkdown"
+
+# Preview source code files with syntax highlighting
+cask "qlcolorcode"
+
+# Display image size and resolution
+cask "qlimagesize"
+
+# This package allows macOS Finder to display thumbnails, static QuickLook previews, cover art and metadata for most types of video files.
+cask "qlvideo"
+
+
+### Fonts
+
+# Monospaced font with programming ligatures
+cask "font-fira-code"
+
+# The iconic font
+cask "font-fontawesome"
+
+# Material Design icons font by Google
+cask "font-material-icons"
+
+# Open-sans font by Google
+cask "font-open-sans"
+
+# Roboto font by Google
+cask "font-roboto"
+
+# Monospaced Roboto font by Google
+cask "font-roboto-mono"
+
+# San Francisco Compact font by Apple
+cask "font-san-francisco-compact"
+
+# San Francisco Pro font by Apple
+cask "font-san-francisco-pro"
+
+# Simple line icons font
+cask "font-simple-line-icons"

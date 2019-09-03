@@ -1,0 +1,42 @@
+#!/bin/bash
+##
+## Script to set Xcode's settings
+##
+
+### General
+
+
+### Accounts
+
+
+### Behaviours
+
+
+### Navigation
+
+
+### Fonts & Colors
+
+
+### Text Editing
+
+
+### Key Bindings
+
+
+### Source Control
+
+
+### Components
+
+
+### Locations
+
+
+### Server & Bots
+
+
+### Extra features
+
+# Enable extra features on Simulator
+mkdir -p /AppleInternal

@@ -1,0 +1,51 @@
+##
+## Bash profile script
+##
+
+dotfiles_path=$(readlink ~/.bash_profile)
+dirname=$(dirname $dotfiles_path)
+parent_dirname=$(dirname $dirname)
+
+### Load environment variables
+if test -r "${dirname}/envs"; then
+  source "${dirname}/envs"
+fi
+
+
+### Load path
+if test -r "${dirname}/path"; then
+  source "${dirname}/path"
+fi
+
+
+### Load NVM
+if test -r "$NVM_DIR/nvm.sh"; then
+  source "$NVM_DIR/nvm.sh"
+fi
+
+### Load chruby
+if test -r "$(brew --prefix)/share/chruby/chruby.sh"; then
+  source "$(brew --prefix)/share/chruby/chruby.sh"
+  RUBIES+=(
+    "$(brew --prefix)/Cellar/ruby/"*
+    "$(brew --prefix)/opt/ruby/"
+    )
+  source "$(brew --prefix)/share/chruby/auto.sh"
+fi
+
+
+### Loading bashrc definitions if it's an interactive shell
+if test ! -z "$PS1" && test -r "${dirname}/bashrc"; then
+  source ${dirname}/bashrc
+fi
+
+
+### Load user-specific definitions
+source ${parent_dirname}/bin/source_files_in.sh
+source_files_in ${parent_dirname}/extra/*{bash_profile,envs,path}_local
+unset source_files_in
+
+### Removing local variables from scope
+unset dotfiles_path
+unset dirname
+unset parent_dirname

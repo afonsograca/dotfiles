@@ -1,0 +1,12 @@
+## Safely delete contents of Xcode Derived data folder
+alias purgeallbuilds='rm -rf ~/Library/Developer/Xcode/DerivedData/*'
+
+# FIXME
+# sudo rm -rf /.DocumentRevisions-V100/
+# rm -rf ~/Library/Developer/Xcode/DerivedData
+# rm -rf ~/Library/Developer/Xcode/Archives
+# rm -rf ~/Library/Developer/Xcode/iOS\ DeviceSupport
+# rm -rf ~/Library/Caches/com.apple.dt.Xcode
+# xcrun simctl delete unavailable
+# watchOS DeviceSupport
+# tvOS DeviceSupport

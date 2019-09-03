@@ -1,0 +1,11 @@
+##
+## Path environment variable configuration
+##
+
+### Load user-specific definitions
+source "${parent_dirname}/bin/source_files_in.sh"
+source_files_in "${parent_dirname}/extra/*path_local"
+unset source_files_in
+
+### Add ~/bin to PATH
+export PATH="$HOME/bin:$PATH"

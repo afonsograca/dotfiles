@@ -1,0 +1,13 @@
+#!/bin/bash
+##
+## Script to install your dotfiles
+##
+
+base_dir="$(cd "$(dirname "$0")"; pwd)"
+
+steps=("system/install.sh" "git/install.sh")
+
+for step in $(seq 0 $((${#steps[@]} - 1))); do
+  source "$base_dir/${steps[step]}" "($(($step + 1))/${#steps[@]})"
+done
+

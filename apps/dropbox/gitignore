@@ -1,0 +1,8 @@
+##
+## Class of Dropbox files to be globally ignored by Git
+##
+
+# Settings and caches
+.dropbox
+.dropbox.attr
+.dropbox.cache

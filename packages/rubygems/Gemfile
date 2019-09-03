@@ -1,0 +1,13 @@
+##
+## Gemfile contains all our Gem dependencies
+##
+
+### Sources
+source "https://rubygems.org"
+
+
+### Gems
+gem "cocoapods"
+gem "fastlane"
+gem "synx"
+gem "xcpretty"

@@ -7,6 +7,7 @@ handle_inputrc() {
   local base_dir="$1"
   local system_dir="$2"
 
+  print_step "Setting Readline"
   ### Create inputrc.lock
   local inputrc="$(cat "$system_dir/inputrc" 2>/dev/null)"
 
@@ -37,8 +38,13 @@ handle_system_dotfiles() {
   
   ### Intro
   print_header_footer "Step: System" $1
+
+  ### Set zsh as the default shell
+  print_step "Setting the Shell type"
+  chsh -s /bin/zsh
   
   ### Symlink bash_profile & bashrc
+  print_step "Setting Configuration"
   local filenames="bash_profile bashrc"
   for filename in $filenames; do
     symlink_files "$system_dir/bash_profile" "$HOME"

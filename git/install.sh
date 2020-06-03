@@ -20,15 +20,29 @@ handle_git_dotfiles() {
   ### Intro
   print_header_footer "Step: Git" $1
 
-  ### Create gitignore_global.lock
-  local gitignore="$(cat "$base_dir/git/gitignore_global" 2>/dev/null)"
+  ### Create gitconfig.lock
+  cat "$git_dir/gitconfig" > "$git_dir/gitconfig.lock" 2>/dev/null
 
-  for file in "$base_dir"/extra/{**,}/gitignore_global_local; do
-    local gitignore="${gitignore}\n\n$(cat "$file" 2>/dev/null)"
+  for file in "$base_dir"/extra/{**/,}*gitconfig_local; do
+    if [ -s "$file" ]; then
+      (echo; echo; cat "$file") >> "$git_dir/gitconfig.lock" 2>/dev/null
+    fi
   done
   unset file
 
-  printf "$gitignore" > "$git_dir/gitignore_global.lock"
+  ### Symlink gitconfig
+  symlink_files "$git_dir/gitconfig.lock" "$HOME" "gitconfig"
+  printf ""
+
+  ### Create gitignore_global.lock
+  cat "$git_dir/gitignore_global" > "$git_dir/gitignore_global.lock" 2>/dev/null
+
+  for file in "$base_dir"/extra/{**/,}gitignore_global_local; do
+    if [ -s "$file" ]; then
+      (echo; echo; cat "$file") >> "$git_dir/gitignore_global.lock" 2>/dev/null
+    fi
+  done
+  unset file
 
   ### Symlink gitignore_global
   symlink_files "$git_dir/gitignore_global.lock" "$HOME" "gitignore_global"

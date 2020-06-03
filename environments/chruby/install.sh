@@ -51,9 +51,16 @@ echo ""
 
 echo "=> Configuring Chruby"
 ### Make Brew's ruby the default
-rbenv global system
 
-rbenv rehash
+# TODO check if bash is loaded, if not, load RUBIES and symlink ruby to ~/.ruby-version
+# if test -r "$(brew --prefix)/share/chruby/chruby.sh"; then
+#   source "$(brew --prefix)/share/chruby/chruby.sh"
+#   RUBIES+=(
+#     "$(brew --prefix)/Cellar/ruby/"*
+#     "$(brew --prefix)/opt/ruby/"
+#     )
+#   source "$(brew --prefix)/share/chruby/auto.sh"
+# fi
 
 ### Load user-specific definitions
 base_dir="$(cd "$(dirname "$0")/../.."; pwd)"

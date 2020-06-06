@@ -15,14 +15,19 @@ fi
 if ! command -v print_header_footer >/dev/null 2>&1; then
   source "$base_dir/bin/print_utils.sh"
 fi
-
-# FIXME needs xcode-select --install first
+  
+if ! command -v install_xcode_tools >/dev/null 2>&1; then
+  source "$base_dir/bin/xcode-tools.sh"
+fi
 
 ### Intro
 print_header_footer "Step: Homebrew"
 
 activate_sudo
 
+if [install_xcode_tools -ne 0]; then
+  return 1
+fi
 
 ### Make sure Brew is installed & up to date
 if ! command -v brew >/dev/null 2>&1; then

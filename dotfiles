@@ -5,9 +5,23 @@
 
 base_dir="$(cd "$(dirname "$0")"; pwd)"
 
-steps=("system/install.sh" "git/install.sh")
+if ! command -v print_header_footer >/dev/null 2>&1; then
+  source "$base_dir/bin/print_utils.sh"
+fi
+  
+if ! command -v install_xcode_tools >/dev/null 2>&1; then
+  source "$base_dir/bin/xcode-tools.sh"
+fi
 
-for step in $(seq 0 $((${#steps[@]} - 1))); do
-  source "$base_dir/${steps[step]}" "($(($step + 1))/${#steps[@]})"
+print_header_footer "Before we begin..."
+
+# Check for Xcode CLI availability
+if [install_xcode_tools -ne 0]; then
+  return 1
+fi
+
+steps=("system/install.sh" "git/install.sh")
+for index in ${!steps[@]}; do
+  source "$base_dir/${steps[index]}" "($(($index + 1))/${#steps[@]})"
 done
 

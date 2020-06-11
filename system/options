@@ -2,36 +2,6 @@
 ## Shell options configuration
 ##
 
-#### History
-#setopt SHARE_HISTORY # share history across multiple sessions
-#setopt APPEND_HISTORY
-#setopt INC_APPEND_HISTORY # incremental append, not at shell exit
-#
-#setopt HIST_EXPIRE_DUPS_FIRST # Expire duplicates first
-#setopt HIST_IGNORE_DUPS # Omit duplicates from history
-#setopt HIST_FIND_NO_DUPS # Omit duplicates from search
-#setopt HIST_REDUCE_BLANKS # Omit blank lines
-#
-#### Tab completion
-#autoload -Uz compinit && compinit
-#
-## Case insensitive path-completion
-#zstyle ':completion:*' matcher-list 'm:{[:lower:][:upper:]}={[:upper:][:lower:]}' 'm:{[:lower:][:upper:]}={[:upper:][:lower:]} l:|=* r:|=*' 'm:{[:lower:][:upper:]}={[:upper:][:lower:]} l:|=* r:|=*' 'm:{[:lower:][:upper:]}={[:upper:][:lower:]} l:|=* r:|=*'
-#
-## partial completion suggestions
-#zstyle ':completion:*' list-suffixes
-#zstyle ':completion:*' expand prefix suffix
-#
-## load bashcompinit for some old bash completions
-#autoload bashcompinit && bashcompinit
-#
-#[[ -r ~/Projects/autopkg_complete/autopkg ]] && source ~/Projects/autopkg_complete/autopkg
-#
-## Generic completion
-#compdef _gnu_generic <command>
-
-
-
 ### Enable auto cd by directory name, if available
 shopt -s autocd 2> /dev/null
 

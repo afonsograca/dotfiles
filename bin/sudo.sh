@@ -5,9 +5,12 @@
 activate_sudo() {
   ## Make sure you have admin privileges
   if ! sudo -n -v 2>/dev/null; then
-    echo "\nProvide me some admin rights, pretty please:"
+    printf "\nProvide me some admin rights, pretty please:\n"
     sudo -v
-    echo "\nAll set and ready to start!\n"
+    if [ $? -ne 0 ]; then
+      return 1
+    fi
+    printf "\nAll set and ready to start!\n"
   fi
 
   ## Keep admin privileges alive in the background

@@ -13,14 +13,22 @@ if ! command -v install_xcode_tools >/dev/null 2>&1; then
   source "$base_dir/bin/xcode-tools.sh"
 fi
 
-print_header_footer "Before we begin..."
-
-# Check for Xcode CLI availability
-if [install_xcode_tools -ne 0]; then
-  return 1
+if ! command -v activate_sudo >/dev/null 2>&1; then
+  source "$base_dir/bin/sudo.sh"
 fi
 
-steps=("system/install.sh" "git/install.sh")
+print_header_footer "Before we begin..."
+
+if ! activate_sudo; then
+  exit 1
+fi
+
+# Check for Xcode CLI availability
+if ! install_xcode_tools; then
+  exit 1
+fi
+
+steps=("shell/install.sh")
 for index in ${!steps[@]}; do
   source "$base_dir/${steps[index]}" "($(($index + 1))/${#steps[@]})"
 done

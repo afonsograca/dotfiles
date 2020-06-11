@@ -1,0 +1,29 @@
+##
+## Environemt variables to be added to all contexts
+##
+
+### Location for config files
+export ZDOTDIR=$HOME/.zsh
+
+### Default editor
+export EDITOR="vim"
+
+### Defining display colors for different filetypes
+export CLICOLOR="true"
+export LSCOLORS="gxfxcxdxbxCgCdabagacad"
+export LS_COLORS="di=36:ln=35:so=32:pi=33:ex=31:bd=1;32;46:cd=1;32;43:su=30;41:sg=30;46:tw=30;42:ow=30;43"
+
+### Language and Localisation
+export LANG=en_US.UTF-8
+export LC_ALL=en_US.UTF-8
+
+### Man colors
+export LESS_TERMCAP_md=$(tput bold; tput setaf 3) # Bold yellow - begin
+export LESS_TERMCAP_me=$(tput sgr0) # Bold - reset
+export LESS_TERMCAP_us=$(tput smul; tput setaf 6) # Underline cyan - begin
+export LESS_TERMCAP_ue=$(tput rmul; tput sgr0) # Underline - end
+export LESS_TERMCAP_so=$(tput bold; tput setaf 3; tput setab 4) # Standout mode yellow on blue - begin
+export LESS_TERMCAP_se=$(tput rmso; tput sgr0) # Standout mode - end 
+# export LESS_TERMCAP_mb=$(tput bold; tput setaf 2) # Blinking green - begin
+# export LESS_TERMCAP_mr=$(tput rev) # Reverse content
+# export LESS_TERMCAP_mh=$(tput dim) # Dim content

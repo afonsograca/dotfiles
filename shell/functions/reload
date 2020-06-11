@@ -1,0 +1,12 @@
+function reload() {
+  if test -r $HOME/.zshenv; then
+    source $HOME/.zshenv
+  fi
+  if test -d $ZDOTDIR; then
+    for file in $ZDOTDIR/.{zshprofile,zshrc,zshlogin,zshlogout}; do
+      if test -r $file; then
+        source $file
+      fi
+    done
+  fi
+}

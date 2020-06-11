@@ -1,0 +1,35 @@
+##
+## Shell options configuration
+##
+
+### Globbing
+setopt NO_CASE_GLOB # Enable case-insensitive globbing
+setopt GLOB_COMPLETE # Generate completion matches to cycle through when using glob pattern
+setopt NUMERIC_GLOB_SORT # Sort extensions with numbers numerically
+
+### History
+HISTFILE=${ZDOTDIR}/.zsh_history # history location
+SAVEHIST=20000 # number of commands in memory, per session
+HISTSIZE=50000 # number of commands stored in disk
+setopt EXTENDED_HISTORY # record comman with timestamp
+setopt INC_APPEND_HISTORY_TIME # save history incrementally once commands are done, but keep session history intact
+setopt HIST_EXPIRE_DUPS_FIRST # expire duplicates first
+setopt HIST_IGNORE_DUPS # do not store if duplicate of previous command
+setopt HIST_FIND_NO_DUPS # skip duplicates when searching
+setopt HIST_REDUCE_BLANKS # omit blank lines from history
+setopt HIST_IGNORE_SPACE # omit commands that start with space (privacy reasons)
+
+### Key bindings
+bindkey $'^[[A' up-line-or-search    # up arrow
+bindkey $'^[[B' down-line-or-search  # down arrow
+
+### Correct commands
+setopt CORRECT
+setopt CORRECT_ALL # includes arguments
+
+### Tab completion
+zstyle ':completion:*' matcher-list 'm:{[:lower:][:upper:]}={[:upper:][:lower:]}' 'm:{[:lower:][:upper:]}={[:upper:][:lower:]} l:|=* r:|=*' 'm:{[:lower:][:upper:]}={[:upper:][:lower:]} l:|=* r:|=*' 'm:{[:lower:][:upper:]}={[:upper:][:lower:]} l:|=* r:|=*' # Case insensitive
+zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS} # Colorize completion
+zstyle ':completion:*' insert-tab false # Never add tabs to shell
+# finally
+autoload -Uz compinit && compinit # Initialise zsh completion system

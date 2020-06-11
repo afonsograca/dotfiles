@@ -1,0 +1,52 @@
+##
+## Prompt configuration
+##
+
+# Enable evaluating the prompt string at every print
+setopt PROMPT_SUBST
+
+### Git information
+add-zsh-hook -Uz precmd vcs_info
+zstyle ':vcs_info:*' enable git
+zstyle ':vcs_info:git*' check-for-changes true
+zstyle ':vcs_info:git*' stagedstr "%B%F{green}+%f%b"
+zstyle ':vcs_info:git*' unstagedstr "%B%F{yellow}*%f%b"
+zstyle ':vcs_info:git*' stashedstr "%B%F{magenta}$%f%b"
+
+# Default info
+zstyle ':vcs_info:git*' formats " %F{yellow}(%b)%f %m%u%c"
+# Action Info (e.g. REBASE) 
+zstyle ':vcs_info:git*' actionformats " %s  %r/%S %b (%a) %m%u%c " 
+
+### Left propmpt
+function _left_prompt() {
+  # Username
+  local prompt="%F{green}%n%f"
+  if sudo -n true 2> /dev/null; then
+    local prompt="%B${prompt}%b" # in sudo
+  fi
+
+  # Current directory
+  local prompt="${prompt} %F{blue}%1~%f"
+
+  # Git info
+  local prompt="${prompt}${vcs_info_msg_0_}"
+
+  # Prompt indicator
+  local prompt="${prompt} %F{blue}>%f "
+
+  echo $prompt
+}
+PROMPT='$(_left_prompt)'
+
+### Right prompt
+function right_prompt() {
+  local prompt="%(?.%F{green}✓%f.%F{red}✗%f)"
+  echo $prompt
+}
+RPROMPT=$(right_prompt)
+
+### Correction prompt
+SPROMPT="Correct %B%F{yellow}%R%f%b to  %B%F{green}%R%f%b? %F{blue}[nyae]%f "
+
+unset -f right_prompt

@@ -8,26 +8,20 @@ cask_args appdir: "/Applications"
 
 
 ### Taps (third-party repositories)
-# Administration of macOS applications
-tap "caskroom/cask"
-
 # Bundler for non-Ruby dependencies from Homebrew
 tap "homebrew/bundle"
 
 # Unofficial, Vendorless, and Walled Builds
 tap "alehouse/homebrew-unofficial"
 
-# Casks for fonts
-tap "caskroom/fonts"
+# Casks of fonts
+tap "homebrew/cask-fonts"
 
 # Remove a formula and its unused dependencies
 tap "beeftornado/rmtree"
 
 
 ### Brews
-
-# Programmable completion for Bash 3.2
-brew "bash-completion"
 
 # Decentralized dependency manager for Cocoa
 brew "carthage"
@@ -50,8 +44,8 @@ brew "gnupg"
 # Mac App Store command line interface
 brew "mas"
 
-# Platform built on V8 to build network applications
-brew "node"
+# # Platform built on V8 to build network applications
+# brew "node"
 
 # Pinentry for GPG on Mac
 brew "pinentry-mac"
@@ -59,14 +53,11 @@ brew "pinentry-mac"
 # Simple Python version management
 brew "pyenv"
 
-# Interpreted, interactive, object-oriented programming language
-brew "python@2"
+# # Interpreted, interactive, object-oriented programming language
+# brew "python@2"
 
-# Groom your app’s Ruby environment
-# brew "rbenv"
-
-# Platform built on V8 to build network applications
-brew "ruby"
+# # Platform built on V8 to build network applications
+# brew "ruby"
 
 # Swift Version Manager https://swiftenv.fuller.li/
 brew "kylef/formulae/swiftenv"
@@ -82,6 +73,9 @@ brew "typescript", args: ['without-node']
 
 # JavaScript package manager
 brew "yarn", args: ["without-node"]
+
+# Programmable completion for Zsh
+brew "zsh-completions"
 
 
 ### Apps
@@ -114,7 +108,10 @@ cask "omnidisksweeper"
 cask "postman"
 
 # Design toolkit built to help you create your best work
-cask "sketch"
+cask "figma"
+
+# Capture your screen
+cask "kap"
 
 # Skype desktop client
 cask "skype"

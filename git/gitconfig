@@ -188,8 +188,8 @@
   # worktree # not applicable to a global gitconfig, relates to repo
 
 [credential]
-	helper = osxkeychain # external helper to be called
-  useHttpPath = true # consider the "path" component of an URL
+	helper = osxkeychain # use macOS keychain as a helper to handle credentials
+  useHttpPath = true # consider the "path" component of an URL to require different credentials
 
 [credentialCache]
   ignoreSIGHUP = true # ignore SIGHUP, instead of quitting
@@ -442,10 +442,10 @@
   verbosity
   verifySignatures
   
-[merge ""]
-  name
-  driver
-  recursive
+# [merge ""] # custom merge driver
+#   name
+#   driver
+#   recursive
 
 [mergetool]
   keepBackup

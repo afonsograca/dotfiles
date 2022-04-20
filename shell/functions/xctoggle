@@ -1,0 +1,17 @@
+function xctoggle() {
+    RELEASE="Xcode.app"
+    BETA="Xcode-beta.app"
+
+    CURRENT=$(xcode-select -p)
+    NEXT=""
+
+    if [[ "$CURRENT" =~ "$RELEASE" ]]
+    then
+        NEXT="$BETA"
+    else
+        NEXT="$RELEASE"
+    fi
+
+    sudo xcode-select -s "/Applications/$NEXT"
+    echo "Switched to $NEXT"
+}

@@ -2,6 +2,9 @@
 ## Shell options configuration
 ##
 
+### Shell edit mode
+setopt emacs
+
 ### Globbing
 setopt NO_CASE_GLOB # Enable case-insensitive globbing
 setopt GLOB_COMPLETE # Generate completion matches to cycle through when using glob pattern
@@ -20,8 +23,14 @@ setopt HIST_REDUCE_BLANKS # omit blank lines from history
 setopt HIST_IGNORE_SPACE # omit commands that start with space (privacy reasons)
 
 ### Key bindings
-bindkey $'^[[A' up-line-or-search    # up arrow
-bindkey $'^[[B' down-line-or-search  # down arrow
+# default search on zsh only uses the first word, adding this contrib
+# will use everything typed until that moment
+autoload -U up-line-or-beginning-search
+autoload -U down-line-or-beginning-search
+zle -N up-line-or-beginning-search # register the widgets in Zsh Line Editor
+zle -N down-line-or-beginning-search # register the widgets in Zsh Line Editor
+bindkey "^[[A" up-line-or-beginning-search # up arrow
+bindkey "^[[B" down-line-or-beginning-search # down arrow
 
 ### Correct commands
 setopt CORRECT

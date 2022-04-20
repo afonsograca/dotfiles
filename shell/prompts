@@ -47,6 +47,6 @@ function right_prompt() {
 RPROMPT=$(right_prompt)
 
 ### Correction prompt
-SPROMPT="Correct %B%F{yellow}%R%f%b to  %B%F{green}%R%f%b? %F{blue}[nyae]%f "
+SPROMPT="Correct %B%F{yellow}%R%f%b to  %B%F{green}%r%f%b? %F{blue}[nyae]%f "
 
 unset -f right_prompt

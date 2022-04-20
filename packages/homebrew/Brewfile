@@ -83,6 +83,9 @@ brew "zsh-completions"
 # Developer tools for Android development
 cask "android-studio"
 
+# small application which allows you to thoroughly uninstall unwanted apps
+cask "appcleaner"
+
 # Dropbox desktop client
 cask "dropbox"
 

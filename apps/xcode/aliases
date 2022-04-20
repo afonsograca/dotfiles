@@ -1,5 +1,5 @@
 ## Safely delete contents of Xcode Derived data folder
-alias purgeallbuilds='rm -rf ~/Library/Developer/Xcode/DerivedData/*'
+alias purgeallbuilds='yes | rm -rf ~/Library/Developer/Xcode/DerivedData/*'
 
 # FIXME
 # sudo rm -rf /.DocumentRevisions-V100/

@@ -4,6 +4,9 @@
 ##
 
 handle_git_dotfiles() {
+
+  local dry_run=$2
+
   if test -z "${base_dir+empty}"; then
     local base_dir="$(cd "$(dirname "$0")/.."; pwd)"
   fi
@@ -20,37 +23,38 @@ handle_git_dotfiles() {
   ### Intro
   print_header_footer "Step: Git" $1
 
-  ### Create gitconfig.lock
-  cat "$git_dir/gitconfig" > "$git_dir/gitconfig.lock" 2>/dev/null
+  if test "$dry_run" -eq 0; then
+    print_substep "NOT DRY RUN"
+    # ### Create gitconfig.lock
+    # cat "$git_dir/gitconfig" > "$git_dir/gitconfig.lock" 2>/dev/null
 
-  for file in "$base_dir"/extra/{**/,}*gitconfig_local; do
-    if [ -s "$file" ]; then
-      (echo; echo; cat "$file") >> "$git_dir/gitconfig.lock" 2>/dev/null
-    fi
-  done
-  unset file
+    # for file in "$base_dir"/extra/{**/,}*gitconfig_local; do
+    #   if [ -s "$file" ]; then
+    #     (echo; echo; cat "$file") >> "$git_dir/gitconfig.lock" 2>/dev/null
+    #   fi
+    # done
+    # unset file
 
-  ### Symlink gitconfig
-  symlink_files "$git_dir/gitconfig.lock" "$HOME" "gitconfig"
-  printf ""
+    # ### Symlink gitconfig
+    # symlink_files "$git_dir/gitconfig.lock" "$HOME" "gitconfig"
 
-  ### Create gitignore_global.lock
-  cat "$git_dir/gitignore_global" > "$git_dir/gitignore_global.lock" 2>/dev/null
+    # ### Create gitignore_global.lock
+    # cat "$git_dir/gitignore_global" > "$git_dir/gitignore_global.lock" 2>/dev/null
 
-  for file in "$base_dir"/extra/{**/,}gitignore_global_local; do
-    if [ -s "$file" ]; then
-      (echo; echo; cat "$file") >> "$git_dir/gitignore_global.lock" 2>/dev/null
-    fi
-  done
-  unset file
+    # for file in "$base_dir"/extra/{**/,}gitignore_global_local; do
+    #   if [ -s "$file" ]; then
+    #     (echo; echo; cat "$file") >> "$git_dir/gitignore_global.lock" 2>/dev/null
+    #   fi
+    # done
+    # unset file
 
-  ### Symlink gitignore_global
-  symlink_files "$git_dir/gitignore_global.lock" "$HOME" "gitignore_global"
-  printf ""
+    # ### Symlink gitignore_global
+    # symlink_files "$git_dir/gitignore_global.lock" "$HOME" "gitignore_global"
+  fi
 
   ### Finishing touches
   print_header_footer "Step: Git — DONE!"
 }
 
-handle_git_dotfiles "$1"
+handle_git_dotfiles $1 $2
 unset -f handle_git_dotfiles

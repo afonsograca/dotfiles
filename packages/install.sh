@@ -1,9 +1,9 @@
 #!/bin/sh
 ##
-## Script to setup all MacOS configurations
+## Script to setup all Packages
 ##
 
-handle_macos_dotfiles() {
+handle_packages_dotfiles() {
   local dry_run=$2
   
   if test -z "${base_dir+empty}"; then
@@ -15,19 +15,21 @@ handle_macos_dotfiles() {
   fi
   
   ### Intro
-  print_header_footer "Step: MacOS" $1
+  print_header_footer "Step: Packages" $1
 
   packages=(
-    "dock"
+    "homebrew"
+    "rubygems"
+    "yarn"
   )
   for index in {1..$#packages}; do
-    source "$base_dir/macos/${packages[index]}.sh" $dry_run
+    source "$base_dir/packages/${packages[index]}/install.sh" $dry_run
   done
 
   ### Finishing touches
-  print_header_footer "Step: MacOS — DONE!"
+  print_header_footer "Step: Packages — DONE!"
 }
 
-handle_macos_dotfiles $1 $2
+handle_packages_dotfiles $1 $2
 
-unset -f handle_macos_dotfiles
+unset -f handle_packages_dotfiles

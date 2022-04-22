@@ -1,9 +1,9 @@
 #!/bin/sh
 ##
-## Script to setup all MacOS configurations
+## Script to setup all Apps configurations
 ##
 
-handle_macos_dotfiles() {
+handle_app_dotfiles() {
   local dry_run=$2
   
   if test -z "${base_dir+empty}"; then
@@ -15,19 +15,19 @@ handle_macos_dotfiles() {
   fi
   
   ### Intro
-  print_header_footer "Step: MacOS" $1
+  print_header_footer "Step: Apps" $1
 
   packages=(
-    "dock"
+    "xcode"
   )
   for index in {1..$#packages}; do
-    source "$base_dir/macos/${packages[index]}.sh" $dry_run
+    source "$base_dir/apps/${packages[index]}/config.sh" $dry_run
   done
 
   ### Finishing touches
-  print_header_footer "Step: MacOS — DONE!"
+  print_header_footer "Step: Apps — DONE!"
 }
 
-handle_macos_dotfiles $1 $2
+handle_app_dotfiles $1 $2
 
-unset -f handle_macos_dotfiles
+unset -f handle_app_dotfiles

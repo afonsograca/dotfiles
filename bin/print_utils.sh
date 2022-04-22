@@ -3,14 +3,24 @@
 ##
 
 print_header_footer() {
-  local indent="   "
+  local indent="=> "
   printf "\n"
-  printf "${indent}$*\n"
-  printf "\n"
+  print $indent $*
 }
 
 print_step() {
-  local indent="=>"
-  printf "${indent} $*"
+  local indent=" - "
+  print $indent $*
+}
+
+print_substep() {
+  local indent="   "
+  print $indent $*
+}
+
+print() {
+  local indent=$1
+  shift
+  printf "${indent}$*\n"
   printf "\n"
 }

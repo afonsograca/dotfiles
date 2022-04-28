@@ -1,0 +1,5 @@
+# GUI for password management
+pinentry-program /usr/local/bin/pinentry-mac
+
+# Enable SSH support
+enable-ssh-support

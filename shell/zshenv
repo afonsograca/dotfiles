@@ -27,3 +27,6 @@ export LESS_TERMCAP_se=$(tput rmso; tput sgr0) # Standout mode - end
 # export LESS_TERMCAP_mb=$(tput bold; tput setaf 2) # Blinking green - begin
 # export LESS_TERMCAP_mr=$(tput rev) # Reverse content
 # export LESS_TERMCAP_mh=$(tput dim) # Dim content
+
+### Setup GPG
+export GPG_TTY=$(tty)

@@ -10,7 +10,7 @@ handle_gpg() {
   if test -z "${base_dir+empty}"; then
     local base_dir="$(cd "$(dirname "$0")/.."; pwd)"
   fi
-  local ssh_dir="$base_dir/ssh"
+  local gpg_dir="$base_dir/gpg"
   
   if ! command -v symlink_files >/dev/null 2>&1; then
     source "$base_dir/bin/symlink_dotfiles.sh"
@@ -24,8 +24,24 @@ handle_gpg() {
   print_header_footer "Step: GPG" $1
   
   if test "$dry_run" -eq 0; then
-    print_substep "NOT DRY RUN"
-    # TODO
+    ### Symlink config file
+    symlink_files "$gpg_dir/config" "$HOME/.gnupg" "gpg.conf" false
+
+    ### Symlink agent config file
+    symlink_files "$gpg_dir/agent" "$HOME/.gnupg" "gpg-agent.conf" false
+
+    ### Symlink SSHControl file
+    local sshcontrol="$base_dir/extra/gpg/sshcontrol"
+    if [ -s "$sshcontrol" ]; then
+      symlink_files "$gpg_dir/config" "$HOME/.gnupg" "gpg-agent.conf" false
+    fi
+
+    ### Import keys
+    for file in "$base_dir"/extra/gpg/*.gpg; do
+      if [ -s "$file" ]; then
+        gpg --import $file > /dev/null
+      fi
+    done
   fi
   
   ### Finishing touches

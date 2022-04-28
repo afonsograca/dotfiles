@@ -29,35 +29,34 @@ handle_shell_dotfiles() {
   print_header_footer "Step: Shell" $1
 
   if test "$dry_run" -eq 0; then
-    print_substep "NOT DRY RUN"
-    # ### Set zsh as the default shell
-    # if  [ "$SHELL" != "/bin/zsh" ]; then
-    #   print_step "Setting the Shell type"
-    #   chsh -s /bin/zsh
-    # fi
+    ### Set zsh as the default shell
+    if  [ "$SHELL" != "/bin/zsh" ]; then
+      print_step "Setting the Shell type"
+      chsh -s /bin/zsh
+    fi
     
-    # ### Symlink environment
-    # cat "$shell_dir/zshenv" > "$zsh_dir/.zshenv" 2>/dev/null
+    ### Symlink environment
+    cat "$shell_dir/zshenv" > "$zsh_dir/.zshenv" 2>/dev/null
 
-    # for file in "$base_dir"/extra/{**/,}*zshenv*; do
-    #   if [ -s "$file" ]; then
-    #     (echo; echo; cat "$file") >> "$zsh_dir/zshenv" 2>/dev/null
-    #   fi
-    # done
-    # unset file
-    # symlink_files "$zsh_dir/.zshenv" "$HOME" "zshenv"
+    for file in "$base_dir"/extra/{**/,}*zshenv*; do
+      if [ -s "$file" ]; then
+        (echo; echo; cat "$file") >> "$zsh_dir/zshenv" 2>/dev/null
+      fi
+    done
+    unset file
+    symlink_files "$zsh_dir/.zshenv" "$HOME" "zshenv"
 
-    # ### Setup paths
+    ### Setup paths
 
-    # ### Symlink zsh files
+    ### Symlink zsh files
     
-    # ## Profile configurations
-    # cp "$shell_dir/zshrc" "$zsh_dir/.zshrc"
+    ## Profile configurations
+    cp "$shell_dir/zshrcprofile" "$zsh_dir/.zshprofile"
 
-    # ## Interactive configurations
-    # cp "$shell_dir/zshrc" "$zsh_dir/.zshrc"
+    ## Interactive configurations
+    cp "$shell_dir/zshrc" "$zsh_dir/.zshrc"
 
-    # symlink_files $zsh_dir "$HOME"
+    symlink_files $zsh_dir "$HOME"
   fi
 
   ### Finishing touches

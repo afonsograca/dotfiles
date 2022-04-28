@@ -24,32 +24,31 @@ handle_git_dotfiles() {
   print_header_footer "Step: Git" $1
 
   if test "$dry_run" -eq 0; then
-    print_substep "NOT DRY RUN"
-    # ### Create gitconfig.lock
-    # cat "$git_dir/gitconfig" > "$git_dir/gitconfig.lock" 2>/dev/null
+    ### Create gitconfig.lock
+    cat "$git_dir/gitconfig" > "$git_dir/gitconfig.lock" 2>/dev/null
 
-    # for file in "$base_dir"/extra/{**/,}*gitconfig_local; do
-    #   if [ -s "$file" ]; then
-    #     (echo; echo; cat "$file") >> "$git_dir/gitconfig.lock" 2>/dev/null
-    #   fi
-    # done
-    # unset file
+    for file in "$base_dir"/extra/{**/,}*gitconfig_local; do
+      if [ -s "$file" ]; then
+        (echo; echo; cat "$file") >> "$git_dir/gitconfig.lock" 2>/dev/null
+      fi
+    done
+    unset file
 
-    # ### Symlink gitconfig
-    # symlink_files "$git_dir/gitconfig.lock" "$HOME" "gitconfig"
+    ### Symlink gitconfig
+    symlink_files "$git_dir/gitconfig.lock" "$HOME" "gitconfig"
 
-    # ### Create gitignore_global.lock
-    # cat "$git_dir/gitignore_global" > "$git_dir/gitignore_global.lock" 2>/dev/null
+    ### Create gitignore_global.lock
+    cat "$git_dir/gitignore_global" > "$git_dir/gitignore_global.lock" 2>/dev/null
 
-    # for file in "$base_dir"/extra/{**/,}gitignore_global_local; do
-    #   if [ -s "$file" ]; then
-    #     (echo; echo; cat "$file") >> "$git_dir/gitignore_global.lock" 2>/dev/null
-    #   fi
-    # done
-    # unset file
+    for file in "$base_dir"/extra/{**/,}gitignore_global_local; do
+      if [ -s "$file" ]; then
+        (echo; echo; cat "$file") >> "$git_dir/gitignore_global.lock" 2>/dev/null
+      fi
+    done
+    unset file
 
-    # ### Symlink gitignore_global
-    # symlink_files "$git_dir/gitignore_global.lock" "$HOME" "gitignore_global"
+    ### Symlink gitignore_global
+    symlink_files "$git_dir/gitignore_global.lock" "$HOME" "gitignore_global"
   fi
 
   ### Finishing touches

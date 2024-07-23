@@ -23,7 +23,7 @@ install_xcode_tools() {
       printf "\nYay, Xcode Command Line tools was successfully installed.\n"
     fi 
     rm /tmp/.com.apple.dt.CommandLineTools.installondemand.in-progress
-
+    echo ">>> $return_value cenas"
     return $return_value
   fi
 }

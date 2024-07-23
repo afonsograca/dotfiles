@@ -1,0 +1,29 @@
+##
+## Zsh profile configurations
+##
+
+dotfiles_folder="dotfiles"
+zsh_path=$(readlink ~/.zsh)
+dotfiles_path="${zsh_path%${dotfiles_folder}*}${dotfiles_folder}"
+shell_path="${dotfiles_path}/shell"
+
+if ! command -v source_files_in >/dev/null 2>&1; then
+  source ${dotfiles_path}/bin/source_files_in.sh
+fi
+
+### Load path changes
+source "${dotfiles_path}/packages/homebrew/path"
+source "${dotfiles_path}/environments/asdf/path"
+source "${dotfiles_path}/environments/path"
+source "${dotfiles_path}/apps/vscode/path"
+source "${dotfiles_path}/ssh/path"
+
+### Load user defined extra configs
+source_files_in "${dotfiles_path}/extra/**/*zsh*profile*"
+
+### Removing local variables from scope
+unset dotfiles_path
+unset shell_path
+unset zsh_path
+unset dotfiles_folder
+unset -f source_files_in

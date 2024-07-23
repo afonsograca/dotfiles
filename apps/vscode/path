@@ -1,0 +1,2 @@
+export VSCODE_HOME="/Applications/Visual Studio Code.app/Contents/Resources/app/bin"
+export PATH="$PATH:$VSCODE_HOME"

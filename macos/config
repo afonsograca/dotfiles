@@ -44,93 +44,18 @@ handle_desktop_and_screen_saver_config() {
   # Save screenshots in PNG format (other options: BMP, GIF, JPG, PDF, TIFF)
   defaults write com.apple.screencapture type -string "png"
   
-  # set locally
-}
-
-handle_dock_config() {
-  
-  print_step " Configuring the Dock..."
-  
-  # Apps in dock set locally
-  
-  # Size
-  defaults write com.apple.dock tilesize -int 37
-  
-  # Magnification
-  defaults write com.apple.dock magnification -bool true
-  defaults write com.apple.dock largesize -int 77
-  
-  # Position on screen
-  defaults write com.apple.dock orientation -string "bottom"
-  
-  # Minimize windows using
-  defaults write com.apple.dock mineffect -string "genie"
-  
   # Prefer tabs when opening documents
   defaults write NSGlobalDomain AppleWindowTabbingMode -string "fullscreen"
   
   # Double-click a window's title bar to 
   defaults write NSGlobalDomain AppleActionOnDoubleClick -string "Maximize"
   
-  # Minimize windows into application
-  defaults write com.apple.dock minimize-to-application -bool true
-  
-  # Animate opening applications
-  defaults write com.apple.dock launchanim -bool true
-  
-  # Automatically hide and show the Dock
-  defaults write com.apple.dock autohide -bool false
-  
-  # Show indicators for open applications
-  defaults write com.apple.dock show-process-indicators -bool true
-  
-  # Enable spring loading for all Dock items
-  defaults write com.apple.dock enable-spring-load-actions-on-all-items -bool true
-
-  # Make Dock icons of hidden applications translucent
-  defaults write com.apple.dock showhidden -bool true
-}
-
-handle_mission_control_config() {
-  
-  print_step " Configuring Mission Control..."
-  
-  # Automatically rearrange Spaces based on most recent use
-  defaults write com.apple.dock mru-spaces -bool true
-  
-  # When switching to an application, switch to a Space with open
-  # windows for the application
-  defaults write NSGlobalDomain AppleSpacesSwitchOnActivate -bool true
-  
-  # Group windows by application
-  defaults write com.apple.dock expose-group-by-app -bool false
-  
-  # Displays have separate Spaces
-  defaults write com.apple.spaces spans-displays -bool false
-  
-  # Dashboard
-  defaults write com.apple.dashboard dashboard-enabled-state -int 1
-}
-
-handle_language_and_region_config() {
-  
-  print_step " Configuring Language & Region..."
-  
-  # Preferred languages
-  defaults write NSGlobalDomain AppleLanguages -array "en"
-  
-  # Region
-  defaults write NSGlobalDomain AppleLocale -string "en_GB"
+  # set locally
 }
 
 handle_security_and_privacy_config() {
   
   print_step " Configuring Security & Privacy..."
-}
-
-handle_spotlight_config() {
-  
-  print_step " Configuring Spotlight..."
 }
 
 handle_notifications_config() {
@@ -179,11 +104,6 @@ handle_keyboard_config() {
   
 }
 
-handle_mouse_config() {
-  
-  print_step " Configuring Mouse..."
-}
-
 handle_trackpad_config() {
   
   print_step " Configuring Trackpad..."
@@ -229,21 +149,6 @@ handle_network_config() {
   print_step " Configuring Network..."
 }
 
-handle_bluetooth_config() {
-  
-  print_step " Configuring Bluetooth..."
-
-  # Enable aptX codec support
-  sudo defaults write bluetoothaudiod "Enable AptX codec" -bool true
-
-  # Enable AAC codec support
-  sudo defaults write bluetoothaudiod "Enable AAC codec" -bool true
-
-  # Increase sound quality for Bluetooth devices without aptX/aac
-  sudo defaults write bluetoothaudiod "Apple Bitpool Min" -int 50
-  sudo defaults write bluetoothaudiod "Apple Initial Bitpool" -int 50
-}
-
 handle_extensions_config() {
   
   print_step " Configuring Extensions..."
@@ -262,11 +167,6 @@ handle_users_and_group_config() {
 handle_parental_controls_config() {
   
   print_step " Configuring Parental Controls..."
-}
-
-handle_siri_config() {
-  
-  print_step " Configuring Siri..."
 }
 
 handle_date_and_time_config() {
@@ -376,20 +276,9 @@ handle_macos_configs() {
   ### Dock
   handle_dock_config
   
-  ### Mission Control
-  handle_mission_control_config
-
-  ### Language & Region
-  handle_language_and_region_config
 
   ### Security & Privacy
   handle_security_and_privacy_config
-
-  ### Spotlight
-  handle_spotlight_config
-
-  ### Notifications
-  handle_notifications_config
 
   ### Displays
   handle_display_config
@@ -399,9 +288,6 @@ handle_macos_configs() {
 
   ### Keyboard
   handle_keyboard_config
-
-  ### Mouse
-  handle_mouse_config
 
   ### Trackpad
   handle_trackpad_config
@@ -427,9 +313,6 @@ handle_macos_configs() {
   ### Network
   handle_network_config
 
-  ### Bluetooth
-  handle_bluetooth_config
-
   ### Extensions
   handle_extensions_config
 
@@ -441,9 +324,6 @@ handle_macos_configs() {
 
   ### Parental Controls
   handle_parental_controls_config
-
-  ### Siri
-  handle_siri_config
 
   ### Date & Time
   handle_date_and_time_config
@@ -510,15 +390,10 @@ handle_macos_configs "$1"
 unset -f handle_general_config
 unset -f handle_desktop_and_screen_saver_config
 unset -f handle_dock_config
-unset -f handle_mission_control_config
-unset -f handle_language_and_region_config
 unset -f handle_security_and_privacy_config
-unset -f handle_spotlight_config
-unset -f handle_notifications_config
 unset -f handle_display_config
 unset -f handle_energy_saver_config
 unset -f handle_keyboard_config
-unset -f handle_mouse_config
 unset -f handle_trackpad_config
 unset -f handle_printers_and_scanners_config
 unset -f handle_sound_config
@@ -527,12 +402,10 @@ unset -f handle_icloud_config
 unset -f handle_internet_acccounts_config
 unset -f handle_app_store_config
 unset -f handle_network_config
-unset -f handle_bluetooth_config
 unset -f handle_extensions_config
 unset -f handle_sharing_config
 unset -f handle_users_and_group_config
 unset -f handle_parental_controls_config
-unset -f handle_siri_config
 unset -f handle_date_and_time_config
 unset -f handle_time_machine_config
 unset -f handle_accessibility_config

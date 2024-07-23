@@ -2,6 +2,7 @@
 ##
 ## Script to install your dotfiles
 ##
+trap 'kill $(jobs -p)' EXIT
 zmodload zsh/zutil || return
 
 zparseopts -D d=dry_run -dry_run=dry_run
@@ -32,16 +33,17 @@ if ! install_xcode_tools; then
 fi
 
 steps=(
-  "shell"
-  "packages"
-  "environments"
-  "git"
+  # "shell"
+  # "packages"
+  # "environments"
+  # "git"
   "ssh"
   "gpg"
-  "macos"
-  "apps"
+  # "macos"
+  # "apps"
 )
 for index in {1..$#steps}; do
-  source "$base_dir/$steps[index]/install.sh" "($(($index))/$#steps)" $([[ "$dry_run" ]] && echo 1 || echo 0)
+  (cd "$base_dir/$steps[index]";zsh install.sh "($(($index))/$#steps)" $([[ "$dry_run" ]] && echo 1 || echo 0))
 done
 
+trap - EXIT

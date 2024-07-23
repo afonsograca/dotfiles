@@ -28,7 +28,7 @@
   hist = log --pretty=format:\"%h %ad | %s%d [%an]\" --graph --date=short
  
 [am]
-  keepcr = true # not remove \r from lines ending with \r\n
+  keepcr = true # not remove \\r from lines ending with \\r\\n
   threeWay = true # fall back on 3-way merge if the patch does not apply cleanly
 
 [apply]
@@ -155,7 +155,7 @@
   fileMode = true # honour the executable bit of the file mode (default true)
   # filesRefLockTimeout # time to wait until retry locking a ref (default 100 ms)
   # fsmonitor # command to track changed files since a specified time
-  fsyncObjectFiles = false # enable fsync() when writing object files (default false)
+  fsync = all # enable fsync() when writing object files (default false)
   # gitProxy # set a proxy command for git protocol
   hideDotFiles = dotGitOnly # Windows only - mark . files/folders as hidden (default dotGitOnly)
   hooksPath = ~/.githooks # global hooks directory
@@ -207,7 +207,7 @@
   # mnemonicPrefix
   # noprefix
   # orderFile
-  # renameLimit
+  renameLimit = 7000
   # renames
   # statGraphWidth
   # submodule
@@ -402,7 +402,7 @@
   port = 1234 # the port for httpd (default 1234)
 
 [interactive]
-  diffFilter = /usr/local/opt/git/share/git-core/contrib/diff-highlight/diff-highlight # diff filter when interactive
+  diffFilter = $(brew --prefix git)/share/git-core/contrib/diff-highlight/diff-highlight # diff filter when interactive
   singleKey = false # do not require hitting Enter after each prompt
 
 [log]
@@ -435,11 +435,11 @@
   defaultToUpstream
   ff
   log
-  renameLimit
+  renameLimit = 7000
   renormalize
   stat
   tool
-  verbosity
+  verbosity = 2
   verifySignatures
   
 # [merge ""] # custom merge driver
@@ -489,9 +489,9 @@
 #   writeBitmapHashCache
 
 [pager]
-  diff = /usr/local/opt/git/share/git-core/contrib/diff-highlight/diff-highlight | less -r
-  log = /usr/local/opt/git/share/git-core/contrib/diff-highlight/diff-highlight | less -r
-  show = /usr/local/opt/git/share/git-core/contrib/diff-highlight/diff-highlight | less -r
+  diff = $(brew --prefix git)/share/git-core/contrib/diff-highlight/diff-highlight | less -r
+  log = $(brew --prefix git)/share/git-core/contrib/diff-highlight/diff-highlight | less -r
+  show = $(brew --prefix git)/share/git-core/contrib/diff-highlight/diff-highlight | less -r
 
 [pretty]
 
@@ -504,9 +504,9 @@
 
 [pull]
   ff = only # update branch depending on the fast-forward situation
-  octopus = true # default merge strategy when pulling multiple branches
+  octopus = octopus # default merge strategy when pulling multiple branches
   # rebase = merges # use rebase as a default for `git pull`
-  twohead = true # default merge strategy when pulling a single branch
+  twohead = ort # default merge strategy when pulling a single branch
 
 [push]
   default = current # always push to a branch with the same name

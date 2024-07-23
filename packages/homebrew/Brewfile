@@ -20,20 +20,20 @@ tap "homebrew/cask-fonts"
 # Remove a formula and its unused dependencies
 tap "beeftornado/rmtree"
 
+# Home for Swiftenv
+tap "kylef/formulae"
+
 
 ### Brews
+
+# Extendable version manager with support for Ruby, Node.js, Elixir, Erlang & more
+brew "asdf"
 
 # Decentralized dependency manager for Cocoa
 brew "carthage"
 
-# Changes the current Ruby
-brew "chruby"
-
 # ⚠️ Stop saying "you forgot to …" in code review
 brew "danger/tap/danger-swift"
-
-# Elixir is a dynamic, functional language designed for building scalable and maintainable applications
-brew "elixir"
 
 # Distributed revision control system
 brew "git"
@@ -44,20 +44,8 @@ brew "gnupg"
 # Mac App Store command line interface
 brew "mas"
 
-# # Platform built on V8 to build network applications
-# brew "node"
-
 # Pinentry for GPG on Mac
 brew "pinentry-mac"
-
-# Simple Python version management
-brew "pyenv"
-
-# # Interpreted, interactive, object-oriented programming language
-# brew "python@2"
-
-# # Platform built on V8 to build network applications
-# brew "ruby"
 
 # Swift Version Manager https://swiftenv.fuller.li/
 brew "kylef/formulae/swiftenv"
@@ -68,15 +56,8 @@ brew "swiftlint"
 # Display directories as trees (with optional color/HTML output)
 brew "tree"
 
-# Language for application scale JavaScript development
-brew "typescript", args: ['without-node']
-
-# JavaScript package manager
-brew "yarn", args: ["without-node"]
-
 # Programmable completion for Zsh
 brew "zsh-completions"
-
 
 ### Apps
 
@@ -89,14 +70,14 @@ cask "appcleaner"
 # Dropbox desktop client
 cask "dropbox"
 
-# Fabric.io desktop client for mobile development
-cask "fabric"
-
 # Mozilla's web browser
 cask "firefox"
 
-# Google Drive's desktop client
-cask "google-backup-and-sync"
+# A desktop debugging platform for mobile developers.
+cask "flipper"
+
+# Client for the Google Drive storage service
+cask "google-drive"
 
 # Google's web browser
 cask "google-chrome"
@@ -116,13 +97,16 @@ cask "figma"
 # Capture your screen
 cask "kap"
 
+# Lightweight clipboard manager for macOS
+cask 'maccy'
+
 # Skype desktop client
 cask "skype"
 
 # Spotify desktop client
 cask "spotify"
 
-# A fast, easy, and free BitTorrent client
+# # A fast, easy, and free BitTorrent client
 cask "transmission"
 
 # Visual Studio Code code editor
@@ -131,41 +115,52 @@ cask "visual-studio-code"
 # Open-source media player
 cask "vlc"
 
-# WWDC video aggregator
-cask "wwdc"
-
-
 ### Mac App Store
 
-# API Documentation Browser and Code Snippet Manager
-mas "Dash", id: 449589707
+# # Adblock and privacy
+# mas "AdGuard for Safari", id: 1440147259
 
-# Digital audio workstations
-mas "GarageBand", id: 682658836
+# # Apple Developer
+# mas "Apple Developer", id: 640199958
 
-# Capture gifs, the easy way
-mas "GIPHY CAPTURE", id: 668208984
+# # API Documentation Browser and Code Snippet Manager
+# mas "Dash", id: 449589707
 
-# Video Editing
-mas "iMovie", id: 408981434
+# # Digital audio workstations
+# mas "GarageBand", id: 682658836
 
-# Presentation software
-mas "Keynote", id: 409183694
+# # Block cookie and Tracking nags
+# mas "Hush Nag Blocker", id: 1544743900
 
-# Spreadsheets
-mas "Numbers", id: 409203825
+# # Video Editing
+# mas "iMovie", id: 408981434
 
-# Word processor
-mas "Pages", id: 409201541
+# # View JSON in a readable format
+# mas "JSON Peep for Safari", id: 458969831
 
-# Team communication
-mas "Slack", id: 803453959
+# # Presentation software
+# mas "Keynote", id: 409183694
 
-# Open any archive in seconds
-mas "The Unarchiver", id: 425424353
+# # Workspace organiser
+# mas "Magnet", id: 441258766
 
-# Developer tools
-mas "Xcode", id: 497799835
+# # Spreadsheets
+# mas "Numbers", id: 409203825
+
+# # Word processor
+# mas "Pages", id: 409201541
+
+# # Clipboard Manager
+# mas "PastePal - Clipboard Manager", id: 1503446680
+
+# # Team communication
+# mas "Slack", id: 803453959
+
+# # Open any archive in seconds
+# mas "The Unarchiver", id: 425424353
+
+# # Developer tools
+# mas "Xcode", id: 497799835
 
 
 ### Quick Look Plug-ins
@@ -185,6 +180,9 @@ cask "qlcolorcode"
 # Display image size and resolution
 cask "qlimagesize"
 
+# A QuickLook plugin that lets you view plain text files without a file extension
+cask "qlstephen"
+
 # This package allows macOS Finder to display thumbnails, static QuickLook previews, cover art and metadata for most types of video files.
 cask "qlvideo"
 
@@ -200,6 +198,9 @@ cask "font-fontawesome"
 # Material Design icons font by Google
 cask "font-material-icons"
 
+# New York font by Apple
+cask "font-new-york"
+
 # Open-sans font by Google
 cask "font-open-sans"
 
@@ -210,10 +211,13 @@ cask "font-roboto"
 cask "font-roboto-mono"
 
 # San Francisco Compact font by Apple
-cask "font-san-francisco-compact"
+cask "font-sf-compact"
+
+# San Francisco Mono font by Apple
+cask "font-sf-mono"
 
 # San Francisco Pro font by Apple
-cask "font-san-francisco-pro"
+cask "font-sf-pro"
 
 # Simple line icons font
 cask "font-simple-line-icons"

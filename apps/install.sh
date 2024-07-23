@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/zsh
 ##
 ## Script to setup all Apps configurations
 ##
@@ -18,10 +18,14 @@ handle_app_dotfiles() {
   print_header_footer "Step: Apps" $1
 
   packages=(
-    "xcode"
+    # "maccy"
+    "terminal"
+    # "vscode"
+    # "xcode"
   )
-  for index in {1..$#packages}; do
-    source "$base_dir/apps/${packages[index]}/config.sh" $dry_run
+  for package in $packages; do
+
+    (cd $base_dir/apps/$package; zsh config.sh $dry_run)
   done
 
   ### Finishing touches

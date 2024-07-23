@@ -2,15 +2,17 @@
 ##
 ## Script to import previously created GnuPG keys and set GnuPG configurations
 ##
+trap '' TERM
 
 handle_gpg() {
 
   local dry_run=$2
 
   if test -z "${base_dir+empty}"; then
-    local base_dir="$(cd "$(dirname "$0")/.."; pwd)"
+    local base_dir="$(cd ..; pwd)"
   fi
-  local gpg_dir="$base_dir/gpg"
+  local build_dir="$base_dir/build/gpg"
+  mkdir -p $build_dir
   
   if ! command -v symlink_files >/dev/null 2>&1; then
     source "$base_dir/bin/symlink_dotfiles.sh"
@@ -25,21 +27,27 @@ handle_gpg() {
   
   if test "$dry_run" -eq 0; then
     ### Symlink config file
-    symlink_files "$gpg_dir/config" "$HOME/.gnupg" "gpg.conf" false
+    cp "config" "$build_dir/gpg.conf"
+    symlink_files "$build_dir/gpg.conf" "$HOME/.gnupg" "" false
 
     ### Symlink agent config file
-    symlink_files "$gpg_dir/agent" "$HOME/.gnupg" "gpg-agent.conf" false
+    cp "agent" "$build_dir/gpg-agent.conf"
+    symlink_files "$build_dir/gpg-agent.conf" "$HOME/.gnupg" "" false
 
     ### Symlink SSHControl file
     local sshcontrol="$base_dir/extra/gpg/sshcontrol"
     if [ -s "$sshcontrol" ]; then
-      symlink_files "$gpg_dir/config" "$HOME/.gnupg" "gpg-agent.conf" false
+      cp "$sshcontrol" "$build_dir/sshcontrol"
+      symlink_files "$sshcontrol" "$HOME/.gnupg" "" false
     fi
+
+    ### Reload Agent
+    gpgconf --kill gpg-agent
 
     ### Import keys
     for file in "$base_dir"/extra/gpg/*.gpg; do
       if [ -s "$file" ]; then
-        gpg --import $file > /dev/null
+        gpg --import $file > /dev/null 2>&1
       fi
     done
   fi
@@ -51,3 +59,5 @@ handle_gpg() {
 handle_gpg $1 $2
 
 unset -f handle_gpg
+
+trap - TERM

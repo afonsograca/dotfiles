@@ -6,11 +6,18 @@
 handle_xcode_dotfiles() {
   local dry_run=$1
   
+  if test -z "${base_dir+empty}"; then
+    local base_dir="$(cd ..; pwd)"
+  fi
+  
+  if ! command -v print_header_footer >/dev/null 2>&1; then
+    source "$base_dir/bin/print_utils.sh"
+  fi
+  
   ### Intro
   print_step "Xcode"
 
   if test "$dry_run" -eq 0; then
-    print_substep "NOT DRY RUN"
 
     ### General
 
@@ -47,11 +54,11 @@ handle_xcode_dotfiles() {
 
     ### Extra features
 
-    # Enable extra features on Simulator
-    # mkdir -p /AppleInternal
+    Enable extra features on Simulator
+    mkdir -p /AppleInternal
 
-    # Add the "ViewModel" and "View" counterpart suffixes
-    # defaults write com.apple.dt.Xcode "IDEAdditionalCounterpartSuffixes" -array-add "ViewModel" "View"
+    Add the "ViewModel" and "View" counterpart suffixes
+    defaults write com.apple.dt.Xcode "IDEAdditionalCounterpartSuffixes" -array-add "ViewModel" "View"
   fi
 
   ### Finishing touches

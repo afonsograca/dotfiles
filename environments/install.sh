@@ -2,12 +2,13 @@
 ##
 ## Script to setup all Environments
 ##
+trap 'kill $(jobs -p)' EXIT
 
 handle_environments_dotfiles() {
   local dry_run=$2
 
   if test -z "${base_dir+empty}"; then
-    local base_dir="$(cd "$(dirname "$0")/.."; pwd)"
+    local base_dir="$(cd ..; pwd)"
   fi
   
   if ! command -v print_header_footer >/dev/null 2>&1; then
@@ -18,13 +19,14 @@ handle_environments_dotfiles() {
   print_header_footer "Step: Environments" $1
 
   environments=(
-  "chruby"
-  "nvm"
-  "pyenv"
-  "swiftenv"
+  "ruby"
+  "node"
+  "python"
+  "swift"
+  "elixir"
 )
 for index in {1..$#environments}; do
-  source "$base_dir/environments/${environments[index]}/install.sh" $dry_run
+  (cd ${environments[index]};sh install.sh $dry_run)
 done
 
   ### Finishing touches
@@ -34,3 +36,5 @@ done
 handle_environments_dotfiles $1 $2
 
 unset -f handle_environments_dotfiles
+
+trap - EXIT

@@ -7,7 +7,7 @@ handle_macos_dotfiles() {
   local dry_run=$2
   
   if test -z "${base_dir+empty}"; then
-    local base_dir="$(cd "$(dirname "$0")/.."; pwd)"
+    local base_dir="$(cd ..; pwd)"
   fi
   
   if ! command -v print_header_footer >/dev/null 2>&1; then
@@ -17,15 +17,45 @@ handle_macos_dotfiles() {
   ### Intro
   print_header_footer "Step: MacOS" $1
 
-  packages=(
-    "dock"
+  # Prevent overrides by closing all System Prefs
+  osascript -e 'tell application "System Preferences" to quit'
+
+  components=(
+    # "general"
+    # "desktop"
+    # "dock"
+    # "menubar"  
+    # "missioncontrol"
+    # "siri"
+    # "spotlight"
+    # "languageregion"
+    # "notifications"
+    # "accessibility"
+    # "screentime"
+    # "securityprivacy"
+    # "softwareupdate"
+    # "network"
+    # "bluetooth"
+    # "sound"
+    # "touchid"
+    # "keyboard"
+    # "trackpad"
+    # "mouse"
+    # "displays"
+    # "battery"
+    # "datetime"
+    # "sharing"
+    # "timemachine"
+    # "sudo"
+    "finder"
   )
-  for index in {1..$#packages}; do
-    source "$base_dir/macos/${packages[index]}.sh" $dry_run
+  for component in $components; do
+    (cd $base_dir/macos; zsh $component.sh $dry_run)
   done
 
   ### Finishing touches
   print_header_footer "Step: MacOS — DONE!"
+  print_substep "(Note: some of these changes require a logout/restart to take effect.)"
 }
 
 handle_macos_dotfiles $1 $2

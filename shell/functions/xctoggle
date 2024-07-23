@@ -12,6 +12,7 @@ function xctoggle() {
         NEXT="$RELEASE"
     fi
 
+#https://www.smileykeith.com/2021/08/12/xcode-select-sudoers/
     sudo xcode-select -s "/Applications/$NEXT"
     echo "Switched to $NEXT"
 }

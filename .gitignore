@@ -3,3 +3,4 @@
 *.lock
 extra/*
 build/
+.DS_Store

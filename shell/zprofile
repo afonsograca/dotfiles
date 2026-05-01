@@ -1,29 +1,25 @@
 ##
-## Zsh profile configurations
+## Zsh profile configurations (loaded before zshrc for login shells)
 ##
 
-dotfiles_folder="dotfiles"
-zsh_path=$(readlink ~/.zsh)
-dotfiles_path="${zsh_path%${dotfiles_folder}*}${dotfiles_folder}"
-shell_path="${dotfiles_path}/shell"
+# Load Apple Terminal integration if available
+[[ -r /etc/zshrc_Apple_Terminal ]] && source /etc/zshrc_Apple_Terminal
 
-if ! command -v source_files_in >/dev/null 2>&1; then
-  source ${dotfiles_path}/bin/source_files_in.sh
+# Load source_if_missing utility first
+if [[ -f "$DOTFILES_PATH/bin/source_if_missing.sh" ]]; then
+  source "$DOTFILES_PATH/bin/source_if_missing.sh"
 fi
 
-### Load path changes
-source "${dotfiles_path}/packages/homebrew/path"
-source "${dotfiles_path}/environments/asdf/path"
-source "${dotfiles_path}/environments/path"
-source "${dotfiles_path}/apps/vscode/path"
-source "${dotfiles_path}/ssh/path"
+# Load utilities using source_if_missing
+source_if_missing source_files_in "$DOTFILES_PATH/bin/source_files_in.sh"
 
-### Load user defined extra configs
-source_files_in "${dotfiles_path}/extra/**/*zsh*profile*"
+# Set up PATH from various sources
+# Note: In production, these will be inlined by the build process
+[[ -f "$DOTFILES_PATH/packages/homebrew/path" ]] && source "$DOTFILES_PATH/packages/homebrew/path"
+[[ -f "$DOTFILES_PATH/environments/mise/path" ]] && source "$DOTFILES_PATH/environments/mise/path"
+[[ -f "$DOTFILES_PATH/environments/path" ]] && source "$DOTFILES_PATH/environments/path"
+[[ -f "$DOTFILES_PATH/apps/vscode/path" ]] && source "$DOTFILES_PATH/apps/vscode/path"
+[[ -f "$DOTFILES_PATH/ssh/path" ]] && source "$DOTFILES_PATH/ssh/path"
 
-### Removing local variables from scope
-unset dotfiles_path
-unset shell_path
-unset zsh_path
-unset dotfiles_folder
-unset -f source_files_in
+# Load local customizations
+source_files_in "$DOTFILES_PATH/extra/**/*zsh*profile*"

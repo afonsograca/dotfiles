@@ -1,14 +1,49 @@
 ##
-## Environemt variables to be added to all contexts
+## Environment variables to be added to all contexts
+## This file is sourced by zsh for all shell instances (interactive and non-interactive)
 ##
+
+# Add at the top
+[[ -o interactive ]] && ZSH_INTERACTIVE=1
 
 ### Location for config files
 export ZDOTDIR=$HOME/.zsh
 
+### Dotfiles path resolution
+if [[ -z "$DOTFILES_PATH" ]]; then
+  # Load path resolution utility if not already available
+  if ! command -v resolve_path >/dev/null 2>&1; then
+    # In the built environment, the utility should be in the original dotfiles/bin
+    if [[ -L ~/.zsh ]]; then
+      local zsh_path=$(readlink ~/.zsh)
+      local potential_bin="${zsh_path%/build/zsh}/bin/resolve_path.sh"
+      [[ -f "$potential_bin" ]] && source "$potential_bin"
+      unset zsh_path potential_bin
+    fi
+  fi
+
+  # Try to use the utility function first
+  if command -v resolve_path >/dev/null 2>&1; then
+    export DOTFILES_PATH="$(resolve_path)"
+  else
+    # Fallback to original symlink resolution
+    if [[ -L ~/.zsh ]]; then
+      local zsh_path=$(readlink ~/.zsh)
+      export DOTFILES_PATH="${zsh_path%/build/zsh}"
+      unset zsh_path
+    else
+      export DOTFILES_PATH="$HOME/dotfiles"
+    fi
+  fi
+
+  # In the built environment, shell files are in ~/.zsh/shell/
+  export SHELL_PATH="${ZDOTDIR:-$HOME/.zsh}/shell"
+fi
+
 ### Default editor
 export EDITOR="vim"
 
-### Defining display colors for different filetypes
+### Terminal colors and file type display
 export CLICOLOR="true"
 export LSCOLORS="gxfxcxdxbxCgCdabagacad"
 export LS_COLORS="di=36:ln=35:so=32:pi=33:ex=31:bd=1;32;46:cd=1;32;43:su=30;41:sg=30;46:tw=30;42:ow=30;43"
@@ -17,16 +52,40 @@ export LS_COLORS="di=36:ln=35:so=32:pi=33:ex=31:bd=1;32;46:cd=1;32;43:su=30;41:s
 export LANG=en_US.UTF-8
 export LC_ALL=en_US.UTF-8
 
-### Man colors
-export LESS_TERMCAP_md=$(tput bold; tput setaf 3) # Bold yellow - begin
-export LESS_TERMCAP_me=$(tput sgr0) # Bold - reset
-export LESS_TERMCAP_us=$(tput smul; tput setaf 6) # Underline cyan - begin
-export LESS_TERMCAP_ue=$(tput rmul; tput sgr0) # Underline - end
-export LESS_TERMCAP_so=$(tput bold; tput setaf 3; tput setab 4) # Standout mode yellow on blue - begin
-export LESS_TERMCAP_se=$(tput rmso; tput sgr0) # Standout mode - end 
-# export LESS_TERMCAP_mb=$(tput bold; tput setaf 2) # Blinking green - begin
-# export LESS_TERMCAP_mr=$(tput rev) # Reverse content
-# export LESS_TERMCAP_mh=$(tput dim) # Dim content
+### Man page colors (using termcap sequences)
+# Makes man pages more readable with syntax highlighting
+if command -v tput >/dev/null 2>&1; then
+  export LESS_TERMCAP_md=$(
+    tput bold
+    tput setaf 3
+  )                                   # Bold yellow for headers
+  export LESS_TERMCAP_me=$(tput sgr0) # Reset bold
+  export LESS_TERMCAP_us=$(
+    tput smul
+    tput setaf 6
+  ) # Underline cyan
+  export LESS_TERMCAP_ue=$(
+    tput rmul
+    tput sgr0
+  ) # Reset underline
+  export LESS_TERMCAP_so=$(
+    tput bold
+    tput setaf 3
+    tput setab 4
+  ) # Yellow on blue standout
+  export LESS_TERMCAP_se=$(
+    tput rmso
+    tput sgr0
+  ) # Reset standout
+
+  # Optional termcap sequences (uncomment if desired)
+  # export LESS_TERMCAP_mb=$(tput bold; tput setaf 2)        # Blinking green
+  # export LESS_TERMCAP_mr=$(tput rev)                       # Reverse video
+  # export LESS_TERMCAP_mh=$(tput dim)                       # Dim text
+fi
 
 ### Setup GPG
-export GPG_TTY=$(tty)
+# Only set GPG_TTY if we have a controlling terminal
+if [[ -t 0 ]] && command -v tty >/dev/null 2>&1; then
+  export GPG_TTY="$(tty)"
+fi

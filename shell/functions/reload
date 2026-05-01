@@ -1,12 +1,25 @@
-function reload() {
-  if test -r $HOME/.zshenv; then
-    source $HOME/.zshenv
+##
+## Reload shell configuration
+##
+
+reload() {
+  local -a config_files
+
+  if [[ -n "$ZSH_VERSION" ]]; then
+    config_files=(
+      "$HOME/.zshenv"
+      "${ZDOTDIR:-$HOME/.zsh}/.zprofile"
+      "${ZDOTDIR:-$HOME/.zsh}/.zshrc"
+    )
+  else
+    config_files=(
+      "$HOME/.bash_profile"
+      "$HOME/.bashrc"
+    )
   fi
-  if test -d $ZDOTDIR; then
-    for file in $ZDOTDIR/.{zshprofile,zshrc,zshlogin,zshlogout}; do
-      if test -r $file; then
-        source $file
-      fi
-    done
-  fi
+
+  for file in "${config_files[@]}"; do
+    [[ -r "$file" ]] && source "$file"
+  done
+  unset file
 }

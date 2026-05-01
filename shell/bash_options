@@ -1,0 +1,31 @@
+##
+## Bash shell options — bash-compatible equivalent of shell/options
+##
+
+# History
+HISTFILE="$HOME/.bash_history"
+HISTSIZE=50000
+HISTFILESIZE=20000
+HISTTIMEFORMAT="%F %T "       # Timestamps (mirrors EXTENDED_HISTORY)
+HISTCONTROL=ignoredups:erasedups  # No duplicate consecutive entries (mirrors HIST_IGNORE_DUPS)
+HISTIGNORE="[ $'\t']*"        # Don't record commands starting with a space (mirrors HIST_IGNORE_SPACE)
+
+shopt -s histappend   # Append to history file; don't overwrite (mirrors INC_APPEND_HISTORY)
+shopt -s cmdhist      # Save multi-line commands as a single history entry
+
+# Globbing
+shopt -s nocaseglob   # Case-insensitive globbing (mirrors NO_CASE_GLOB)
+shopt -s dotglob      # Include dotfiles in globs (mirrors GLOB_DOTS)
+
+# Navigation
+shopt -s cdspell      # Correct minor typos in directory names for cd
+
+# Resize awareness
+shopt -s checkwinsize # Update LINES/COLUMNS after each command
+
+# Up-arrow prefix search — mirrors zsh's up-line-or-beginning-search
+# Only bind in interactive shells; suppressed in scripts that source this file.
+if [[ $- == *i* ]]; then
+  bind '"\e[A": history-search-backward' 2>/dev/null
+  bind '"\e[B": history-search-forward'  2>/dev/null
+fi

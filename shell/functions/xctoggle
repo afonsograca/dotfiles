@@ -1,18 +1,19 @@
-function xctoggle() {
-    RELEASE="Xcode.app"
-    BETA="Xcode-beta.app"
+# macOS only — silently skipped when sourced on other platforms
+if [[ "$OSTYPE" == darwin* ]]; then
+  function xctoggle() {
+      local RELEASE="Xcode.app"
+      local BETA="Xcode-beta.app"
+      local CURRENT=$(xcode-select -p)
+      local NEXT=""
 
-    CURRENT=$(xcode-select -p)
-    NEXT=""
+      if [[ "$CURRENT" =~ "$RELEASE" ]]; then
+          NEXT="$BETA"
+      else
+          NEXT="$RELEASE"
+      fi
 
-    if [[ "$CURRENT" =~ "$RELEASE" ]]
-    then
-        NEXT="$BETA"
-    else
-        NEXT="$RELEASE"
-    fi
-
-#https://www.smileykeith.com/2021/08/12/xcode-select-sudoers/
-    sudo xcode-select -s "/Applications/$NEXT"
-    echo "Switched to $NEXT"
-}
+      # https://www.smileykeith.com/2021/08/12/xcode-select-sudoers/
+      sudo xcode-select -s "/Applications/$NEXT"
+      echo "Switched to $NEXT"
+  }
+fi

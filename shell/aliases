@@ -1,0 +1,18 @@
+##
+## Shell aliases
+##
+
+# Navigation
+alias ..='cd ..'
+alias ...='cd ../..'
+alias ....='cd ../../..'
+alias ~='cd ~'
+alias -- -='cd -'
+
+# Network
+alias myip='curl -s https://ipinfo.io/ip'
+
+# macOS specific
+if [[ "$OSTYPE" == "darwin"* ]]; then
+  alias flushdns='sudo dscacheutil -flushcache && sudo killall -HUP mDNSResponder'
+fi

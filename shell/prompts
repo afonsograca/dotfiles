@@ -5,48 +5,133 @@
 # Enable evaluating the prompt string at every print
 setopt PROMPT_SUBST
 
-### Git information
-add-zsh-hook -Uz precmd vcs_info
+### Git information setup
+autoload -Uz vcs_info
+add-zsh-hook precmd vcs_info
+
+# Configure VCS info
 zstyle ':vcs_info:*' enable git
 zstyle ':vcs_info:git*' check-for-changes true
 zstyle ':vcs_info:git*' stagedstr "%B%F{green}+%f%b"
 zstyle ':vcs_info:git*' unstagedstr "%B%F{yellow}*%f%b"
-zstyle ':vcs_info:git*' stashedstr "%B%F{magenta}$%f%b"
+
+# Enable hooks for additional git status info
+zstyle ':vcs_info:git*+set-message:*' hooks git-untracked
 
 # Default info
 zstyle ':vcs_info:git*' formats " %F{yellow}(%b)%f %m%u%c"
-# Action Info (e.g. REBASE) 
-zstyle ':vcs_info:git*' actionformats " %s  %r/%S %b (%a) %m%u%c " 
+# Action Info (e.g. REBASE)
+zstyle ':vcs_info:git*' actionformats " %s  %r/%S %b (%a) %m%u%c "
 
-### Left propmpt
-function _left_prompt() {
-  # Username
-  local prompt="%F{green}%n%f"
-  if sudo -n true 2> /dev/null; then
-    local prompt="%B${prompt}%b" # in sudo
+# Hook functions for additional git information
++vi-git-untracked() {
+  if [[ $(git rev-parse --is-inside-work-tree 2>/dev/null) == 'true' ]] &&
+    git status --porcelain | grep -q '^??'; then
+    hook_com[misc]+='%B%F{red}?%f%b'
   fi
-
-  # Current directory
-  local prompt="${prompt} %F{blue}%1~%f"
-
-  # Git info
-  local prompt="${prompt}${vcs_info_msg_0_}"
-
-  # Prompt indicator
-  local prompt="${prompt} %F{blue}>%f "
-
-  echo $prompt
 }
+
+# Get git worktree name if in a worktree
+_get_git_worktree() {
+  if ! git rev-parse --is-inside-work-tree >/dev/null 2>&1; then
+    return
+  fi
+  
+  local git_dir=$(git rev-parse --git-dir 2>/dev/null)
+  if [[ -z "$git_dir" ]]; then
+    return
+  fi
+  
+  # Check if we're in a worktree (not the main repository)
+  if [[ -f "$git_dir/gitdir" ]]; then
+    # We're in a worktree, get the worktree name from the path
+    local worktree_path=$(git rev-parse --show-toplevel 2>/dev/null)
+    if [[ -n "$worktree_path" ]]; then
+      local worktree_name=$(basename "$worktree_path")
+      echo " %F{magenta}[$worktree_name]%f"
+    fi
+  fi
+}
+
+### Prompt helper functions
+
+# Cache sudo status for performance
+_check_sudo_status() {
+  # Cache sudo check for 5 minutes to match default sudo timeout
+  if [[ -z "$_SUDO_CACHED" ]] || ((EPOCHSECONDS - _SUDO_LAST_CHECK > 299)); then
+    if sudo -n true 2>/dev/null; then
+      _SUDO_STATUS=1
+    else
+      _SUDO_STATUS=0
+    fi
+    _SUDO_LAST_CHECK=$EPOCHSECONDS
+    _SUDO_CACHED=1
+  fi
+  return $((1 - _SUDO_STATUS))
+}
+
+# Username component
+_prompt_user() {
+  local user_prompt="%F{green}%n%f"
+  if _check_sudo_status; then
+    user_prompt="%B${user_prompt}%b" # Bold if sudo available
+  fi
+  echo "$user_prompt"
+}
+
+# Directory component
+_prompt_directory() {
+  echo "%F{blue}%1~%f"
+}
+
+# Git component
+_prompt_git() {
+  local git_info="${vcs_info_msg_0_}"
+  local worktree_info="$(_get_git_worktree)"
+  
+  if [[ -n "$git_info" && -n "$worktree_info" ]]; then
+    echo "${worktree_info}${git_info}"
+  elif [[ -n "$git_info" ]]; then
+    echo "${git_info}"
+  fi
+}
+
+# Prompt indicator
+_prompt_indicator() {
+  echo "%F{blue}>%f "
+}
+
+### Main prompt functions
+
+# Left prompt function
+_left_prompt() {
+  local prompt=""
+
+  # Build prompt components
+  prompt+="$(_prompt_user)"
+  prompt+=" $(_prompt_directory)"
+  prompt+="$(_prompt_git)"
+  prompt+=" $(_prompt_indicator)"
+
+  echo "$prompt"
+}
+
+# Right prompt function
+_right_prompt() {
+  echo "%(?.%F{green}✓%f.%F{red}✗%f)"
+}
+
+### Set prompts
 PROMPT='$(_left_prompt)'
+RPROMPT='$(_right_prompt)'
 
-### Right prompt
-function right_prompt() {
-  local prompt="%(?.%F{green}✓%f.%F{red}✗%f)"
-  echo $prompt
-}
-RPROMPT=$(right_prompt)
+# Correction prompt
+SPROMPT="Correct %B%F{yellow}%R%f%b to %B%F{green}%r%f%b? %F{blue}[nyae]%f "
 
-### Correction prompt
-SPROMPT="Correct %B%F{yellow}%R%f%b to  %B%F{green}%r%f%b? %F{blue}[nyae]%f "
+### Load local customizations
+if [[ -n "$DOTFILES_PATH" ]] && command -v source_files_in >/dev/null 2>&1; then
+  source_files_in "$DOTFILES_PATH/extra/**/*prompt*"
+fi
 
-unset -f right_prompt
+# Note: We don't unset the prompt functions because they need to persist
+# for the entire shell session and are called every time the prompt is displayed

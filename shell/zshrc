@@ -1,60 +1,35 @@
 ##
-## Zsh run command configurations (for interactive shell)
+## Zsh run command configurations (for interactive shell sessions only)
 ##
 
-dotfiles_folder="dotfiles"
-zsh_path=$(readlink ~/.zsh)
-dotfiles_path="${zsh_path%${dotfiles_folder}*}${dotfiles_folder}"
-shell_path="${dotfiles_path}/shell"
-
-if ! command -v source_files_in >/dev/null 2>&1; then
-  source ${dotfiles_path}/bin/source_files_in.sh
+# Load source_if_missing utility first
+if [[ -f "$DOTFILES_PATH/bin/source_if_missing.sh" ]]; then
+  source "$DOTFILES_PATH/bin/source_if_missing.sh"
 fi
 
-### Load shell options
-if test -r ${shell_path}/options; then
-  source ${shell_path}/options
-fi
+# Load utilities using source_if_missing
+source_if_missing source_files_in "$DOTFILES_PATH/bin/source_files_in.sh"
 
-### Load aliases
-# System aliases
-if test -r ${shell_path}/aliases; then
-  source ${shell_path}/aliases
-fi
+# Load shell configuration
+source "$SHELL_PATH/options"
+source "$SHELL_PATH/aliases"
+source "$SHELL_PATH/prompts"
 
-# App aliases
-source_files_in ${dotfiles_path}/apps/**/aliases
+# Load app aliases
+source_files_in "$DOTFILES_PATH/apps/**/aliases"
 
-### Load functions
-
-# Shell functions
-if test -d ${shell_path}/functions; then
-
-  fpath+="${shell_path}/functions"
-  for file in ${shell_path}/functions/*; do
-    autoload $(basename $file)
+# Load functions
+if [[ -d "$SHELL_PATH/functions" ]]; then
+  fpath+="$SHELL_PATH/functions"
+  for func in "$SHELL_PATH/functions"/*; do
+    [[ -r "$func" ]] && autoload "$(basename "$func")"
   done
+  unset func
 fi
 
-# App functions
-# TODO 
-# source_files_in "${dotfiles_path}/apps/**/functions"
-
-### Load prompt configuration
-if test -r ${shell_path}/prompts; then
-  source ${shell_path}/prompts
-fi
-
-### Load user defined extra configs
-source_files_in "${dotfiles_path}/extra/**/*options_local"
-source_files_in "${dotfiles_path}/extra/**/*zshrc*"
-source_files_in "${dotfiles_path}/extra/**/*aliases*"
-source_files_in "${dotfiles_path}/extra/**/*functions*"
-source_files_in "${dotfiles_path}/extra/**/*prompt*"
-
-### Removing local variables from scope
-unset dotfiles_path
-unset shell_path
-unset zsh_path
-unset dotfiles_folder
-unset -f source_files_in
+# Load local customizations
+source_files_in "$DOTFILES_PATH/extra/**/*options_local"
+source_files_in "$DOTFILES_PATH/extra/**/*zshrc*"
+source_files_in "$DOTFILES_PATH/extra/**/*aliases*"
+source_files_in "$DOTFILES_PATH/extra/**/*functions*"
+source_files_in "$DOTFILES_PATH/extra/**/*prompt*"

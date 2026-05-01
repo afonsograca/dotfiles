@@ -53,39 +53,16 @@ source_files_in() {
       -e '/source_if_missing source_files_in.*/d' \
       "$shell_dir/zprofile" |
       while IFS= read -r line; do
-        case "$line" in
-        *'source "$DOTFILES_PATH/packages/homebrew/path"'*)
-          if [[ -f "$DOTFILES_PATH/packages/homebrew/path" ]]; then
-            echo "# Homebrew (inlined)"
-            cat "$DOTFILES_PATH/packages/homebrew/path"
+        if [[ "$line" == *'source "$DOTFILES_PATH/'*'/path"'* ]]; then
+          local rel_path="${line##*source \"\$DOTFILES_PATH/}"
+          rel_path="${rel_path%%\"*}"
+          if [[ -f "$DOTFILES_PATH/$rel_path" ]]; then
+            cat "$DOTFILES_PATH/$rel_path"
             echo
           fi
-          ;;
-        *'source "$DOTFILES_PATH/environments/mise/path"'*)
-          if [[ -f "$DOTFILES_PATH/environments/mise/path" ]]; then
-            echo "# Mise (inlined)"
-            cat "$DOTFILES_PATH/environments/mise/path"
-            echo
-          fi
-          ;;
-        *'source "$DOTFILES_PATH/apps/vscode/path"'*)
-          if [[ -f "$DOTFILES_PATH/apps/vscode/path" ]]; then
-            echo "# VSCode (inlined)"
-            cat "$DOTFILES_PATH/apps/vscode/path"
-            echo
-          fi
-          ;;
-        *'source "$DOTFILES_PATH/ssh/path"'*)
-          if [[ -f "$DOTFILES_PATH/ssh/path" ]]; then
-            echo "# SSH (inlined)"
-            cat "$DOTFILES_PATH/ssh/path"
-            echo
-          fi
-          ;;
-        *)
+        else
           echo "$line"
-          ;;
-        esac
+        fi
       done
   } >"$zsh_dir/.zprofile"
 

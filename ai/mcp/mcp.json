@@ -1,0 +1,13 @@
+{
+  "mcpServers": {
+    "context7": {
+      "url": "https://mcp.context7.com/mcp",
+      "headers": {
+        "CONTEXT7-API-KEY": "ctx7sk-d1696838-14fc-48d5-b325-e56ee0031eb7"
+      }
+    },
+    "grep": {
+      "url": "https://mcp.grep.app"
+    }
+  }
+}

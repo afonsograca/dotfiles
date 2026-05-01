@@ -2,48 +2,94 @@
 ##
 ## Script to install your dotfiles
 ##
+
 trap 'kill $(jobs -p)' EXIT
 zmodload zsh/zutil || return
 
-zparseopts -D d=dry_run -dry_run=dry_run
+initialize() {
+  # Parse options: --dry-run and --mode
+  local -a opts mode_args
+  zparseopts -D -E -a opts d=dry_run -dry-run=dry_run -mode:=mode_args
+  base_dir="$(
+    cd "$(dirname "$0")"
+    pwd
+  )"
 
-base_dir="$(cd "$(dirname "$0")"; pwd)"
+  # Set container mode when --mode container is passed
+  container_mode=0
+  if [[ "${mode_args[2]}" == "container" ]]; then
+    container_mode=1
+  fi
 
-if ! command -v print_header_footer >/dev/null 2>&1; then
-  source "$base_dir/bin/print_utils.sh"
-fi
-  
-if ! command -v install_xcode_tools >/dev/null 2>&1; then
-  source "$base_dir/bin/xcode-tools.sh"
-fi
+  # Check if --dry-run was specified and set an environment variable
+  if [[ -n "${opts[(i) - dry_run]}" ]]; then
+    export DOTFILES_DRY_RUN=1
+  fi
 
-if ! command -v activate_sudo >/dev/null 2>&1; then
-  source "$base_dir/bin/sudo.sh"
-fi
+  # Source the utilities files
+  source "$base_dir/bin/source_if_missing.sh"
+  source_if_missing print_header_footer "$base_dir/bin/print_utils.sh"
+  source_if_missing install_xcode_tools "$base_dir/bin/xcode-tools.sh"
+  source_if_missing activate_sudo "$base_dir/bin/sudo.sh"
+}
 
-print_header_footer "Before we begin..."
+perform_checks() {
+  print_header_footer "Before we begin..."
+  if ! activate_sudo; then
+    exit 1
+  fi
+  # [[ ! activate_sudo ]] && exit 1
+  if ! install_xcode_tools; then
+    exit 1
+  fi
+  # [[ ! install_xcode_tools ]] && exit 1
+}
 
-if ! activate_sudo; then
-  exit 1
-fi
+cleanup() {
+  # Check if DOTFILES_DRY_RUN was specified and unset it
+  if [ ! -z "${DOTFILES_DRY_RUN+x}" ]; then
+    unset DOTFILES_DRY_RUN
+  fi
 
-# Check for Xcode CLI availability
-if ! install_xcode_tools; then
-  exit 1
-fi
+  trap - EXIT
+}
 
-steps=(
-  # "shell"
-  # "packages"
-  # "environments"
-  # "git"
-  "ssh"
-  "gpg"
-  # "macos"
-  # "apps"
-)
-for index in {1..$#steps}; do
-  (cd "$base_dir/$steps[index]";zsh install.sh "($(($index))/$#steps)" $([[ "$dry_run" ]] && echo 1 || echo 0))
-done
+  run_steps() {
+  if [[ $container_mode -eq 1 ]]; then
+    steps=("shell" "git" "ai")
+  else
+    steps=(
+      # "shell"
+      # "packages"
+      # "environments"
+      # "git"
+      "ai"
+      # "ssh"
+      # "gpg"
+      # "macos"
+      # "apps"
+    )
+  fi
+  for step in $steps; do
+    local step_dir="$base_dir/$step"
+    local dry_run_flag=$([[ "$dry_run" ]] && echo 1 || echo 0)
+    (
+      cd $step_dir
+      zsh install.sh "$((${#steps[@]}))/$#steps"
+    )
+  done
+}
 
-trap - EXIT
+main() {
+  # Ensure cleanup is called on script exit
+  trap cleanup EXIT
+  initialize "$@"
+  if [[ $container_mode -eq 0 ]]; then
+    perform_checks
+  fi
+  run_steps
+}
+
+main "$@"
+
+unset -f initialize perform_checks cleanup run_steps main

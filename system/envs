@@ -5,11 +5,9 @@
 ### Default editor
 export EDITOR="vim"
 
-
 ### Language and Localisation
 export LANG=en_US.UTF-8
 export LC_ALL=en_US.UTF-8
-
 
 ### Shell History
 export HISTSIZE="32768"
@@ -18,22 +16,18 @@ export HISTFILESIZE="${HISTSIZE}"
 ### Omit duplicates and commands that begin with a space from history.
 export HISTCONTROL="ignoreboth"
 
-
 ### Defining display colors for different filetypes
 export CLICOLOR="true"
 export LSCOLORS="gxfxcxdxbxCgCdabagacad"
 
-
 ### Highlight section titles in manual pages.
 export LESS_TERMCAP_md="${yellow}"
-
 
 ### Define Homebrew's Cask default install location
 export HOMEBREW_CASK_OPTS="--appdir=/Applications"
 
-
-### Define NVM directory 
+### Define NVM directory
 export NVM_DIR="$HOME/.nvm"
 
 ### Define GPG default TTY
-#export GPG_TTY=$(tty)
+export GPG_TTY=$(tty)

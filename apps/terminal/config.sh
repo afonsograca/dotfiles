@@ -29,6 +29,9 @@ handle_terminal_dotfiles() {
 
     ### View
 
+    # Keep terminal windows open between quits
+    defaults write com.apple.Terminal NSQuitAlwaysKeepsWindows -bool true
+
     # Hide Marks
     defaults write com.apple.Terminal ShowLineMarks -int 0
 

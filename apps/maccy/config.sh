@@ -5,13 +5,16 @@
 
 handle_vscode_dotfiles() {
   local dry_run=$1
-  
+
   if test -z "${base_dir+empty}"; then
-    local base_dir="$(cd ../..; pwd)"
+    local base_dir="$(
+      cd ../..
+      pwd
+    )"
   fi
   local build_dir="$base_dir/build/maccy"
   mkdir -p $build_dir
-    
+
   if ! command -v print_header_footer >/dev/null 2>&1; then
     source "$base_dir/bin/print_utils.sh"
   fi
@@ -40,14 +43,14 @@ handle_vscode_dotfiles() {
 
     # # Turn on Launch at Login
     ## TODO
-    
+
     # Turn on Update automatically
     defaults write org.p0deje.Maccy SUAutomaticallyUpdate 1
-    
+
     # Turn on Check for updates automatically
     defaults write org.p0deje.Maccy SUEnableAutomaticChecks 1
 
-    # Turn on Fuzzy Search 
+    # Turn on Fuzzy Search
     defaults write org.p0deje.Maccy fuzzySearch 1
 
     # Turn on Paste automatically
@@ -63,7 +66,7 @@ handle_vscode_dotfiles() {
     print_substep "Setting up database..."
     cp "$base_dir/extra"/**/maccy/*sqlite* "$HOME/Library/Containers/org.p0deje.Maccy/Data/Library/Application Support/Maccy/"
 
-    symlink_files "$HOME/Library/Containers/org.p0deje.Maccy/Data/Library/Application Support/Maccy/*" "$build_dir" "" false
+    symlink_files "$build_dir/*" "$HOME/Library/Containers/org.p0deje.Maccy/Data/Library/Application Support/Maccy" "" false
   fi
 
   ### Finishing touches

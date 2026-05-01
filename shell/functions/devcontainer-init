@@ -1,0 +1,45 @@
+devcontainer-init() {
+  local type="$1"
+  local repo_url="$2"
+  local -a valid_types=(vanilla sveltekit nextjs deno react-native ios android rust elixir python ruby)
+
+  if [[ -z "$type" || -z "$repo_url" ]]; then
+    print "Usage: devcontainer-init <type> <repo-url>"
+    print "Valid types: ${(j:, :)valid_types}"
+    return 1
+  fi
+
+  if (( ! ${valid_types[(Ie)$type]} )); then
+    print "Error: unknown type '${type}'"
+    print "Valid types: ${(j:, :)valid_types}"
+    return 1
+  fi
+
+  local template="${DOTFILES_PATH}/devcontainers/${type}/devcontainer.json"
+  if [[ ! -f "$template" ]]; then
+    print "Error: template not found: ${template}"
+    return 1
+  fi
+
+  local repo_name="${repo_url##*/}"
+  repo_name="${repo_name%.git}"
+
+  if [[ -z "$repo_name" ]]; then
+    print "Error: could not derive repo name from URL: ${repo_url}"
+    return 1
+  fi
+
+  local wrapper="${PWD}/${repo_name}"
+
+  if [[ -e "$wrapper" ]]; then
+    print "Error: '${repo_name}' already exists in the current directory"
+    return 1
+  fi
+
+  mkdir -p "${wrapper}/.devcontainer"
+  cp "$template" "${wrapper}/.devcontainer/devcontainer.json"
+  git clone "$repo_url" "${wrapper}/repo"
+
+  print "Workspace ready at ${wrapper}"
+  print "Open '${repo_name}' in VS Code and reopen in container."
+}

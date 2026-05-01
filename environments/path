@@ -1,5 +1,0 @@
-## asdf
-. $(brew --prefix asdf)/libexec/asdf.sh 2>/dev/null
-
-## Swiftenv
-eval "$(swiftenv init - 2>/dev/null)"

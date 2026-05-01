@@ -1,6 +1,6 @@
 #!/bin/zsh
-## 
-## Helper method to install a tool via mise (https://mise.jdx.dev/)
+##
+## Helper method to install a tool globally via mise (https://mise.jdx.dev/)
 ##
 
 install_with_mise() {
@@ -13,36 +13,22 @@ install_with_mise() {
   if test -z "${base_dir+empty}"; then
     local base_dir="$(cd "$(dirname "$0")/../.."; pwd)"
   fi
-    
+
   if ! command -v print_header_footer >/dev/null 2>&1; then
     source "$base_dir/bin/print_utils.sh"
   fi
 
-  ### Make sure Homebrew is installed
-  if ! command -v brew >/dev/null 2>&1; then
-    printf "Please make sure Homebrew is installed before installing $tool\n"
+  ### Make sure mise is installed
+  if ! command -v mise >/dev/null 2>&1; then
+    printf "Please make sure mise is installed before installing $tool\n"
     exit 1
   fi
 
-  ### Make sure mise is installed & up to date
-  if command -v asdf >/dev/null 2>&1; then
-    print_substep "Checking if we're running the latest version of asdf..."
-    brew upgrade asdf >/dev/null 2>&1
-  else
-    print_substep "Installing asdf..."
-    brew install asdf >/dev/null
-  fi
-
-  ### Install asdf's Tool plugin
-  if ! asdf plugin list | grep -q $tool; then
-    print_substep "Installing asdf's $tool plugin..."
-    asdf plugin add $tool >/dev/null
-  fi
-
-  # ### Install Tool plugin
-  if ! (asdf current $tool 2> /dev/null) | grep -q $(asdf latest $tool 2> /dev/null) 2> /dev/null; then
-    print_substep "Installing latest version of $tool..."
-    asdf install $tool latest >/dev/null 2>&1
-    asdf global $tool latest >/dev/null
+  ### Install the latest version globally if not already current
+  local latest
+  latest=$(mise latest "$tool" 2>/dev/null)
+  if ! mise list "$tool" 2>/dev/null | grep -q "$latest"; then
+    print_substep "Installing latest version of $tool via mise..."
+    mise use --global "$tool@latest" >/dev/null
   fi
 }

@@ -17,7 +17,6 @@ source_if_missing source_files_in "$DOTFILES_PATH/bin/source_files_in.sh"
 # Note: In production, these will be inlined by the build process
 [[ -f "$DOTFILES_PATH/packages/homebrew/path" ]] && source "$DOTFILES_PATH/packages/homebrew/path"
 [[ -f "$DOTFILES_PATH/environments/mise/path" ]] && source "$DOTFILES_PATH/environments/mise/path"
-[[ -f "$DOTFILES_PATH/environments/path" ]] && source "$DOTFILES_PATH/environments/path"
 [[ -f "$DOTFILES_PATH/apps/vscode/path" ]] && source "$DOTFILES_PATH/apps/vscode/path"
 [[ -f "$DOTFILES_PATH/ssh/path" ]] && source "$DOTFILES_PATH/ssh/path"
 

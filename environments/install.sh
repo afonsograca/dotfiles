@@ -1,15 +1,12 @@
-#!/bin/szh
+#!/bin/zsh
 ##
-## Script to setup all Environments
+## Script to setup environments
 ##
 trap 'kill $(jobs -p)' EXIT
 
 handle_environments_dotfiles() {
   if test -z "${base_dir+empty}"; then
-    local base_dir="$(
-      cd ..
-      pwd
-    )"
+    local base_dir="$(cd "$(dirname "$0")/.." && pwd)"
   fi
 
   if ! command -v print_header_footer >/dev/null 2>&1; then
@@ -19,19 +16,10 @@ handle_environments_dotfiles() {
   ### Intro
   print_header_footer "Step: Environments" $1
 
-  environments=(
-    "ruby"
-    "node"
-    "python"
-    "swift"
-    "elixir"
+  (
+    cd "$base_dir/environments/ruby"
+    zsh install.sh $2
   )
-  for index in {1..$#environments}; do
-    (
-      cd ${environments[index]}
-      zsh install.sh
-    )
-  done
 
   ### Finishing touches
   print_header_footer "Step: Environments — DONE!"

@@ -110,13 +110,6 @@ source_files_in() {
             echo
           fi
           ;;
-        *'source "$DOTFILES_PATH/environments/path"'*)
-          if [[ -f "$base_dir/environments/path" ]]; then
-            echo "# Legacy environments (inlined)"
-            cat "$base_dir/environments/path"
-            echo
-          fi
-          ;;
         *'source "$DOTFILES_PATH/apps/vscode/path"'*)
           if [[ -f "$base_dir/apps/vscode/path" ]]; then
             echo "# VSCode (inlined)"

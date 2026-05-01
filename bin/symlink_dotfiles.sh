@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/zsh
 ##
 ## Helper functions to symlink files
 ##

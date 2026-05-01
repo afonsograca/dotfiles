@@ -1,13 +1,10 @@
-#!/bin/sh
+#!/bin/zsh
 ##
 ## Script to deal with git 
 ##
 trap '' TERM
 
 handle_git_dotfiles() {
-
-  local dry_run=$2
-
   if test -z "${base_dir+empty}"; then
     local base_dir="$(cd ..; pwd)"
   fi
@@ -25,14 +22,16 @@ handle_git_dotfiles() {
   ### Intro
   print_header_footer "Step: Git" $1
 
-  if test "$dry_run" -eq 0; then
+  # if test "$DOTFILES_DRY_RUN" -eq 0; then
     ### Create build gitconfig
     local gitconfig="$(cat "gitconfig" 2>/dev/null)"
 
-    for file in "$base_dir"/extra/{**,}/*gitconfig_local(.N); do
-      local gitconfig="${gitconfig}\n\n$(cat "$file" 2>/dev/null)"
-    done
-    unset file
+    if [[ -d "$base_dir/extra" ]]; then
+      for file in "$base_dir"/extra/{**,}/*gitconfig_local(.N); do
+        local gitconfig="${gitconfig}\n\n$(cat "$file" 2>/dev/null)"
+      done
+      unset file
+    fi
 
     echo "$gitconfig" > "$build_dir/gitconfig"
 
@@ -42,16 +41,18 @@ handle_git_dotfiles() {
     ### Create build gitignore_global
     local gitignore="$(cat "gitignore_global" 2>/dev/null)"
 
-    for file in "$base_dir"/extra/{**,}/*gitconfig_local(.N); do
-      local gitignore="${gitignore}\n\n$(cat "$file" 2>/dev/null)"
-    done
-    unset file
+    if [[ -d "$base_dir/extra" ]]; then
+      for file in "$base_dir"/extra/{**,}/*gitignore_local(.N); do
+        local gitignore="${gitignore}\n\n$(cat "$file" 2>/dev/null)"
+      done
+      unset file
+    fi
 
     echo "$gitignore" > "$build_dir/gitignore_global"
 
     ### Symlink gitignore_global
     symlink_files "gitignore_global" "$HOME" ""
-  fi
+  # fi
 
   ### Finishing touches
   print_header_footer "Step: Git — DONE!"

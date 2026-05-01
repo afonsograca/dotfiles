@@ -131,7 +131,7 @@
   # tag # specify column behaviour on `git tag`. Overrides `ui`.
 
 [commit]
-  cleanup = default # clean whitespaces and comments from messages
+  cleanup = strip # clean whitespaces and comments from messages
   gpgSign = true # sign all commits
   status = true # show commit status in message editor as a comment
   # template = ~/.gitmessage # path to template to be used in the commit message
@@ -391,8 +391,9 @@
 # [index]
 #   version
   
-# [init]
-#   templateDir
+[init]
+  defaultBranch = main # default branch name
+  # templateDir
 
 [instaweb]
   browser = open # browser to view the gitweb page
@@ -440,7 +441,7 @@
   stat
   tool
   verbosity = 2
-  verifySignatures
+  verifySignatures = false
   
 # [merge ""] # custom merge driver
 #   name
@@ -509,17 +510,18 @@
   twohead = ort # default merge strategy when pulling a single branch
 
 [push]
-  default = current # always push to a branch with the same name
+  default = simple # push the current branch to its upstream branch but refuses to push if the upstream branch's name is different from the local one
   followTags = false # push tags simulatenously with commits
   gpgSign = if-asked # sign push if necessary
   # pushOption # options to be passed to the server (pre & post receive hook)
   recurseSubmodules = check # check if all submodule commits are available remote
+  autoSetupRemote = true # set up the remote as the default push target
 
 [rebase]
   abbreviateCommands = false # while interactive rebasing should print p instead of pick (abbreviate commands)
   autoSquash = true # reorder commits marked with fixup and squash during rebases
   autoStash = true # stash uncommited changes before rebasing
-  instructionFormat = oneline # the format used for the list of commits during an interactive rebase
+  instructionFormat = "%C(auto) %h %d %s" # the format used for the list of commits during an interactive rebase
   missingCommitsCheck = warn # check if commits were removed during rebase (default: ignore) 
   stat = true # show diffstat of the changes of the rebase
 

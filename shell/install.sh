@@ -4,74 +4,32 @@
 ##
 trap '' TERM
 
+if [ -z "${DOTFILES_PATH+set}" ]; then
+  _d="$(cd "$(dirname "$0")" && pwd)"
+  while [ ! -f "$_d/bin/init_installer.sh" ]; do _d="$(dirname "$_d")"; done
+  export DOTFILES_PATH="$_d"
+  unset _d
+fi
+. "$DOTFILES_PATH/bin/init_installer.sh"
+
 initialize() {
-  local dry_run=$1
-
-  # Determine base directory - this should be the dotfiles root
-  if [[ -z "${base_dir+empty}" ]]; then
-    local script_dir="$(cd "$(dirname "$0")" && pwd)"
-    base_dir="$(cd "$script_dir/.." && pwd)"
-
-    # Validate we have the right directory by checking for expected files
-    if [[ ! -f "$base_dir/dotfiles" || ! -d "$base_dir/shell" ]]; then
-      echo "ERROR: Cannot find dotfiles directory structure"
-      echo "Expected to find 'dotfiles' script and 'shell' directory in: $base_dir"
-      return 1
-    fi
-  fi
-
-  # Load source_if_missing utility first
-  if [[ -f "$base_dir/bin/source_if_missing.sh" ]]; then
-    source "$base_dir/bin/source_if_missing.sh"
-  fi
-
-  # Load required utilities using source_if_missing
-  if command -v source_if_missing >/dev/null 2>&1; then
-    source_if_missing symlink_files "$base_dir/bin/symlink_dotfiles.sh"
-    source_if_missing print_header_footer "$base_dir/bin/print_utils.sh"
-  else
-    # Fallback to manual loading if source_if_missing isn't available
-    if ! command -v symlink_files >/dev/null 2>&1; then
-      if [[ -f "$base_dir/bin/symlink_dotfiles.sh" ]]; then
-        source "$base_dir/bin/symlink_dotfiles.sh"
-      fi
-    fi
-
-    if ! command -v print_header_footer >/dev/null 2>&1; then
-      if [[ -f "$base_dir/bin/print_utils.sh" ]]; then
-        source "$base_dir/bin/print_utils.sh"
-      fi
-    fi
-  fi
-
-  # Set up directory paths
-  shell_dir="$base_dir/shell"
-  build_dir="$base_dir/build"
+  shell_dir="$DOTFILES_PATH/shell"
+  build_dir="$DOTFILES_PATH/build"
   zsh_dir="$build_dir/zsh"
   bash_dir="$build_dir/bash"
-
-  # Create build directories
   mkdir -p "$build_dir" "$zsh_dir" "$bash_dir"
 }
 
 check_prerequisites() {
   # Ensure zsh is the default shell
   if [[ "$SHELL" != "/bin/zsh" ]]; then
-    if command -v print_step >/dev/null 2>&1; then
-      print_step "Setting zsh as default shell"
-    else
-      echo " - Setting zsh as default shell"
-    fi
+    print_step "Setting zsh as default shell"
     chsh -s /bin/zsh
   fi
 }
 
 build_config_files() {
-  if command -v print_step >/dev/null 2>&1; then
-    print_step "Building shell configuration files"
-  else
-    echo " - Building shell configuration files"
-  fi
+  print_step "Building shell configuration files"
 
   # Define the inlined source_files_in function
   local source_files_in_function='
@@ -97,30 +55,30 @@ source_files_in() {
       while IFS= read -r line; do
         case "$line" in
         *'source "$DOTFILES_PATH/packages/homebrew/path"'*)
-          if [[ -f "$base_dir/packages/homebrew/path" ]]; then
+          if [[ -f "$DOTFILES_PATH/packages/homebrew/path" ]]; then
             echo "# Homebrew (inlined)"
-            cat "$base_dir/packages/homebrew/path"
+            cat "$DOTFILES_PATH/packages/homebrew/path"
             echo
           fi
           ;;
         *'source "$DOTFILES_PATH/environments/mise/path"'*)
-          if [[ -f "$base_dir/environments/mise/path" ]]; then
+          if [[ -f "$DOTFILES_PATH/environments/mise/path" ]]; then
             echo "# Mise (inlined)"
-            cat "$base_dir/environments/mise/path"
+            cat "$DOTFILES_PATH/environments/mise/path"
             echo
           fi
           ;;
         *'source "$DOTFILES_PATH/apps/vscode/path"'*)
-          if [[ -f "$base_dir/apps/vscode/path" ]]; then
+          if [[ -f "$DOTFILES_PATH/apps/vscode/path" ]]; then
             echo "# VSCode (inlined)"
-            cat "$base_dir/apps/vscode/path"
+            cat "$DOTFILES_PATH/apps/vscode/path"
             echo
           fi
           ;;
         *'source "$DOTFILES_PATH/ssh/path"'*)
-          if [[ -f "$base_dir/ssh/path" ]]; then
+          if [[ -f "$DOTFILES_PATH/ssh/path" ]]; then
             echo "# SSH (inlined)"
-            cat "$base_dir/ssh/path"
+            cat "$DOTFILES_PATH/ssh/path"
             echo
           fi
           ;;
@@ -159,7 +117,7 @@ build_zshenv() {
   fi
 
   # Append any extra zshenv files
-  for file in $(find "$base_dir/extra" -name "*zshenv*" -type f 2>/dev/null); do
+  for file in $(find "$DOTFILES_PATH/extra" -name "*zshenv*" -type f 2>/dev/null); do
     if [[ -s "$file" ]]; then
       {
         echo
@@ -172,23 +130,13 @@ build_zshenv() {
 }
 
 create_symlinks() {
-  if command -v print_step >/dev/null 2>&1; then
-    print_step "Creating symlinks"
-  else
-    echo " - Creating symlinks"
-  fi
-  if command -v symlink_files >/dev/null 2>&1; then
-    symlink_files "$zsh_dir/.zshenv" "$HOME" "zshenv"
-    symlink_files "$zsh_dir" "$HOME"
-  fi
+  print_step "Creating symlinks"
+  symlink_files "$zsh_dir/.zshenv" "$HOME" "zshenv"
+  symlink_files "$zsh_dir" "$HOME"
 }
 
 build_bash_config() {
-  if command -v print_step >/dev/null 2>&1; then
-    print_step "Building bash configuration files"
-  else
-    echo " - Building bash configuration files"
-  fi
+  print_step "Building bash configuration files"
 
   # .bash_profile: entry point for login shells — simply sources .bashrc
   cat >"$bash_dir/.bash_profile" <<'EOF'
@@ -229,30 +177,19 @@ EOF
 }
 
 create_bash_symlinks() {
-  if command -v print_step >/dev/null 2>&1; then
-    print_step "Creating bash symlinks"
-  else
-    echo " - Creating bash symlinks"
-  fi
-  if command -v symlink_files >/dev/null 2>&1; then
-    symlink_files "$bash_dir/.bash_profile" "$HOME" ".bash_profile" false
-    symlink_files "$bash_dir/.bashrc" "$HOME" ".bashrc" false
-  fi
+  print_step "Creating bash symlinks"
+  symlink_files "$bash_dir/.bash_profile" "$HOME" ".bash_profile" false
+  symlink_files "$bash_dir/.bashrc" "$HOME" ".bashrc" false
 }
 
 main() {
   local dry_run=${2:-0}
   local in_container=${3:-0}
 
-  # Initialize first to set up base_dir and utilities
-  initialize "$dry_run"
+  initialize
 
   ### Intro
-  if command -v print_header_footer >/dev/null 2>&1; then
-    print_header_footer "Step: Shell" $1
-  else
-    echo "=> Step: Shell"
-  fi
+  print_header_footer "Step: Shell" $1
 
   if [[ "$dry_run" -eq 0 ]]; then
     if [[ "$SHELL" == */bash && $in_container -eq 0 ]]; then
@@ -267,17 +204,11 @@ main() {
   fi
 
   ### Finishing touches
-  if command -v print_header_footer >/dev/null 2>&1; then
-    print_header_footer "Step: Shell — DONE!"
-  else
-    echo "=> Step: Shell — DONE!"
-  fi
+  print_header_footer "Step: Shell — DONE!"
 }
 
-# Run main function with all arguments
 main "$@"
 
-# Cleanup
 unset -f initialize check_prerequisites build_config_files build_zshenv create_symlinks build_bash_config create_bash_symlinks main
 
 trap - TERM

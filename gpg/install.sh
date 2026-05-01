@@ -4,26 +4,18 @@
 ##
 trap '' TERM
 
+if [ -z "${DOTFILES_PATH+set}" ]; then
+  _d="$(cd "$(dirname "$0")" && pwd)"
+  while [ ! -f "$_d/bin/init_installer.sh" ]; do _d="$(dirname "$_d")"; done
+  export DOTFILES_PATH="$_d"
+  unset _d
+fi
+. "$DOTFILES_PATH/bin/init_installer.sh"
+
 handle_gpg() {
-
   local dry_run=$2
-
-  if test -z "${base_dir+empty}"; then
-    local base_dir="$(
-      cd ..
-      pwd
-    )"
-  fi
-  local build_dir="$base_dir/build/gpg"
+  local build_dir="$DOTFILES_PATH/build/gpg"
   mkdir -p $build_dir
-
-  if ! command -v symlink_files >/dev/null 2>&1; then
-    source "$base_dir/bin/symlink_dotfiles.sh"
-  fi
-
-  if ! command -v print_header_footer >/dev/null 2>&1; then
-    source "$base_dir/bin/print_utils.sh"
-  fi
 
   ### Intro
   print_header_footer "Step: GPG" $1
@@ -40,7 +32,7 @@ handle_gpg() {
     symlink_files "$build_dir/gpg-agent.conf" "$HOME/.gnupg" "" false
 
     ### Symlink SSHControl file
-    local sshcontrol="$base_dir/extra/gpg/sshcontrol"
+    local sshcontrol="$DOTFILES_PATH/extra/gpg/sshcontrol"
     if [ -s "$sshcontrol" ]; then
       cp "$sshcontrol" "$build_dir/sshcontrol"
       symlink_files "$sshcontrol" "$HOME/.gnupg" "" false
@@ -50,7 +42,7 @@ handle_gpg() {
     gpgconf --kill gpg-agent
 
     ### Import keys
-    for file in "$base_dir"/extra/gpg/*.gpg; do
+    for file in "$DOTFILES_PATH"/extra/gpg/*.gpg; do
       if [ -s "$file" ]; then
         gpg --import $file >/dev/null 2>&1
       fi

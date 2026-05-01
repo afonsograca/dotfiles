@@ -10,14 +10,6 @@ install_with_mise() {
   fi
   local tool="$1"
 
-  if test -z "${base_dir+empty}"; then
-    local base_dir="$(cd "$(dirname "$0")/../.."; pwd)"
-  fi
-
-  if ! command -v print_header_footer >/dev/null 2>&1; then
-    source "$base_dir/bin/print_utils.sh"
-  fi
-
   ### Make sure mise is installed
   if ! command -v mise >/dev/null 2>&1; then
     printf "Please make sure mise is installed before installing $tool\n"

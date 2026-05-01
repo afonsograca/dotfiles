@@ -29,8 +29,6 @@ symlink_files() {
     echo "Optional: the name of the symlink and if it should be hidden or not (default hidden)"
     exit 1
   fi
-  source "$base_dir/bin/print_utils.sh"
-
   remove_broken_links "$2"
   
   local should_be_hidden="true"

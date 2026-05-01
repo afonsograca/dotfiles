@@ -4,20 +4,20 @@
 ##
 trap 'kill $(jobs -p)' EXIT
 
+if [ -z "${DOTFILES_PATH+set}" ]; then
+  _d="$(cd "$(dirname "$0")" && pwd)"
+  while [ ! -f "$_d/bin/init_installer.sh" ]; do _d="$(dirname "$_d")"; done
+  export DOTFILES_PATH="$_d"
+  unset _d
+fi
+. "$DOTFILES_PATH/bin/init_installer.sh"
+
 handle_environments_dotfiles() {
-  if test -z "${base_dir+empty}"; then
-    local base_dir="$(cd "$(dirname "$0")/.." && pwd)"
-  fi
-
-  if ! command -v print_header_footer >/dev/null 2>&1; then
-    source "$base_dir/bin/print_utils.sh"
-  fi
-
   ### Intro
   print_header_footer "Step: Environments" $1
 
   (
-    cd "$base_dir/environments/ruby"
+    cd "$DOTFILES_PATH/environments/ruby"
     zsh install.sh $2
   )
 

@@ -15,6 +15,7 @@ initialize() {
   local -a opts mode_args
   zparseopts -D -E -a opts d=dry_run -dry-run=dry_run -mode:=mode_args
   base_dir="$DOTFILES_SCRIPT_DIR"
+  export DOTFILES_PATH="$base_dir"
 
   # Set container mode when --mode container is passed
   container_mode=0

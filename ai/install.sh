@@ -19,27 +19,23 @@
 ##
 trap '' TERM
 
+if [ -z "${DOTFILES_PATH+set}" ]; then
+  _d="$(cd "$(dirname "$0")" && pwd)"
+  while [ ! -f "$_d/bin/init_installer.sh" ]; do _d="$(dirname "$_d")"; done
+  export DOTFILES_PATH="$_d"
+  unset _d
+fi
+. "$DOTFILES_PATH/bin/init_installer.sh"
+
 handle_ai_dotfiles() {
   local dry_run=${2:-0}
-
-  if test -z "${base_dir+empty}"; then
-    local base_dir="$(cd "$(dirname "$0")/.."; pwd)"
-  fi
-  local build_dir="$base_dir/build/ai"
+  local build_dir="$DOTFILES_PATH/build/ai"
   mkdir -p "$build_dir"
 
   # Detect container context
   local in_container=0
   if [[ -n "$REMOTE_CONTAINERS" || -n "$CODESPACES" ]]; then
     in_container=1
-  fi
-
-  if ! command -v symlink_files >/dev/null 2>&1; then
-    source "$base_dir/bin/symlink_dotfiles.sh"
-  fi
-
-  if ! command -v print_header_footer >/dev/null 2>&1; then
-    source "$base_dir/bin/print_utils.sh"
   fi
 
   ### Intro
@@ -50,18 +46,18 @@ handle_ai_dotfiles() {
     print_step "Building AI config (skills, mcp)"
     mkdir -p "$build_dir/skills" "$build_dir/mcp"
 
-    if [[ -d "$base_dir/ai/skills" ]]; then
-      cp -R "$base_dir/ai/skills"/. "$build_dir/skills/" 2>/dev/null || true
+    if [[ -d "$DOTFILES_PATH/ai/skills" ]]; then
+      cp -R "$DOTFILES_PATH/ai/skills"/. "$build_dir/skills/" 2>/dev/null || true
     fi
-    if [[ -d "$base_dir/extra/ai/skills" ]]; then
-      cp -R "$base_dir/extra/ai/skills"/. "$build_dir/skills/" 2>/dev/null || true
+    if [[ -d "$DOTFILES_PATH/extra/ai/skills" ]]; then
+      cp -R "$DOTFILES_PATH/extra/ai/skills"/. "$build_dir/skills/" 2>/dev/null || true
     fi
 
-    if [[ -d "$base_dir/ai/mcp" ]]; then
-      cp -R "$base_dir/ai/mcp"/. "$build_dir/mcp/" 2>/dev/null || true
+    if [[ -d "$DOTFILES_PATH/ai/mcp" ]]; then
+      cp -R "$DOTFILES_PATH/ai/mcp"/. "$build_dir/mcp/" 2>/dev/null || true
     fi
-    if [[ -d "$base_dir/extra/ai/mcp" ]]; then
-      cp -R "$base_dir/extra/ai/mcp"/. "$build_dir/mcp/" 2>/dev/null || true
+    if [[ -d "$DOTFILES_PATH/extra/ai/mcp" ]]; then
+      cp -R "$DOTFILES_PATH/extra/ai/mcp"/. "$build_dir/mcp/" 2>/dev/null || true
     fi
 
     if [[ $in_container -eq 1 ]]; then

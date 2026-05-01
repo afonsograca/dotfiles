@@ -4,30 +4,25 @@
 ##
 trap '' TERM
 
+if [ -z "${DOTFILES_PATH+set}" ]; then
+  _d="$(cd "$(dirname "$0")" && pwd)"
+  while [ ! -f "$_d/bin/init_installer.sh" ]; do _d="$(dirname "$_d")"; done
+  export DOTFILES_PATH="$_d"
+  unset _d
+fi
+. "$DOTFILES_PATH/bin/init_installer.sh"
+
 handle_homebrew_dotfiles() {
-
   local dry_run=$1
-
-  if test -z "${base_dir+empty}"; then
-    local base_dir="$(cd ../..; pwd)"
-  fi
-  local build_dir="$base_dir/build/homebrew"
+  local build_dir="$DOTFILES_PATH/build/homebrew"
   mkdir -p $build_dir
-    
+
   if ! command -v activate_sudo >/dev/null 2>&1; then
-    source "$base_dir/bin/sudo.sh"
-  fi
-    
-  if ! command -v print_header_footer >/dev/null 2>&1; then
-    source "$base_dir/bin/print_utils.sh"
-  fi
-    
-  if ! command -v install_xcode_tools >/dev/null 2>&1; then
-    source "$base_dir/bin/xcode-tools.sh"
+    . "$DOTFILES_PATH/bin/sudo.sh"
   fi
 
-  if ! command -v symlink_files >/dev/null 2>&1; then
-    source "$base_dir/bin/symlink_dotfiles.sh"
+  if ! command -v install_xcode_tools >/dev/null 2>&1; then
+    . "$DOTFILES_PATH/bin/xcode-tools.sh"
   fi
 
   ### Intro
@@ -53,7 +48,7 @@ handle_homebrew_dotfiles() {
     ### Create build Brewfile
     local brewfile="$(cat "Brewfile" 2>/dev/null)"
 
-    for file in $base_dir/extra/{**,}/*Brewfile*; do
+    for file in $DOTFILES_PATH/extra/{**,}/*Brewfile*; do
       local brewfile="${brewfile}\n\n$(cat "$file" 2>/dev/null)"
     done
     unset file
@@ -70,13 +65,13 @@ handle_homebrew_dotfiles() {
     fi
 
     brew upgrade --quiet
-    brew upgrade --cask --quiet 
+    brew upgrade --cask --quiet
 
     ### Remove outdated versions from the cellar.
     print_substep "Cleaning up old brews/taps..."
     brew cleanup --quiet
   fi
-  
+
   ### Finishing touches
   print_step "Homebrew — DONE!"
 }

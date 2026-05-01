@@ -249,6 +249,7 @@ create_bash_symlinks() {
 
 main() {
   local dry_run=${2:-0}
+  local in_container=${3:-0}
 
   # Initialize first to set up base_dir and utilities
   initialize "$dry_run"
@@ -261,7 +262,7 @@ main() {
   fi
 
   if [[ "$dry_run" -eq 0 ]]; then
-    if [[ "$SHELL" == */bash ]]; then
+    if [[ "$SHELL" == */bash && $in_container -eq 0 ]]; then
       build_bash_config
       create_bash_symlinks
     else

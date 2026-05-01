@@ -76,7 +76,7 @@ cleanup() {
     local dry_run_flag=$([[ "$dry_run" ]] && echo 1 || echo 0)
     (
       cd $step_dir
-      zsh install.sh "$((${#steps[@]}))/$#steps"
+      zsh install.sh "$((${#steps[@]}))/$#steps" "$dry_run_flag" "$container_mode"
     )
   done
 }

@@ -6,14 +6,15 @@
 trap 'kill $(jobs -p)' EXIT
 zmodload zsh/zutil || return
 
+# Capture script path at top-level scope before any functions are defined.
+# Inside a function, $0 expands to the function name in zsh (FUNCTION_ARGZERO).
+DOTFILES_SCRIPT_DIR="${0:A:h}"
+
 initialize() {
   # Parse options: --dry-run and --mode
   local -a opts mode_args
   zparseopts -D -E -a opts d=dry_run -dry-run=dry_run -mode:=mode_args
-  base_dir="$(
-    cd "$(dirname "$0")"
-    pwd
-  )"
+  base_dir="$DOTFILES_SCRIPT_DIR"
 
   # Set container mode when --mode container is passed
   container_mode=0

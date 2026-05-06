@@ -29,3 +29,12 @@ if [[ $- == *i* ]]; then
   bind '"\e[A": history-search-backward' 2>/dev/null
   bind '"\e[B": history-search-forward'  2>/dev/null
 fi
+
+# Programmable completion (git subcommands/branches, etc.)
+if ! shopt -oq posix; then
+  if [[ -f /usr/share/bash-completion/bash_completion ]]; then
+    source /usr/share/bash-completion/bash_completion
+  elif [[ -f /etc/bash_completion ]]; then
+    source /etc/bash_completion
+  fi
+fi

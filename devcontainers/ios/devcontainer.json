@@ -3,9 +3,6 @@
   "image": "swift:6.1-bookworm",
   "workspaceMount": "source=${localWorkspaceFolder},target=/workspace,type=bind,consistency=cached",
   "workspaceFolder": "/workspace/repo",
-  "dotfiles": {
-    "repository": "afonsograca/dotfiles"
-  },
   "features": {
     "ghcr.io/devcontainers/features/common-utils:2": {
       "installZsh": true,

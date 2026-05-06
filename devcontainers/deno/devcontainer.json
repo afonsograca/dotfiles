@@ -3,9 +3,6 @@
   "image": "mcr.microsoft.com/devcontainers/base:bookworm",
   "workspaceMount": "source=${localWorkspaceFolder},target=/workspace,type=bind,consistency=cached",
   "workspaceFolder": "/workspace/repo",
-  "dotfiles": {
-    "repository": "afonsograca/dotfiles"
-  },
   "features": {
     "ghcr.io/devcontainers/features/common-utils:2": {
       "installZsh": true,
@@ -26,6 +23,8 @@
       ]
     }
   },
-  "forwardPorts": [8000],
+  "forwardPorts": [
+    8000
+  ],
   "postCreateCommand": "mise install 2>/dev/null || true"
 }

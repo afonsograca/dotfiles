@@ -3,9 +3,6 @@
   "image": "hexpm/elixir:1.18-erlang-27-debian-bookworm-slim",
   "workspaceMount": "source=${localWorkspaceFolder},target=/workspace,type=bind,consistency=cached",
   "workspaceFolder": "/workspace/repo",
-  "dotfiles": {
-    "repository": "afonsograca/dotfiles"
-  },
   "features": {
     "ghcr.io/devcontainers/features/common-utils:2": {
       "installZsh": true,
@@ -25,6 +22,8 @@
       ]
     }
   },
-  "forwardPorts": [4000],
+  "forwardPorts": [
+    4000
+  ],
   "postCreateCommand": "mise install 2>/dev/null || true"
 }

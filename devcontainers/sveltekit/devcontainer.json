@@ -3,9 +3,6 @@
   "image": "mcr.microsoft.com/devcontainers/javascript-node:24-bookworm",
   "workspaceMount": "source=${localWorkspaceFolder},target=/workspace,type=bind,consistency=cached",
   "workspaceFolder": "/workspace/repo",
-  "dotfiles": {
-    "repository": "afonsograca/dotfiles"
-  },
   "features": {
     "ghcr.io/devcontainers/features/common-utils:2": {
       "installZsh": true,
@@ -27,6 +24,8 @@
       ]
     }
   },
-  "forwardPorts": [5173],
+  "forwardPorts": [
+    5173
+  ],
   "postCreateCommand": "mise install 2>/dev/null || true"
 }

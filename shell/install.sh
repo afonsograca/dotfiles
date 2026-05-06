@@ -169,11 +169,13 @@ main() {
   print_header_footer "Step: Shell" $1
 
   if [[ "$dry_run" -eq 0 ]]; then
-    if [[ "$SHELL" == */bash && $in_container -eq 0 ]]; then
+    if [[ "$SHELL" == */bash ]]; then
       build_bash_config
       create_bash_symlinks
     else
-      check_prerequisites
+      if [[ $in_container -eq 0 ]]; then
+        check_prerequisites
+      fi
       build_config_files
       build_zshenv
       create_symlinks

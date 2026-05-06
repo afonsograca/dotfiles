@@ -1,7 +1,7 @@
 ##
 ## Bash prompt — mirrors the information shown by shell/prompts
 ##
-## Shows: exit status (✓/✗)  username  last-dir-component  git-branch +*?  >
+## Shows: username (green=ok, red=err)  last-dir-component  git-branch +*?  >
 ##
 
 _bash_git_info() {
@@ -42,17 +42,13 @@ _bash_prompt() {
   local green="${nps}"$'\033[32m'"${npe}"
   local blue="${nps}"$'\033[34m'"${npe}"
 
-  local exit_indicator
-  if [[ $exit_code -eq 0 ]]; then
-    exit_indicator="${green}✓${r}"
-  else
-    exit_indicator="${red}✗${r}"
-  fi
+  local user_color="${green}"
+  [[ $exit_code -ne 0 ]] && user_color="${red}"
 
   local git_info
   git_info=$(_bash_git_info)
 
-  PS1="${exit_indicator} ${green}\u${r} ${blue}\W${r}${git_info} ${blue}>${r} "
+  PS1="${user_color}\u${r} ${blue}\W${r}${git_info} ${blue}>${r} "
 }
 
 PROMPT_COMMAND=_bash_prompt

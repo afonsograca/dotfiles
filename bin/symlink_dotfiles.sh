@@ -22,28 +22,36 @@ remove_broken_links() {
 # $2 - destionation
 # $3 - symlink name
 # $4 - is hidden symlink (default hidden)
+# $5 - force overwrite existing destination (default true; pass "false" to
+#      preserve a pre-existing regular file or directory at the destination)
 symlink_files() {
-  if test $# -lt 2 || test $# -gt 4; then
-    echo "Error: this function takes 2 to 4 arguments:"
+  if test $# -lt 2 || test $# -gt 5; then
+    echo "Error: this function takes 2 to 5 arguments:"
     echo "Mandatory: the file(s) to symlink and the destination."
-    echo "Optional: the name of the symlink and if it should be hidden or not (default hidden)"
+    echo "Optional: the symlink name, hidden flag (default true), and force flag (default true)"
     exit 1
   fi
   remove_broken_links "$2"
-  
+
   local should_be_hidden="true"
-  
+
   if test  "$4" = "false" || test "$4" = "False"; then
     local should_be_hidden="false"
   fi
-  
+
+  local force="true"
+
+  if test "$5" = "false" || test "$5" = "False"; then
+    local force="false"
+  fi
+
   for file in "$1"; do
     local symlink_name="$(basename $file)"
-    
+
     if test "$3" != ""; then
       local symlink_name="$3"
     fi
-    
+
     print_substep "Creating symlink for $symlink_name"
     source_file="$file"
     mkdir -p "$2"
@@ -52,7 +60,11 @@ symlink_files() {
       ln -sfn "$(dirname $file)"/* "$2"
     else
       symlink="$2/$( test "$should_be_hidden" = "true" && echo ".")$symlink_name"
-      ln -sfn "$source_file" "$symlink"
+      if test "$force" = "false" && test -e "$symlink" && test ! -L "$symlink"; then
+        print_substep "Skipping $symlink_name: $symlink already exists and is not a symlink"
+      else
+        ln -sfn "$source_file" "$symlink"
+      fi
     fi
   done
   unset file

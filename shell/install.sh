@@ -108,8 +108,17 @@ build_zshenv() {
 
 create_symlinks() {
   print_step "Creating symlinks"
-  symlink_files "$zsh_dir/.zshenv" "$HOME" "zshenv"
-  symlink_files "$zsh_dir" "$HOME"
+  local in_container=${1:-0}
+  local force="false"
+  if [[ $in_container -eq 1 ]]; then
+    force="true"
+  fi
+  symlink_files "$zsh_dir/.zshenv" "$HOME" "zshenv" true "$force"
+  symlink_files "$zsh_dir/.zshrc" "$HOME" "zshrc" true "$force"
+  symlink_files "$zsh_dir/.zprofile" "$HOME" "zprofile" true "$force"
+  # ZDOTDIR=$HOME/.zsh, set in zshenv, expects ~/.zsh to point at the build
+  # output so per-file lookups resolve into $zsh_dir.
+  symlink_files "$zsh_dir" "$HOME" "" true "$force"
 }
 
 build_bash_config() {
@@ -155,8 +164,13 @@ EOF
 
 create_bash_symlinks() {
   print_step "Creating bash symlinks"
-  symlink_files "$bash_dir/.bash_profile" "$HOME" ".bash_profile" false
-  symlink_files "$bash_dir/.bashrc" "$HOME" ".bashrc" false
+  local in_container=${1:-0}
+  local force="false"
+  if [[ $in_container -eq 1 ]]; then
+    force="true"
+  fi
+  symlink_files "$bash_dir/.bash_profile" "$HOME" ".bash_profile" false "$force"
+  symlink_files "$bash_dir/.bashrc" "$HOME" ".bashrc" false "$force"
 }
 
 main() {
@@ -169,16 +183,30 @@ main() {
   print_header_footer "Step: Shell" $1
 
   if [[ "$dry_run" -eq 0 ]]; then
-    if [[ "$SHELL" == */bash ]]; then
+    # In containers, $SHELL is leaked from the host IDE/SSH process and does
+    # not reflect the container user's login shell. Read /etc/passwd instead.
+    # On hosts, $SHELL is the user's actual choice and we trust it.
+    local dispatch_shell
+    if [[ $in_container -eq 1 ]]; then
+      local user_name="${USER:-$(id -un 2>/dev/null)}"
+      dispatch_shell="$(getent passwd "$user_name" 2>/dev/null | cut -d: -f7)"
+      if [[ -z "$dispatch_shell" ]]; then
+        dispatch_shell="$(awk -F: -v u="$user_name" '$1==u {print $7; exit}' /etc/passwd 2>/dev/null)"
+      fi
+    else
+      dispatch_shell="$SHELL"
+    fi
+
+    if [[ "$dispatch_shell" == */bash ]]; then
       build_bash_config
-      create_bash_symlinks
+      create_bash_symlinks "$in_container"
     else
       if [[ $in_container -eq 0 ]]; then
         check_prerequisites
       fi
       build_config_files
       build_zshenv
-      create_symlinks
+      create_symlinks "$in_container"
     fi
   fi
 

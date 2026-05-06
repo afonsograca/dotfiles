@@ -3,7 +3,7 @@
 ## Script to install your dotfiles
 ##
 
-trap 'kill $(jobs -p)' EXIT
+trap 'pids=$(jobs -p); [[ -n "$pids" ]] && kill $pids' EXIT
 zmodload zsh/zutil || return
 
 # Capture script path at top-level scope before any functions are defined.

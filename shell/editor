@@ -1,0 +1,14 @@
+##
+## Default editor — pick the first available, preferring vim.
+## Sourced by both zsh (zshenv) and bash (.bashrc) so $EDITOR and $VISUAL
+## are set consistently across environments that may not have vim installed.
+##
+
+for _ed in vim vi nano; do
+  if command -v "$_ed" >/dev/null 2>&1; then
+    export EDITOR="$_ed"
+    export VISUAL="$_ed"
+    break
+  fi
+done
+unset _ed

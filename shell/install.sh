@@ -150,6 +150,7 @@ DOTFILES_PATH="$(cd "$(dirname "$_bashrc_self")/../.." && pwd)"
 SHELL_PATH="$DOTFILES_PATH/shell"
 unset _bashrc_self
 
+source "$SHELL_PATH/editor"
 source "$SHELL_PATH/aliases"
 source "$SHELL_PATH/bash_options"
 source "$SHELL_PATH/bash_prompt"

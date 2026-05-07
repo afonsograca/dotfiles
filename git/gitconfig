@@ -149,7 +149,7 @@
   # compression = # takes a value 0..9, being 0 no compression and 9 best compression of objects
   # createObject # determine how files are created depending on the sytem/OS combinations (default unset)
   # deltaBaseCacheLimit # Max nº of bytes to reserve for caching base objects
-  editor = "vim" # editor to be used by `git commit` and `git tag`
+  # editor # unset — git falls back through $GIT_EDITOR, $VISUAL, $EDITOR (set by shell/editor)
   eol = native # line ending type to use (default native)
   excludesFile = ~/.gitignore_global # global ignore file
   fileMode = true # honour the executable bit of the file mode (default true)
@@ -593,8 +593,8 @@
 #   validate
 #   xmailer
 
-[sequence]
-  editor = "vim" # text editor to be used by `git rebase -i`
+# [sequence]
+  # editor # unset — falls back to core.editor, then $VISUAL / $EDITOR (set by shell/editor)
 
 [showbranch]
   default = --topo-order # show branches in topological order

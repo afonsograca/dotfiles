@@ -41,7 +41,7 @@ if [[ -z "$DOTFILES_PATH" ]]; then
 fi
 
 ### Default editor
-export EDITOR="vim"
+source "$SHELL_PATH/editor"
 
 ### Terminal colors and file type display
 export CLICOLOR="true"

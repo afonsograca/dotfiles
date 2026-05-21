@@ -42,8 +42,8 @@
   # date # the format of the date shown (default unset - ISO)
 
 [branch]
-  autoSetupMerge = true # should `git branch`/`git checkout` imply the `--track` option (default true)
-  autoSetupRebase = always # should new branches should be set up to be rebased upon `git pull` (default never)
+  autoSetupMerge = simple   # track upstream only when local branch name matches the remote branch name (default: true — always track when starting from a remote-tracking branch)
+  autoSetupRebase = always  # configure new branches to rebase on `git pull` instead of merge (default: never)                                                                                                                                                                             
 
 # [browser "command_name"]
   # cmd # command executed by the shell
@@ -509,13 +509,13 @@
   # rebase = merges # use rebase as a default for `git pull`
   twohead = ort # default merge strategy when pulling a single branch
 
-[push]
-  default = simple # push the current branch to its upstream branch but refuses to push if the upstream branch's name is different from the local one
-  followTags = false # push tags simulatenously with commits
-  gpgSign = if-asked # sign push if necessary
-  # pushOption # options to be passed to the server (pre & post receive hook)
-  recurseSubmodules = check # check if all submodule commits are available remote
-  autoSetupRemote = true # set up the remote as the default push target
+[push]                                                                                                                                                                                                                                                                                     
+  default = simple              # push current branch to upstream of same name; refuse if names differ
+  followTags = false            # don't auto-push annotated tags reachable from pushed commits (set true to opt in)                                                                                                                                                                        
+  gpgSign = if-asked            # sign pushes only when the server advertises support for signed pushes                                                                                                                                                                                    
+  # pushOption                  # extra options sent to the server's pre/post-receive hooks                                                                                                                                                                                                
+  recurseSubmodules = check     # abort push if any submodule commit isn't already on a remote                                                                                                                                                                                             
+  autoSetupRemote = true        # on push with no upstream, auto-create one at <remote>/<same-name>
 
 [rebase]
   abbreviateCommands = false # while interactive rebasing should print p instead of pick (abbreviate commands)

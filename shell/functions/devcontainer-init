@@ -1,10 +1,10 @@
 devcontainer-init() {
   local type="$1"
-  local repo_url="$2"
+  local source="$2"
   local -a valid_types=(vanilla sveltekit nextjs deno react-native ios android rust elixir python ruby)
 
-  if [[ -z "$type" || -z "$repo_url" ]]; then
-    print "Usage: devcontainer-init <type> <repo-url>"
+  if [[ -z "$type" || -z "$source" ]]; then
+    print "Usage: devcontainer-init <type> <repo-url|name>"
     print "Valid types: ${(j:, :)valid_types}"
     return 1
   fi
@@ -21,11 +21,18 @@ devcontainer-init() {
     return 1
   fi
 
-  local repo_name="${repo_url##*/}"
-  repo_name="${repo_name%.git}"
+  local repo_url=""
+  local repo_name=""
+  if [[ "$source" == *[:/]* ]]; then
+    repo_url="$source"
+    repo_name="${repo_url##*/}"
+    repo_name="${repo_name%.git}"
+  else
+    repo_name="$source"
+  fi
 
   if [[ -z "$repo_name" ]]; then
-    print "Error: could not derive repo name from URL: ${repo_url}"
+    print "Error: could not derive repo name from: ${source}"
     return 1
   fi
 
@@ -38,7 +45,13 @@ devcontainer-init() {
 
   mkdir -p "${wrapper}/.devcontainer"
   cp "$template" "${wrapper}/.devcontainer/devcontainer.json"
-  git clone "$repo_url" "${wrapper}/repo"
+
+  if [[ -n "$repo_url" ]]; then
+    git clone "$repo_url" "${wrapper}/repo"
+  else
+    mkdir -p "${wrapper}/repo"
+    git -C "${wrapper}/repo" init -q
+  fi
 
   print "Workspace ready at ${wrapper}"
   print "Open '${repo_name}' in VS Code and reopen in container."

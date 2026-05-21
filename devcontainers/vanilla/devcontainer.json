@@ -3,6 +3,10 @@
   "image": "mcr.microsoft.com/devcontainers/base:bookworm",
   "workspaceMount": "source=${localWorkspaceFolder},target=/workspace,type=bind,consistency=cached",
   "workspaceFolder": "/workspace/repo",
+  "mounts": [
+    "source=${localEnv:HOME}/.pi,target=${containerEnv:HOME}/.pi,type=bind,consistency=cached",
+    "source=${localEnv:HOME}/.claude,target=${containerEnv:HOME}/.claude,type=bind,consistency=cached"
+  ],
   "features": {
     "ghcr.io/devcontainers/features/common-utils:2": {
       "installZsh": true,
@@ -10,7 +14,8 @@
     },
     "ghcr.io/devcontainers/features/github-cli:1": {},
     "ghcr.io/devcontainers-extra/features/mise:1": {},
-    "ghcr.io/devcontainers-extra/features/claude-code:2": {}
+    "ghcr.io/devcontainers-extra/features/claude-code:2": {},
+    "ghcr.io/devcontainer-community/devcontainer-features/pi.dev:1": {}
   },
   "customizations": {
     "vscode": {

@@ -3,6 +3,7 @@
   "image": "mcr.microsoft.com/devcontainers/ruby:3.3-bookworm",
   "workspaceMount": "source=${localWorkspaceFolder},target=/workspace,type=bind,consistency=cached",
   "workspaceFolder": "/workspace/repo",
+  "initializeCommand": "mkdir -p ${localEnv:HOME}/.pi ${localEnv:HOME}/.claude",
   "mounts": [
     "source=${localEnv:HOME}/.pi,target=/home/vscode/.pi,type=bind,consistency=cached",
     "source=${localEnv:HOME}/.claude,target=/home/vscode/.claude,type=bind,consistency=cached"

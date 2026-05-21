@@ -3,6 +3,7 @@
   "image": "mcr.microsoft.com/devcontainers/javascript-node:24-bookworm",
   "workspaceMount": "source=${localWorkspaceFolder},target=/workspace,type=bind,consistency=cached",
   "workspaceFolder": "/workspace/repo",
+  "initializeCommand": "mkdir -p ${localEnv:HOME}/.pi ${localEnv:HOME}/.claude",
   "mounts": [
     "source=${localEnv:HOME}/.pi,target=/home/node/.pi,type=bind,consistency=cached",
     "source=${localEnv:HOME}/.claude,target=/home/node/.claude,type=bind,consistency=cached"

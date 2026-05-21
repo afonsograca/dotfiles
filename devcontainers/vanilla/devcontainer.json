@@ -4,8 +4,8 @@
   "workspaceMount": "source=${localWorkspaceFolder},target=/workspace,type=bind,consistency=cached",
   "workspaceFolder": "/workspace/repo",
   "mounts": [
-    "source=${localEnv:HOME}/.pi,target=${containerEnv:HOME}/.pi,type=bind,consistency=cached",
-    "source=${localEnv:HOME}/.claude,target=${containerEnv:HOME}/.claude,type=bind,consistency=cached"
+    "source=${localEnv:HOME}/.pi,target=/home/vscode/.pi,type=bind,consistency=cached",
+    "source=${localEnv:HOME}/.claude,target=/home/vscode/.claude,type=bind,consistency=cached"
   ],
   "features": {
     "ghcr.io/devcontainers/features/common-utils:2": {

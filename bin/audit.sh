@@ -6,6 +6,7 @@
 ## Usage:
 ##   zsh bin/audit.sh          # full audit
 ##   zsh bin/audit.sh watch    # find the defaults keys that a settings change writes
+##   zsh bin/audit.sh jobs     # list launchd jobs whose program no longer exists
 ##
 
 setopt null_glob extended_glob
@@ -216,7 +217,9 @@ report_launchd_orphans() {
     fi
     bin="$(plutil -extract Program raw -o - "$f" 2>/dev/null)"
     test -n "$bin" || bin="$(plutil -extract ProgramArguments.0 raw -o - "$f" 2>/dev/null)"
-    if test -z "$bin"; then
+    if test -z "$bin" && ! plutil -extract Label raw -o - "$f" >/dev/null 2>&1; then
+      echo "$f -> no Label key, launchd does not load it"
+    elif test -z "$bin"; then
       echo "$f -> no Program key (check manually)"
     elif test ! -e "$bin"; then
       echo "$f -> $bin"
@@ -260,5 +263,6 @@ watch_defaults() {
 mkdir -p "$AUDIT_DIR"
 case "${1:-}" in
   watch) watch_defaults ;;
+  jobs) report_launchd_orphans ;;
   *) full_audit ;;
 esac

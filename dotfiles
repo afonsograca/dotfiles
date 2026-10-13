@@ -14,6 +14,7 @@ initialize() {
   # Parse options: --dry-run and --mode
   local -a opts mode_args
   zparseopts -D -E -a opts d=dry_run -dry-run=dry_run -mode:=mode_args
+  requested_steps=("$@")
   base_dir="$DOTFILES_SCRIPT_DIR"
   export DOTFILES_PATH="$base_dir"
 
@@ -58,20 +59,30 @@ cleanup() {
 
   run_steps() {
   if [[ $container_mode -eq 1 ]]; then
-    steps=("shell" "git" "ai")
+    steps=("shell" "git" "vim" "ai")
   else
     steps=(
-      # "shell"
+      "shell"
       # "packages"
       # "environments"
-      # "git"
+      "git"
       "ai"
-      # "ssh"
-      # "gpg"
+      "ssh"
+      "vim"
+      "gpg"
       # "macos"
       # "apps"
     )
   fi
+  if (( $#requested_steps )); then
+    steps=($requested_steps)
+  fi
+  for step in $steps; do
+    if [[ ! -f "$base_dir/$step/install.sh" ]]; then
+      echo "Error: no step with the name '$step'."
+      exit 1
+    fi
+  done
   for step in $steps; do
     local step_dir="$base_dir/$step"
     local dry_run_flag=$([[ "$dry_run" ]] && echo 1 || echo 0)

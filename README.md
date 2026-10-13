@@ -53,7 +53,7 @@ cd ~/dotfiles
 
 Pass `--dry-run` to preview what would happen without making changes.
 
-To run only specific modules, edit the `steps` array near the top of `dotfiles` and uncomment what you want.
+To run only specific modules, pass their names, for example `./dotfiles shell git`. Without names, it runs the `steps` array in `dotfiles`.
 
 ### VS Code Remote Containers / GitHub Codespaces
 

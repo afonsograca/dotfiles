@@ -48,7 +48,7 @@ handle_git_dotfiles() {
     echo "$gitignore" > "$build_dir/gitignore_global"
 
     ### Symlink gitignore_global
-    symlink_files "gitignore_global" "$HOME" ""
+    symlink_files "$build_dir/gitignore_global" "$HOME" ""
   # fi
 
   ### Finishing touches

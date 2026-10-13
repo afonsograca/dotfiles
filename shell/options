@@ -17,8 +17,8 @@ setopt NUMERIC_GLOB_SORT # Sort globs numerically when possible
 # History
 
 HISTFILE=${ZDOTDIR}/.zsh_history # History file location
-SAVEHIST=20000                   # Number of lines to save to history file
-HISTSIZE=50000                   # Number of lines to keep in memory
+SAVEHIST=200000                  # Number of lines to save to history file
+HISTSIZE=200000                  # Number of lines to keep in memory
 setopt EXTENDED_HISTORY          # Save timestamp and duration with each command
 setopt INC_APPEND_HISTORY_TIME   # Append to history file immediately with timestamps
 setopt HIST_EXPIRE_DUPS_FIRST    # Expire duplicate entries first when trimming history

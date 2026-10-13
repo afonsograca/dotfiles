@@ -1,0 +1,34 @@
+{
+  "skill_name": "pr-comments",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "In the PR review for this branch, I got the following comments:\n```\n1. packages/app/utils/null-to-undefined.ts \u2014 this helper doesn't seem to be used anywhere, remove it.\n2. packages/app/utils/time-ago.ts \u2014 the `plural` helper is a bit cryptic, please add a comment explaining what it does.\n3. packages/app/utils/strip-markdown.ts \u2014 the italic regex `_([^_\\n]+?)_` will mangle snake_case identifiers in plain text (e.g. `user_name_field` becomes `usernamefield`), and these show up in LLM output all the time.\n```\nAre they warranted? If they are, find a fix for each, verify it and provide a brief explanation. If not provide a brief explanation why not. Do **not** be heavy-handed with the comments. comments are reserved for context that can't be easily inferred from reading the code.",
+      "expected_output": "Comment 1 rebutted as not warranted after a repo-wide search (the helper is used in packages/app/features/mentor/tools/schemas.ts and packages/app/lib/jobs/search-query-schema.ts). Comment 2 rebutted per the code-comment rule (the helper is self-explanatory). Comment 3 confirmed warranted with a reproduction, fixed minimally, and verified. Per-comment report with verdict, fix, verification, and a paste-ready reply.",
+      "files": [],
+      "assertions": [
+        "Comment 1 (dead code claim): verdict is 'Not warranted' and the report cites a real usage site (packages/app/features/mentor/tools/schemas.ts or packages/app/lib/jobs/search-query-schema.ts)",
+        "Comment 1: null-to-undefined.ts is NOT deleted (diff.patch contains no deletion of the file)",
+        "Comment 2 (add-a-comment request): rebutted; no explanatory comment added to time-ago.ts, and the reply explains that the helper is readable from the code",
+        "Comment 3 (snake_case mangling): verdict is 'Warranted'; strip-markdown.ts is fixed so that 'user_name_field' survives stripMarkdown while paired _emphasis_ is still stripped (verify by running the patched function)",
+        "Report contains, for every comment, a verdict and a short paste-ready reply for the PR thread"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "/pr-comments on `test/pr-comments-eval2-a` use /bash-codex\n```\n1. packages/app/utils/strip-markdown.ts \u2014 the inline-code regex is now greedy; a line with two code spans keeps the inner backticks and swallows the text between them as one span.\n2. packages/app/utils/strip-markdown.ts \u2014 please add JSDoc with @param and @returns to stripMarkdown.\n```",
+      "baseline_prompt": "In the PR review for the branch `test/pr-comments-eval2-b`, I got the following comments:\n```\n1. packages/app/utils/strip-markdown.ts \u2014 the inline-code regex is now greedy; a line with two code spans keeps the inner backticks and swallows the text between them as one span.\n2. packages/app/utils/strip-markdown.ts \u2014 please add JSDoc with @param and @returns to stripMarkdown.\n```\nAre they warranted? If they are, find a fix for each, verify it and provide a brief explanation. If not provide a brief explanation why not. Do **not** be heavy-handed with the comments. comments are reserved for context that can't be easily inferred from reading the code. /bash-codex for each finding. Do **NOT** switch branches in this worktree, create your own and once you are done, discard it.",
+      "expected_output": "Work happens in a temporary worktree for the named branch; the user's worktree never switches branches. Comment 1 confirmed warranted (planted greedy regex, one bad line inside a larger commit), fixed by the Codex delegate, verified by a different agent, and the fix folded into the originating commit without emptying it. Comment 2 rebutted per the code-comment rule. Temporary worktree removed at the end; nothing pushed.",
+      "fixture": "Branches test/pr-comments-eval2-a (with skill) and test/pr-comments-eval2-b (baseline), both at one commit ahead of origin/main. The commit adds task-list and autolink rules to strip-markdown.ts and also changes the inline-code regex from `([^`]+)` to the greedy `(.+)` as a drive-by. The correct fix reverts only that one line, so the folded commit stays non-empty.",
+      "files": [],
+      "assertions": [
+        "The invocation worktree never switches branches; all work happens in a separate temporary worktree for the target branch",
+        "Comment 1 (greedy regex): verdict is 'Warranted' and the branch tip restores the non-greedy inline-code regex (git show <branch>:packages/app/utils/strip-markdown.ts contains `([^`]+)` again)",
+        "The fix is folded into the originating commit: the branch is exactly one commit ahead of origin/main, no stacked 'address review' commit, and the commit still contains the task-list and autolink additions \u2014 or fixup commits plus explicit squash commands are handed over",
+        "Comment 2 (JSDoc request): rebutted; no @param/@returns JSDoc added to stripMarkdown on the branch tip",
+        "The named delegate (Codex, via codex exec) produces the fix, and the verification is done by a different agent than the author",
+        "The temporary worktree is removed at the end (git worktree list shows no leftover pr-comments worktree) and nothing is pushed"
+      ]
+    }
+  ]
+}

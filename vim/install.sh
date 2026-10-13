@@ -19,8 +19,9 @@ handle_vim() {
   print_header_footer "Step: Vim" $1
 
   if test "$dry_run" -eq 0; then
-    ### Symlink vimrc
+    ### Symlink vimrc and exrc
     symlink_files "$DOTFILES_PATH/vim/vimrc" "$HOME" ""
+    symlink_files "$DOTFILES_PATH/vim/exrc" "$HOME" ""
   fi
 
   ### Finishing touches

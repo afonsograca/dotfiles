@@ -9,6 +9,11 @@ alias ....='cd ../../..'
 alias ~='cd ~'
 alias -- -='cd -'
 
+# BusyBox vi does not read ~/.vimrc
+if command -v vim >/dev/null 2>&1; then
+  alias vi='vim'
+fi
+
 # Network
 alias myip='curl -s https://ipinfo.io/ip'
 

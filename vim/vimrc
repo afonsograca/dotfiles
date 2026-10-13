@@ -1,0 +1,78 @@
+""
+"" Settings file used by Vim.
+""
+
+"" Vi Compatibility
+set nocompatible " off
+
+
+""
+"" Text Editing
+""
+
+"" Syntax highlighting
+if has('syntax')
+  syntax on    " on
+endif
+
+"" Indent and plugin rules for each file type
+filetype plugin indent on
+
+"" Line Numbering
+set number     " on
+" set nonumber     " off
+
+"" Line Numbering width
+set numberwidth=4
+
+
+"" File stats
+set ruler     " on
+
+
+"" Indentation
+"
+
+"" Prefer indent using Spaces
+set expandtab    " on
+
+"" Tab Width
+set tabstop=2
+
+"" Indent width
+set shiftwidth=2
+
+"" Line Wrapping
+set wrap    " on
+set linebreak " wrap on certain characters
+set nolist  " list disables linebreak
+
+"" Wrapped lines keep indentation
+if exists('+breakindent')
+  set breakindent
+endif
+
+"" Wrap line indentation
+set showbreak=\ \ " two spaces
+
+"" Use same indentation as previous line
+set autoindent
+
+"" Backspace across line breaks and indentation
+set backspace=indent,eol,start
+
+"" Lines to keep above and below the cursor
+set scrolloff=3
+
+
+""
+"" Search
+""
+
+"" Highlight matches while typing and after search
+set incsearch
+set hlsearch
+
+"" Ignore case, unless the search has a capital letter
+set ignorecase
+set smartcase

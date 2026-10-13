@@ -1,0 +1,74 @@
+---
+name: to-spec
+description: Turn the current conversation into a spec and publish it to the location specified by the user — no interview, just synthesis of what you've already discussed.
+disable-model-invocation: true
+---
+
+This skill uses the current conversation and your knowledge of the codebase to make a spec. Do not interview the user. The one exception is step 2: get a confirmation of the test seams.
+
+## Process
+
+1. Explore the repo to understand the current state of the codebase, if you haven't already. Use the project's domain glossary vocabulary throughout the spec, and respect any ADRs in the area you're touching.
+
+2. Sketch out the seams at which you're going to test the feature. Existing seams should be preferred to new ones. Use the highest seam possible. If new seams are needed, propose them at the highest point you can. The fewer seams across the codebase, the better - the ideal number is one.
+
+Ask the user to confirm these seams. Ask one time only. This is the only question in this skill.
+
+3. Write the spec using the template below, then publish it to the location provided by the user, otherwise infer from existing specs.
+
+<spec-template>
+
+## Problem Statement
+
+The problem that the user is facing, from the user's perspective.
+
+## Solution
+
+The solution to the problem, from the user's perspective.
+
+## User Stories
+
+A numbered list of user stories. Use this format for each user story:
+
+1. As an <actor>, I want a <feature>, so that <benefit>
+
+<user-story-example>
+1. As a mobile bank customer, I want to see balance on my accounts, so that I can make better informed decisions about my spending
+</user-story-example>
+
+Include a user story for each behavior that the feature adds or changes. Do not add user stories only to make the list longer.
+
+## Implementation Decisions
+
+A list of implementation decisions that were made. This can include:
+
+- The modules that will be built/modified
+- The interfaces of those modules that will be modified
+- Technical clarifications from the developer
+- Architectural decisions
+- Schema changes
+- API contracts
+- Specific interactions
+
+Do not include file paths. They become incorrect quickly. Do not include implementation code.
+
+Exception: include a snippet when it gives a decision more precisely than prose. Examples are an interface, a type shape, a schema, a state machine, or a reducer. Put the snippet in the related decision. Keep only the parts that contain the decision. If the snippet comes from a prototype, write this.
+
+## Testing Decisions
+
+A list of testing decisions that were made. Include:
+
+- A description of what makes a good test (only test external behavior, not implementation details)
+- Which modules will be tested
+- Prior art for the tests (i.e. similar types of tests in the codebase)
+- The names of the primary test cases at the selected seam. Use the given/when/then form. These test cases are the executable part of the spec.
+
+## Out of Scope
+
+A description of the things that are out of scope for this spec.
+
+## Further Notes
+
+Any further notes about the feature.
+
+</spec-template>

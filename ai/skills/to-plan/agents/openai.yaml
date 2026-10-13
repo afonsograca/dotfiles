@@ -1,0 +1,5 @@
+interface:
+  display_name: "To Plan"
+  short_description: "Turn a spec into a phased tracer-bullet plan"
+policy:
+  allow_implicit_invocation: false

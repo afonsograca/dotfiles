@@ -1,0 +1,136 @@
+{
+  "skill_name": "delegate",
+  "evals": [
+    {
+      "id": 0,
+      "prompt": "I've got a folder ~/screenshots with about 200 PNGs from a design review. Have codex resize every one to 1200px wide (keep aspect ratio) and save them as webp into ~/screenshots/web/.",
+      "expected_output": "Shells out to `codex exec -s workspace-write` via Bash with the folder, width, and target in the prompt, written as direct orders with a report-back instruction.",
+      "files": [],
+      "assertions": [
+        {
+          "text": "Invokes the codex CLI via the Bash tool using `codex exec`"
+        },
+        {
+          "text": "Does NOT delegate via the Agent/Task sub-agent tool instead of Bash"
+        },
+        {
+          "text": "Closes stdin: gives the prompt as a file on stdin (`- < /tmp/<job>.prompt.md`) or uses < /dev/null"
+        },
+        {
+          "text": "Passes concrete context (source folder ~/screenshots, 1200px width, webp target ~/screenshots/web/) into the codex prompt"
+        },
+        {
+          "text": "Chooses -s workspace-write since the task changes files, not read-only"
+        },
+        {
+          "text": "The codex prompt is written as direct imperatives with an explicit report-back instruction (what to say when done or if the folder is missing)"
+        }
+      ]
+    },
+    {
+      "id": 1,
+      "prompt": "There's a service running locally on port 8080. I think one of its endpoints started throwing 500s after my last change. Hit its /health, /ready and /api/status endpoints, follow anything they link to, and tell me which ones are broken.",
+      "expected_output": "No CLI and no model named: does the work itself with Bash/curl. Does not delegate and does not ask which CLI to use.",
+      "files": [],
+      "assertions": [
+        {
+          "text": "Does NOT invoke claude, codex or devin"
+        },
+        {
+          "text": "Does NOT ask the user which CLI to use"
+        },
+        {
+          "text": "Probes the three endpoints itself and reports which ones fail"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "Have Devin review apps/nextjs/src/features/push for bugs, use gpt-6-sol with high effort. Don't let it change anything.",
+      "expected_output": "Runs `devin --model gpt-6-sol-high --permission-mode auto --prompt-file /tmp/<job>.prompt.md -p < /dev/null` via Bash in the background, reads .log and .err, and checks the findings before it reports them.",
+      "files": [],
+      "assertions": [
+        {
+          "text": "Invokes the devin CLI via the Bash tool, not codex, because the user asked for Devin"
+        },
+        {
+          "text": "Uses the model name gpt-6-sol-high (effort in the model name, no separate effort flag)"
+        },
+        {
+          "text": "Uses --permission-mode auto, not accept-edits, smart or dangerous"
+        },
+        {
+          "text": "Writes the prompt to a file and passes it with --prompt-file; -p is last, with no value"
+        },
+        {
+          "text": "Reads the stderr file for refused tool calls"
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "use swe-2 to add a unit test for the bundle id helper in the push feature and run it",
+      "expected_output": "Selects devin because only Devin has SWE-2, picks a swe-2-* model, uses --permission-mode accept-edits (not smart unless the user asks), then runs the test itself.",
+      "files": [],
+      "assertions": [
+        {
+          "text": "Invokes the devin CLI via the Bash tool"
+        },
+        {
+          "text": "Uses a swe-2-* model name"
+        },
+        {
+          "text": "Uses --permission-mode accept-edits; does not use smart or dangerous"
+        },
+        {
+          "text": "Runs the test itself after the job to verify the result"
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "prompt": "Spin up two sonnet agents with high effort: one to audit the auth feature for missing error handling, one to do the same for billing. Report back what they find.",
+      "expected_output": "Claude model with an effort: uses the Agent tool with model sonnet and effort high, two parallel agents. Does not run claude -p.",
+      "files": [],
+      "assertions": [
+        {
+          "text": "Uses the Agent tool with model sonnet and effort high"
+        },
+        {
+          "text": "Does NOT run claude -p"
+        },
+        {
+          "text": "Starts the two agents in parallel"
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "prompt": "I'm writing a blog post about agent tooling. Can you explain how the computer-use tool in the Claude API actually works under the hood — the screenshot loop, coordinate clicking, that kind of thing?",
+      "expected_output": "Near-miss negative: a knowledge question. Should not run any agent CLI; should just answer.",
+      "files": [],
+      "assertions": [
+        {
+          "text": "Does NOT invoke claude, codex or devin"
+        },
+        {
+          "text": "Answers the question directly, explaining the computer-use screenshot/click loop"
+        }
+      ]
+    },
+    {
+      "id": 6,
+      "prompt": "Resize all PNGs in ~/screenshots to 1200px webp on my machine.",
+      "expected_output": "Near-miss negative: hands-on work with no CLI and no model named. Does the work itself; does not delegate.",
+      "files": [],
+      "assertions": [
+        {
+          "text": "Does NOT invoke claude, codex or devin"
+        },
+        {
+          "text": "Does NOT ask the user which CLI to use"
+        }
+      ]
+    }
+  ]
+}

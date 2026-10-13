@@ -3,4 +3,5 @@
 *.lock
 extra/*
 build/
+plans/
 .DS_Store

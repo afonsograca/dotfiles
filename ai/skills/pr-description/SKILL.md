@@ -1,98 +1,116 @@
---
+---
 name: pr-description
-description: Writes pull request descriptions. Use when creating a PR, writing a PR, or when the user asks to summarize changes for a pull request.
+description: Writes a pull request title and description for the current branch in terse ASD-STE100 Simplified Technical English. Use when the user asks for a PR title or description or a branch summary for review, also when they name a plan phase that the branch delivers.
+argument-hint: "[in the background] [plan and phase] [Linear issue] [base branch]"
+effort: medium
 allowed-tools: Read, Grep, Glob, Bash
---
-<task-context>
-  You will be acting as an AI assistant named Taylor. Your goal is to generate pull request descriptions that summarize the changes on the branch.
-</task-context>
+---
 
-<tone-context>
-  You should maintain a clear and concise tone. Write in "we" (e.g. "we add", "we believe"), never "I"—except in the product-purpose paragraph, where "I" is allowed only in the standard BDD phrase "As a …, I should…". Avoid absolutes; prefer formulations like "We believe this is the best approach" over "This is the best way to implement this."
-</tone-context>
+# Task
 
-<rules>
-  Here are some important rules for the interaction:
-  - Always stay in character, as Taylor, an AI assistant
-  - Infer the base branch from the user's message when they specify a target (e.g. "against feat/foobar", "into feat/foobar", "for merging to feat/foobar", "stacked on feature-base"). If no base branch is mentioned, use **main**.
-  - Generate exactly one PR description, not multiple options.
-  - If the repo has a `.github/pull_request_template.md` file, follow that template's format and section structure. Otherwise use the structure defined in output-format.
-  - When the user mentions the issue this PR solves, include `Resolves #<id>` as the first paragraph (e.g. Resolves #123). If they don't mention one, infer from branch name or recent commit messages when there's an obvious issue reference (e.g. #123, fix/123-title).
-  - For PRs that are visual (UI, design, flows), add a Screenshots section with a markdown table. Include different variants as relevant: for mobile projects, Android and iOS; for web, mobile and desktop if the app supports both; if the app has light and dark mode, include both. Each row/column should show a distinct variant (e.g. platform or theme).
-  - For simple refactors that intend no functionality change (NFC), add immediately after the "In this PR we..." summary a line: **N.B.** This is an NFC. There should be no functional change.
-</rules>
+Write one title and one description for the work that is committed on the current branch. Print them. The user copies them. Do not open the pull request. Do not write files.
 
-<examples>
-  Here are some examples of PR descriptions:
-  <example id="1">
-    Resolves #42
+The description gives the reviewer two things that the diff does not show: the reason for the change, and the limit of the change. Remove each sentence that only repeats the diff.
 
-    As a hiring manager, I should be able to close and reopen job openings on the platform. Closing an opening should stop candidates from applying; reopening it should allow applications again.
+# Sources
 
-    In this PR we add the close/reopen flow for openings:
-    - New "Close opening" and "Reopen opening" actions in the opening detail screen
-    - API support for opening status updates
-    - Candidates no longer see closed openings in the list
-  </example>
-  <example id="2">
-    As a user, I should see a consistent secondary action style across forms so that primary and secondary actions are clearly distinguishable.
+- **Base branch.** Use the branch that the user names ("against feat/foo", "stacked on feat/foo"). If the user names none, use the default remote-tracking branch, for example `origin/main`.
+- **Commits first.** Run `git rev-list --count <base>..HEAD` before other work. If the count is 0, stop and tell the user that the branch has no commits on top of the base. Do not describe the working tree.
+- **Committed work only.** Read `git log <base>..HEAD` and `git diff <base>...HEAD`. Each statement in the description must be true from the diff, from a commit message, or from a check that was run in this session.
+- **No untracked or ignored files.** Do not write the path, the name or the contents of a file that is not in the diff: screenshots, notes, plans and specs under `.local/`, and temporary files. Do not write the words of a plan that the reviewer cannot read, for example "phase 2" or "the acceptance criteria". The reviewer cannot open these files, so a description that refers to them is wrong at the first read.
 
-    In this PR we introduce a secondary button style in the design system and use it where needed. We believe this keeps the hierarchy clear without adding new components.
-  </example>
-  <example id="3">
-    Resolves #88
+# Plan
 
-    As a user, I should be able to toggle dark mode in the app and have the UI reflect my preference across all main screens.
+If the user names a plan and a phase, read that phase only. Use it for two things, and do not write it into the description:
 
-    In this PR we wire up the theme toggle and ensure the main flows support both themes:
-    - Settings screen theme selector
-    - Dashboard, list and detail screens respond to theme
-    - We persist the preference in local storage
+- The scope. Do not describe later phases.
+- A check of each acceptance criterion against the diff and the tests. Put the result in the notes (see Output). Write a criterion that is not met as a limit in the description only when the reviewer must know it, and write it as a fact about the code.
 
-    ## Screenshots
+If the user names no plan, use the diff and the commits. Do not look for a plan.
 
-    | Light mode | Dark mode |
-    |------------|-----------|
-    | ![Dashboard light](url) | ![Dashboard dark](url) |
-    | ![Settings light](url) | ![Settings dark](url) |
-  </example>
-  <example id="4">
-    In this PR we extract the payment validation logic into a dedicated module and rename the old helpers for consistency. No behavior changes.
+# Linear issue
 
-    **N.B.** This is an NFC. There should be no functional change.
-  </example>
-</examples>
+Find the issue id in the message of the user, the branch name (`fix/apt-1279`, `feature/apt-498-gmail-integration`), the commit messages, and the conversation. Write it as the first line of the description:
 
-<the-ask>
-  Write a pull request description for the current branch's changes compared to the base branch.
-</the-ask>
+```
+Resolves [APT-1279](https://linear.app/tryapt/issue/APT-1279)
+```
 
-<thinking-instructions>
-  1. Determine the base branch (from user message or default to main).
-  2. Check for `.github/pull_request_template.md` in the project. If it exists, read it and use its format and section structure for the description.
-  3. If the user mentioned an issue this PR solves (e.g. "fixes #123", "for issue 45"), note the issue id for the Resolves line. If not, check branch name and recent commit messages for an obvious issue reference (e.g. #123, fix/123-title).
-  4. Run `git diff <base>...HEAD` to see all changes on this branch.
-  5. Analyze the diff: what area/feature is touched, what was added/removed/changed; whether the PR is visual (UI/screens/flows) and needs a Screenshots section; whether it is a simple refactor with no intended behavior change (NFC) and needs the NFC note.
-  6. Write the description: if using the repo template, fill it; otherwise follow output-format: Resolves (if applicable), product-purpose paragraph (BDD style—or "As a developer…" / skip for version bumps, refactors, or when there's no user-facing story), summary paragraph starting with "In this PR we..." (with bullets if helpful), NFC note after the summary when the PR is an NFC refactor, and Screenshots section with markdown table only when the PR is visual (include platform or theme variants as relevant).
-</thinking-instructions>
+Use the full issue URL when you know it. Write one line for each issue. For a GitHub issue, write `Resolves #<n>`. If you find no id, write no line. Do not invent an id.
 
-<output-format>
-  Return only the PR description. If the repo has `.github/pull_request_template.md`, use that template's format. Otherwise use this structure:
+# Title
 
-  1. **Resolves (optional)**  
-     If the user mentioned the issue this PR solves: a single paragraph `Resolves #<id>` (e.g. Resolves #123).
+Use `Domain | Description`, for example `Skills | Add diagnose-bug so Claude Tag finds bug causes with a failing test`.
 
-  2. **Product purpose**  
-     A paragraph in BDD/user-story style describing the purpose from a product point of view (e.g. "As a user, I should be able to..."). Explain the desired behavior and outcomes. For version bumps, refactors, dependency updates, or small bugfixes with no clear user-facing story, use a brief "As a developer…" style line or skip this block and go straight to the summary.
+- The domain is the area of the change: a feature, an app, or a package. Use the domain names of earlier titles: `git log origin/main --first-parent --merges --format=%b -50 | grep ' | '`.
+- The description gives the effect that the user sees, in the imperative. Keep the title below about 72 characters.
+- Do not use gitmoji or a commit scope in the title.
 
-  3. **Summary**  
-     A paragraph that starts with "In this PR we" and summarizes what the PR does. Use a bullet list when it makes the summary easier to digest.  
-     For simple refactors that intend no functionality change (NFC), add immediately after: **N.B.** This is an NFC. There should be no functional change.
+# Style
 
-  4. **Screenshots (optional)**  
-     Only for visual PRs (UI, design, flows). A section `## Screenshots` with a markdown table. Rows/columns must show different variants:
-     - Mobile app: include Android and iOS columns/rows as appropriate.
-     - Web app: include mobile and desktop if the app supports both.
-     - If the app has light and dark mode, include both (e.g. columns or rows per theme).
-     Use placeholder URLs or short labels for each cell (e.g. "Dashboard – light", "Dashboard – dark"); the author will replace placeholders with real screenshot URLs.
-</output-format>
+The project rules already require STE. These rules apply them to a description:
+
+- A description is descriptive text, not a procedure. Use the sentence length limit for descriptive text. Type names, file names and branch names are technical names.
+- Write "we": "we add", "we move". The user story is the one exception: "As a ..., I expect ...".
+- Do not write absolutes. Write "We believe this is the best approach", not "This is the best way".
+- Do not use em-dashes or en-dashes to break a sentence. Use a full stop, a comma or a colon.
+- Do not use emoji.
+- Do not use empty adjectives (comprehensive, robust, seamless, powerful), filler verbs (streamline, facilitate, leverage, unlock), filler phrases ("it is worth noting", "under the hood", "across the board"), or hedge adverbs (simply, just, significantly, essentially).
+- Do not end with a paragraph that repeats the summary. Stop when the facts stop.
+
+Bad: This PR introduces a comprehensive refactor of the list primitives, seamlessly enabling call sites to leverage a data-driven contract.
+Good: In this PR we change the list primitives to a data contract. A call site passes data, and the row leaf draws it.
+
+Read the draft again before you print it. Correct each sentence that does not obey STE, and remove the words that give no fact.
+
+# Description structure
+
+If the repository has `.github/pull_request_template.md`, use its sections. If not, use this structure:
+
+1. The `Resolves` lines, when an issue exists.
+2. One paragraph that starts with "As a <role>, I expect ...". It gives the result that the user gets. For a refactor or a tooling change, the role is "developer".
+3. One paragraph that starts with "In this PR we ...". Add a bullet list when the change has more than one part. One line for each bullet, and no sub-bullets.
+4. The limits, when they exist: what the PR does not do, and what nobody tested. Write them as facts about the code.
+5. `**N.B.** This is an NFC. There should be no functional change.` for a refactor that does not change behavior.
+6. `## Screenshots`, when the reviewer can see the change in the UI. Use a markdown table with one column for each variant: iOS and Android, mobile and desktop, light and dark. Use `(url)` as the placeholder link.
+
+Format rules, so that the paste is clean:
+
+- Write each paragraph and each bullet on one line. GitHub keeps a newline in the middle of a sentence.
+- Put one empty line between blocks. Stop at the last line of content.
+
+# Output
+
+Print exactly this layout. The title and the description are each in a fence of four backticks, so that a fence inside the description shows correctly. The horizontal rule shows where the text to copy stops.
+
+`````
+**Title**
+
+````
+Worktree | Install when a filtered install leaves a workspace link out
+````
+
+**Description**
+
+````markdown
+Resolves [APT-1279](https://linear.app/tryapt/issue/APT-1279)
+
+As a developer, I expect a worktree to have each workspace link after a filtered pnpm install, so that commands in a new package do not fail with ERR_MODULE_NOT_FOUND.
+
+In this PR we make `step-node-modules.sh` look for each `workspace:` link. A filtered install writes the full `lock.yaml` but links only the filtered projects, so the step did not find the gap:
+- For each package in `apps/*` and `packages/*`, the step looks for `<pkg>/node_modules/<name>` for each `workspace:` dependency
+- When a tree exists but a link is missing, the step deletes the workspace-state file and runs `pnpm install`
+
+The step does not examine peer links. pnpm makes a peer link only with `autoInstallPeers`, so a check for peer links could cause an install at each session start.
+````
+
+---
+
+**Notes** (not part of the description)
+
+- No test runs a real `pnpm install`, so no test proves that the repair makes the missing link.
+`````
+
+The Notes section is for the user only. Put in it: each acceptance criterion that is not met or that you could not check, each assumption (for example the base branch or the issue id), and each fact that you could not confirm. If there is nothing, do not print the rule or the Notes section.
+
+When a background agent writes the description, the parent prints the result of the agent unchanged.

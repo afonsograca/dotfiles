@@ -18,6 +18,7 @@ source_if_missing source_files_in "$DOTFILES_PATH/bin/source_files_in.sh"
 [[ -f "$DOTFILES_PATH/packages/homebrew/path" ]] && source "$DOTFILES_PATH/packages/homebrew/path"
 [[ -f "$DOTFILES_PATH/environments/mise/path" ]] && source "$DOTFILES_PATH/environments/mise/path"
 [[ -f "$DOTFILES_PATH/apps/vscode/path" ]] && source "$DOTFILES_PATH/apps/vscode/path"
+[[ -f "$DOTFILES_PATH/apps/android-studio/path" ]] && source "$DOTFILES_PATH/apps/android-studio/path"
 [[ -f "$DOTFILES_PATH/ssh/path" ]] && source "$DOTFILES_PATH/ssh/path"
 
 # Load local customizations

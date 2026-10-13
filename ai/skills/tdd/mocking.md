@@ -13,6 +13,25 @@ Don't mock:
 - Internal collaborators
 - Anything you control
 
+## How to Mock: prefer `spyOn`
+
+`spyOn` (`vi.spyOn` in Vitest, `jest.spyOn` in Jest) is the default. A module mock (`vi.mock`, `jest.mock`) is the exception.
+
+- `spyOn` replaces one function on a real object. All other exports stay real.
+- Restore each spy after its test (`restoreMocks: true` in the config). Then the double does not leak into other tests.
+- A module mock replaces the full module for the full file. It hides contract drift.
+
+```typescript
+// GOOD: one function is a double, the rest of the module runs
+const charge = vi.spyOn(paymentClient, 'charge').mockResolvedValue({ id: 'ch_1' });
+
+// BAD: the full module is a double
+vi.mock('./payment-client');
+```
+
+Use a module mock only if the test environment cannot import the module. Examples:
+native host modules, ESM-only packages, and asset transforms.
+
 ## Designing for Mockability
 
 At system boundaries, design interfaces that are easy to mock:

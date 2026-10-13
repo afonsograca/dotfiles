@@ -5,3 +5,6 @@ extra/*
 build/
 plans/
 .DS_Store
+__pycache__/
+# skill-creator eval output
+ai/skills/*-workspace/

@@ -1,0 +1,47 @@
+{
+  "skill_name": "linear-draft",
+  "evals": [
+    {
+      "id": 1,
+      "name": "cron-bearer-adhoc",
+      "prompt": "write a linear issue for this: the cron routes parse the Authorization header with `split(\"Bearer \").at(1)`, so a header like `xxBearer <secret>` also passes. I saw it in apps/nextjs/src/app/api/cron/gsc-snapshot/route.ts while reviewing something else.",
+      "expected_output": "No new draft. A Linear search finds APT-1388 (Cron | Authorization parser accepts a prefix before Bearer) and the answer gives its link. It can add new facts, for example the 26 files, as a comment for that issue.",
+      "files": [],
+      "assertions": [
+        "Answer searched Linear and names APT-1388 with its link",
+        "Answer does not give a full new draft (title and description) for the same problem",
+        "Answer shows a reproduction of the parse, or says that APT-1388 already has it",
+        "Answer gives facts that APT-1388 may not have, for example the count of 26 files, as a suggested comment for APT-1388"
+      ]
+    },
+    {
+      "id": 2,
+      "name": "scripts-draft-update",
+      "prompt": "Earlier in this session you gave me this Linear draft:\n\nTitle: `Scripts | Four scripts call OpenAI and Google directly, not through the AI Gateway`\n\n````markdown\n## Problem\n\n`apps/nextjs/AGENTS.md` tells us to send each model call through the Vercel AI Gateway. Four scripts still create a direct client: `apps/nextjs/scripts/analyze-career-salary-coverage.ts`, `score-candidates.ts`, `vc-resume-demographics.ts` and `generate-career-images.ts`.\n\n## Proposed fix\n\nMove each script to the gateway provider.\n\n## Done when\n\n- [ ] No file in `apps/nextjs/scripts` calls `createOpenAI` or `createGoogleGenerativeAI`.\n\n## Why deferred\n\n<PR link> changes only the guide and lint rules.\n````\n\nThe reviewer says the evals folder and a migration also call providers directly. Update the draft.",
+      "expected_output": "A list of changes with a title line, then the full new title and description (not edit instructions). The search covers evals/ and migrations/ and gives about 14 files with the intentional test file called out. It tells the user to edit an existing issue, not create a second one.",
+      "files": [],
+      "assertions": [
+        "Answer lists what changed before the draft, including a line about the title (unchanged or old -> new)",
+        "Answer prints the full new title and full new description, not instructions to edit the old draft",
+        "New draft names files under evals/ and the migration apps/nextjs/migrations/check-embedding-alignment.ts",
+        "New draft gives a search command or a total count of about 14 files, and treats integration/lib/ai-test-provider.test.ts as intentional or excluded",
+        "Answer tells the user to edit the existing issue if they already created it, not to create a second one",
+        "Done when no longer limits the check to apps/nextjs/scripts only",
+        "Any remaining placeholder such as <PR link> is listed for the user to replace"
+      ]
+    },
+    {
+      "id": 3,
+      "name": "planned-not-deferred",
+      "prompt": "/pr-comments deferred this comment on feat/cronHardening and I need the Linear draft for it.\n\nComment (CodeRabbit, apps/nextjs/src/app/api/cron/close-idle-chats/route.ts:15): **Cron secret check is not timing-safe.** `authToken !== process.env.CRON_SECRET` leaks timing; use `crypto.timingSafeEqual`.\n\nContext, our plan for this branch (4 phases):\n- Phase 2 (this PR): add the `close-idle-chats` cron.\n- Phase 3: move every cron and admin route to one `verifyCronSecret(request)` helper in `apps/nextjs/src/lib/cron-auth.server.ts`. It parses `Authorization: Bearer <token>` strictly and compares with `timingSafeEqual`. Done when: all routes under `api/cron` use the helper.\n- Phase 4: rotate CRON_SECRET.",
+      "expected_output": "No draft. The answer says Planned in phase 3. It notes that the phase 3 criterion covers only api/cron and that the admin and workflow routes with the same parse need a criterion in the plan.",
+      "files": [],
+      "assertions": [
+        "Answer does not give a Linear draft for the timing-safe comment",
+        "Answer says the fix is planned in phase 3",
+        "Answer notes that the phase 3 'Done when' covers only api/cron, and that admin or workflow routes with the same check need a criterion in the plan",
+        "Answer gives a reply or a one-line entry suitable for the PR thread that says a later change does the fix"
+      ]
+    }
+  ]
+}

@@ -13,7 +13,7 @@ fi
 . "$DOTFILES_PATH/bin/init_installer.sh"
 
 handle_gpg() {
-  local dry_run=$2
+  local dry_run=${2:-0}
   local build_dir="$DOTFILES_PATH/build/gpg"
   mkdir -p $build_dir
 

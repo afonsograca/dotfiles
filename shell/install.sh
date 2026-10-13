@@ -35,9 +35,9 @@ build_config_files() {
   local source_files_in_function='
 # Inline utility function
 source_files_in() {
-  for file in $1; do
-    if test -r $file; then
-      source $file
+  for file in ${~1}(N); do
+    if test -r "$file"; then
+      source "$file"
     fi
   done
   unset file
@@ -80,6 +80,7 @@ source_files_in() {
   cp "$shell_dir/aliases" "$zsh_dir/shell/"
   cp "$shell_dir/options" "$zsh_dir/shell/"
   cp "$shell_dir/prompts" "$zsh_dir/shell/"
+  cp "$shell_dir/editor" "$zsh_dir/shell/"
 
   # Copy functions directory if it exists
   if [[ -d "$shell_dir/functions" ]]; then

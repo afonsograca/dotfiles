@@ -11,7 +11,7 @@ remove_broken_links() {
     exit 1
   fi
   local broken_links="$(find -L "$1" -type l -maxdepth 1)"
-  for link in $broken_links; do
+  for link in ${(f)broken_links}; do
     unlink "$link"
   done
   unset link

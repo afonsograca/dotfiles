@@ -24,6 +24,7 @@ handle_app_dotfiles() {
     "terminal"
     # "vscode"
     # "xcode"
+    "zed"
   )
   for package in $packages; do
     (cd $DOTFILES_PATH/apps/$package; zsh config.sh $dry_run)

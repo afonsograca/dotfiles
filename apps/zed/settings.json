@@ -1,0 +1,103 @@
+// Zed settings
+//
+// For information on how to configure Zed, see the Zed
+// documentation: https://zed.dev/docs/configuring-zed
+//
+// To see all of Zed's default settings without changing your
+// custom settings, run `zed: open default settings` from the
+// command palette (cmd-shift-p / ctrl-shift-p)
+{
+  "show_edit_predictions": true,
+  "cli_default_open_behavior": "new_window",
+  "outline_panel": {
+    "dock": "right",
+  },
+  "collaboration_panel": {
+    "dock": "right",
+  },
+  "languages": {
+    "Swift": {
+      "show_edit_predictions": true
+    },
+    "TypeScript": {
+      "inlay_hints": {
+        "enabled": false,
+      },
+      "show_completion_documentation": true,
+    },
+  },
+  "buffer_font_family": "CommitMono",
+  "gutter": {
+    "min_line_number_digits": 0,
+  },
+  "title_bar": {
+    "show_branch_status_icon": true,
+  },
+  "git_panel": {
+    "dock": "right",
+  },
+  "tab_size": 2,
+  "edit_predictions": {
+    "mode": "subtle",
+  },
+  "agent": {
+    "sidebar_side": "left",
+    "dock": "left",
+    "tool_permissions": {
+      "default": "allow",
+    },
+    "profiles": {
+      "write": {
+        "name": "Write",
+        "tools": {},
+        "enable_all_context_servers": false,
+        "context_servers": {},
+      },
+      "plan": {
+        "name": "Plan",
+        "tools": {},
+        "enable_all_context_servers": false,
+        "context_servers": {},
+      },
+    },
+    "default_profile": "ask",
+    "default_model": {
+      "enable_thinking": true,
+      "provider": "google",
+      "model": "gemini-2.5-flash-lite",
+    },
+  },
+  "minimap": {
+    "show": "auto",
+  },
+  "inlay_hints": {
+    "enabled": true,
+    "show_value_hints": true,
+    "show_type_hints": true,
+    "show_parameter_hints": true,
+    "show_other_hints": true,
+    "show_background": false,
+    "edit_debounce_ms": 700,
+    "scroll_debounce_ms": 50,
+    "toggle_on_modifiers_press": {
+      "control": false,
+      "alt": false,
+      "shift": false,
+      "platform": false,
+      "function": false,
+    },
+  },
+  "icon_theme": {
+    "mode": "dark",
+    "light": "Zed (Default)",
+    "dark": "Zed (Default)",
+  },
+  "ui_font_size": 14,
+  "buffer_font_size": 13.0,
+  "theme": {
+    "mode": "system",
+    "light": "Glip Glops Light",
+    "dark": "Glip Glops",
+  },
+  "autosave": "on_focus_change",
+}

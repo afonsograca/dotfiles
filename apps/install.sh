@@ -18,6 +18,7 @@ handle_app_dotfiles() {
   print_header_footer "Step: Apps" $1
 
   packages=(
+    "glip-glops"
     # "maccy"
     "terminal"
     # "vscode"

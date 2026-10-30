@@ -17,6 +17,11 @@ handle_environments_dotfiles() {
   print_header_footer "Step: Environments" $1
 
   (
+    cd "$DOTFILES_PATH/environments/mise"
+    zsh install.sh $2
+  )
+
+  (
     cd "$DOTFILES_PATH/environments/ruby"
     zsh install.sh $2
   )

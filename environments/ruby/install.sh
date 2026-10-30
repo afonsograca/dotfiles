@@ -1,6 +1,6 @@
 #!/bin/zsh
 ##
-## Script to install Ruby and its configs
+## Script to install the RubyGems (mise installs Ruby)
 ##
 trap 'kill $(jobs -p)' EXIT
 
@@ -19,13 +19,6 @@ handle_ruby_dotfiles() {
   print_step "Ruby & Gems"
 
   if test "$dry_run" -eq 0; then
-    ### Setup Ruby via mise
-    if ! command -v install_with_mise >/dev/null 2>&1; then
-      . "$DOTFILES_PATH/environments/mise/install_tool.sh"
-    fi
-    install_with_mise ruby
-    unset -f install_with_mise
-
     ### Setup RubyGems
     (cd "$DOTFILES_PATH/packages/rubygems"; sh install.sh "$dry_run")
   fi

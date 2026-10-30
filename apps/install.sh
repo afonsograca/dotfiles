@@ -19,6 +19,7 @@ handle_app_dotfiles() {
 
   packages=(
     "glip-glops"
+    "ghostty"
     # "maccy"
     "terminal"
     # "vscode"

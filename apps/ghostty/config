@@ -1,0 +1,19 @@
+theme = light:Glip Glops Light,dark:Glip Glops
+
+# Cursor
+cursor-style = block
+cursor-style-blink = true
+
+# Fonts
+font-size = 11.5
+adjust-cell-height = 12%
+
+# Window
+background-opacity = 0.8
+background-blur = 20
+window-height = 28
+window-width = 80
+
+window-save-state = always
+window-inherit-working-directory = true
+working-directory = home

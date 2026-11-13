@@ -8,7 +8,9 @@ HISTSIZE=50000
 HISTFILESIZE=1000000
 HISTTIMEFORMAT="%F %T "       # Timestamps (mirrors EXTENDED_HISTORY)
 HISTCONTROL=ignoredups:erasedups  # No duplicate consecutive entries (mirrors HIST_IGNORE_DUPS)
-HISTIGNORE="[ $'\t']*"        # Don't record commands starting with a space (mirrors HIST_IGNORE_SPACE)
+# Don't record commands that start with a space or a tab (mirrors HIST_IGNORE_SPACE),
+# or that contain a URI with a password (//user:pass@)
+HISTIGNORE=$'[ \t]*:*//*\\:*@*'
 
 shopt -s histappend   # Append to history file; don't overwrite (mirrors INC_APPEND_HISTORY)
 shopt -s cmdhist      # Save multi-line commands as a single history entry

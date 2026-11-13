@@ -27,6 +27,11 @@ setopt HIST_FIND_NO_DUPS         # Don't display duplicates when searching histo
 setopt HIST_REDUCE_BLANKS        # Remove extra blanks from commands before adding to history
 setopt HIST_IGNORE_SPACE         # Don't record commands that start with a space
 
+# Don't record commands that contain a URI with a password (//user:pass@)
+autoload -Uz add-zsh-hook
+_history_skip_secrets() { [[ $1 != *//*:*@* ]] }
+add-zsh-hook zshaddhistory _history_skip_secrets
+
 # Enhanced history search
 
 autoload -U up-line-or-beginning-search
